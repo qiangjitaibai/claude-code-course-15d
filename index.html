@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>15天 Claude Code 入门</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --bg-card: #161b22;
+    --border: #30363d;
+    --text: #c9d1d9;
+    --text-secondary: #8b949e;
+    --accent: #58a6ff;
+    --accent-glow: rgba(88,166,255,0.15);
+    --code-bg: #1c2128;
+    --tag-bg: #1a2332;
+    --tag-text: #58a6ff;
+    --heading: #f0f6fc;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    display: flex;
+    min-height: 100vh;
+  }
+  /* Sidebar */
+  nav {
+    width: 260px;
+    background: var(--bg-card);
+    border-right: 1px solid var(--border);
+    padding: 24px 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    flex-shrink: 0;
+  }
+  nav h2 {
+    font-size: 16px;
+    color: var(--heading);
+    padding: 0 20px 16px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 8px;
+  }
+  nav a {
+    display: block;
+    padding: 8px 20px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 14px;
+    transition: all 0.15s;
+    border-left: 3px solid transparent;
+    cursor: pointer;
+  }
+  nav a:hover { color: var(--text); background: rgba(88,166,255,0.05); }
+  nav a.active {
+    color: var(--accent);
+    background: var(--accent-glow);
+    border-left-color: var(--accent);
+  }
+  nav .day-num { color: var(--accent); font-weight: 600; margin-right: 6px; }
+  /* Main content */
+  main {
+    flex: 1;
+    max-width: 800px;
+    padding: 40px 48px;
+    margin: 0 auto;
+  }
+  article { display: none; }
+  article.active { display: block; }
+  article h1 {
+    font-size: 28px;
+    color: var(--heading);
+    margin-bottom: 8px;
+    font-weight: 700;
+  }
+  article .meta {
+    color: var(--text-secondary);
+    font-size: 14px;
+    margin-bottom: 32px;
+  }
+  article .meta span {
+    background: var(--tag-bg);
+    color: var(--tag-text);
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-left: 8px;
+  }
+  article h2 {
+    font-size: 20px;
+    color: var(--heading);
+    margin: 32px 0 12px;
+    font-weight: 600;
+  }
+  article h3 {
+    font-size: 16px;
+    color: var(--heading);
+    margin: 24px 0 8px;
+    font-weight: 600;
+  }
+  article p { margin: 10px 0; }
+  article strong { color: var(--heading); }
+  article ul, article ol { margin: 8px 0 8px 24px; }
+  article li { margin: 4px 0; }
+  article blockquote {
+    border-left: 3px solid var(--accent);
+    padding: 8px 16px;
+    margin: 16px 0;
+    background: var(--accent-glow);
+    border-radius: 0 6px 6px 0;
+    color: var(--text);
+  }
+  article pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    overflow-x: auto;
+    margin: 12px 0;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  article code {
+    font-family: "JetBrains Mono", "SF Mono", "Fira Code", monospace;
+    font-size: 13px;
+    background: var(--code-bg);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  article pre code {
+    background: none;
+    padding: 0;
+    font-size: 13px;
+  }
+  article table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 14px;
+  }
+  article th {
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 2px solid var(--border);
+    color: var(--heading);
+    font-weight: 600;
+  }
+  article td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  article .highlight {
+    background: linear-gradient(135deg, var(--accent-glow), transparent);
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 20px 0;
+  }
+  article hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 32px 0;
+  }
+  /* Mobile */
+  @media (max-width: 768px) {
+    body { flex-direction: column; }
+    nav {
+      width: 100%;
+      height: auto;
+      position: static;
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+      padding: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      overflow-x: auto;
+    }
+    nav h2 { display: none; }
+    nav a {
+      padding: 6px 12px;
+      border-left: none;
+      border-radius: 6px;
+      font-size: 13px;
+      white-space: nowrap;
+      border: 1px solid var(--border);
+    }
+    nav a.active { border-color: var(--accent); }
+    main { padding: 24px 16px; }
+    article h1 { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+<nav>
+  <h2>Claude Code 入门</h2>
+  <a onclick="showDay(1)" class="active"><span class="day-num">01</span>启动与第一段对话</a>
+  <a onclick="showDay(2)"><span class="day-num">02</span>读代码：代码导航</a>
+  <a onclick="showDay(3)"><span class="day-num">03</span>写代码：从一行到文件</a>
+  <a onclick="showDay(4)"><span class="day-num">04</span>多文件编辑</a>
+  <a onclick="showDay(5)"><span class="day-num">05</span>终端命令</a>
+  <a onclick="showDay(6)"><span class="day-num">06</span>Git 工作流</a>
+  <a onclick="showDay(7)"><span class="day-num">07</span>上下文与 CLAUDE.md</a>
+  <a onclick="showDay(8)"><span class="day-num">08</span>任务规划</a>
+  <a onclick="showDay(9)"><span class="day-num">09</span>测试与调试</a>
+  <a onclick="showDay(10)"><span class="day-num">10</span>Hooks 自动化</a>
+  <a onclick="showDay(11)"><span class="day-num">11</span>MCP 工具扩展</a>
+  <a onclick="showDay(12)"><span class="day-num">12</span>CLAUDE.md 进阶</a>
+  <a onclick="showDay(13)"><span class="day-num">13</span>会话管理与成本</a>
+  <a onclick="showDay(14)"><span class="day-num">14</span>高级提示技巧</a>
+  <a onclick="showDay(15)"><span class="day-num">15</span>完整实战</a>
+</nav>
+<main id="content"></main>
+
+<script>
+const days = [
+{"day":1,"date":"5月7日 周三","title":"启动与第一段对话：Claude Code 到底怎么用","content":"<p>你已经装好了 Claude Code。打开终端，进入你的项目目录，输入一个命令：</p><pre><code>claude</code></pre><p>回车。一个蓝色的终端界面（TUI）出现了。这就是 Claude Code 的全部——没有侧边栏，没有设置面板，就是一个对话窗口。你的编程伙伴在这里等你。</p><h3>界面上有什么</h3><ul><li>上方：对话历史区，你和 Claude 的每一句对话都在这里滚动</li><li>下方：输入区，你打字的地方</li><li>左上角：当前模型名称和会话状态</li></ul><p>极其简洁。所有操作都通过打字或斜杠命令完成。</p><h3>第一条消息应该发什么</h3><p>不要上来就说「帮我写一个网站」。Claude Code 需要先理解你的项目。第一句话就做一件事：让 Claude 看看你的代码。</p><pre><code>帮我看看这个项目的结构，告诉我它是什么、怎么组织的</code></pre><p>Claude 会自动读取你的文件结构、package.json、README，给你一个项目概览。这就像一个新人入职第一天，先看一眼代码库再干活。</p><h3>斜杠命令：你的快捷工具箱</h3><p>在输入框里输入 <code>/</code> 你会看到一个命令菜单。最常用的几个：</p><ul><li><code>/help</code> — 查看所有命令</li><li><code>/clear</code> — 清空对话历史，重新开始</li><li><code>/cost</code> — 查看本次会话花了多少钱</li><li><code>/doctor</code> — 诊断 Claude Code 的配置问题</li><li><code>/init</code> — 在当前项目中初始化 CLAUDE.md</li></ul><p>这些不是「高级功能」，是日常操作。今天你至少试一遍 <code>/help</code> 和 <code>/cost</code>。</p><h3>三个最重要的操作习惯</h3><ol><li><strong>先让 Claude 看，再让它做。</strong> 别跳步。给它上下文，它会聪明十倍。</li><li><strong>一次说一件事。</strong> 「顺便也」是效率杀手。拆成多轮对话，每轮聚焦一个任务。</li><li><strong>看它改了什么。</strong> Claude 每次编辑文件后会显示 diff（差异对比）。花 5 秒看一眼，你不看就没人帮你看。</li></ol><h3>今天的小练习</h3><p>打开你的一个项目（随便什么项目，哪怕只有一个 README），输入：</p><pre><code>看看这个项目，用三句话总结它是做什么的</code></pre><p>然后输入 <code>/cost</code> 看看花了多少。如果 Claude 的总结是准的——恭喜，你已经会用了。不准的话，告诉它错在哪，它会记住并在接下来的对话中修正。</p><div class=\"highlight\"><strong>今日小结：</strong>Claude Code 不是搜索引擎，是一个能读懂你代码库的配对程序员。你的任务是给它上下文。</div>"},
+{"day":2,"date":"5月8日 周四","title":"读代码：让 Claude 成为你的代码导航仪","content":"<p>很多开发者打开 Claude Code 的第一反应是「帮我写个功能」。这就像第一次去健身房就杠铃深蹲——先学会看，再学会写。今天只做一件事：让 Claude 帮你读懂代码。</p><h3>为什么「读」比「写」先学</h3><p>一个事实：你 70% 的编程时间是在读代码，不是写代码。在你理解一段代码之前改它，就像不看地图走夜路。Claude 能几秒内读完你整个项目，它是最好的代码导航仪——但你要学会怎么问。</p><h3>基本提问模式</h3><p><strong>模式 1：定位型</strong></p><pre><code>用户登录的逻辑在哪里实现的？带我去看。</code></pre><p>Claude 会搜索相关文件，定位到关键函数，引用代码给你看。</p><p><strong>模式 2：解释型</strong></p><pre><code>这段代码是干什么的？逐行解释。</code></pre><p>选中一段代码（或告诉 Claude 文件名+行号），它会像老师一样拆解每一步。</p><p><strong>模式 3：追踪型</strong></p><pre><code>这个函数被哪些地方调用了？调用链是什么样的？</code></pre><p>Claude 会做依赖分析，画出调用关系。</p><p><strong>模式 4：对比型</strong></p><pre><code>这两个模块有什么区别？为什么不能合并？</code></pre><p>让 Claude 帮你做代码审查和架构分析。</p><h3>关键技巧：@ 引用</h3><p>在对话中，你可以用 <code>@</code> 引用文件或代码块：</p><pre><code>@src/utils/auth.ts — 这个文件里的 authenticate 函数是怎么工作的？</code></pre><p>用 <code>@</code> 比描述文件名更准确，Claude 会精确读取那个文件，不会搞混。</p><h3>让 Claude 画出结构</h3><pre><code>帮我画出这个项目的数据库模型关系图，用文字描述就行</code></pre><p>Claude 会用 Mermaid 或者纯文本画出一个 ER 图。即使你熟悉这个项目，这种图往往能让你发现之前没意识到的耦合。</p><h3>今天的小练习</h3><ol><li>「帮我看看这个项目的入口文件在哪，启动流程是什么」</li><li>「最核心的三个模块是什么，它们怎么互相调用」</li><li>「有没有你觉得设计得不好的地方？为什么」</li></ol><p>第三个问题尤其有意思——Claude 会给出代码审查意见。你不一定同意，但这个「对话」本身就是理解代码的过程。</p><div class=\"highlight\"><strong>今日小结：</strong>让 Claude 帮你读代码，不是偷懒，是把你从「考古」中解放出来，把脑子留给真正的设计决策。</div>"},
+{"day":3,"date":"5月9日 周五","title":"写代码：从一行到一整个文件","content":"<p>读了两天，今天终于开始写了。但别一上来就让 Claude 写一千行——从一行开始。</p><h3>让 Claude 修改现有代码</h3><p>最好的起步方式不是从零写，而是改一个已有的东西：</p><pre><code>把这个函数的名字从 getUser 改成 fetchUserById，然后把所有调用它的地方也一起改了</code></pre><p>Claude 会：找到函数定义 → 修改函数名 → 搜索所有调用点 → 逐一更新 → 展示所有 diff 给你确认。你只需要看一眼 diff，说「可以」或者「这里不对」。</p><h3>添加一个功能</h3><pre><code>在 auth.ts 里加一个 validateToken 函数，接收一个 token 字符串，返回 { valid: boolean, userId?: string }</code></pre><p>越具体越好。告诉 Claude：文件名（精确）、函数名（你想要的）、输入和输出（类型）。模糊的需求会让 Claude 猜，猜不准。</p><h3>从零创建一个文件</h3><pre><code>创建一个 src/utils/logger.ts，实现一个简单的日志工具：\n- 支持 log / warn / error 三个级别\n- 每条日志带时间戳\n- 可以设置日志级别来过滤输出</code></pre><p>给 Claude 一个清单式的需求描述，它会按顺序实现。</p><h3>Claude 写代码的三个模式</h3><p><strong>模式 1：直接给方案</strong> — 适合小任务</p><p><strong>模式 2：先讨论再写</strong> — Claude 分析利弊，等你决定方向后再动手</p><p><strong>模式 3：Plan 模式</strong> — <code>/plan 我要给项目加一个完整的用户邀请系统</code>，Claude 先列出计划，等你说「开始」才执行</p><h3>无论如何，看 diff</h3><p>Claude 改完代码后，一定会展示一个 diff 视图。花 30 秒扫一眼：改的地方是不是你要的？有没有多余改动？改完之后逻辑还通吗？如果不对，直接说「撤回」「这里不对」。</p><h3>今天的小练习</h3><ol><li>找一个函数，让 Claude 给它加一个参数，并更新所有调用处</li><li>让 Claude 创建一个新的工具函数文件（比如 formatDate）</li><li>故意给它一个模糊的需求，看它怎么回应——然后修正需求，让它重新做</li></ol><div class=\"highlight\"><strong>今日小结：</strong>好需求 = 精确的位置 + 明确的输入输出 + 验收标准。模糊的需求等于让 Claude 猜——它猜得越多，你改得越多。</div>"},
+{"day":4,"date":"5月12日 周一","title":"多文件编辑：跨文件的操作才是真功夫","content":"<p>单文件改改没什么，真正省时间的是跨文件操作。今天学怎么让 Claude 一次性处理和协调多个文件。</p><h3>全局重命名</h3><pre><code>把所有文件里的 UserProfile 类型改成 Account，包括文件名、import 语句、类型引用</code></pre><p>Claude 会：搜索所有位置 → 确认 → 一次性修改 → 展示完整改动清单。这比 IDE 的「重命名符号」更强大——因为它连注释、文档、配置文件里的引用也能改。</p><h3>重构一个功能</h3><pre><code>把 src/utils/helpers.ts 里的 formatCurrency 函数移到 src/formatters/money.ts，更新所有 import，确保所有调用处正常运行</code></pre><p>Claude 会复制到新位置 → 从旧文件删除 → 更新所有 import → 检查遗漏。</p><h3>批量生成相似文件</h3><pre><code>参考 src/api/users.ts 的模式，给 products、orders、categories 三个模块各创建对应的 API 文件，保持同样的结构和命名规范</code></pre><p>Claude 会读取模板文件，理解模式，然后批量生成。关键是告诉它「参考哪个」。</p><h3>多步骤任务：一次说完还是分步做</h3><table><tr><th>策略</th><th>适用场景</th></tr><tr><td>一次性全说</td><td>3 步以下的小改动，Claude 能一次消化</td></tr><tr><td>分步确认（推荐）</td><td>复杂改动，每步确认不累积错误</td></tr></table><h3>今天的小练习</h3><ol><li>找一个跨多个文件的命名，让 Claude 全局改掉</li><li>把某个工具函数移到一个更合理的位置</li><li>创建 3 个结构相似的组件/模块，让 Claude 批量生成</li></ol><p>每做一步，用 <code>git diff</code> 看看改了什么。</p><div class=\"highlight\"><strong>今日小结：</strong>多文件操作的关键不是「能不能改」，而是「改完之后每个文件还通不通」。让 Claude 改完后自己跑一下相关的测试或编译。</div>"},
+{"day":5,"date":"5月13日 周二","title":"终端命令：Claude 的手和脚","content":"<p>Claude Code 不只是能改代码文件。它能直接在终端执行命令——装依赖、跑脚本、操作 git、执行测试。这是它从「建议者」变成「执行者」的关键。</p><h3>Claude 怎么执行命令</h3><p>当你说「帮我跑一下测试」，Claude 会自动在终端执行 <code>npm test</code> 或项目里配置的测试命令。你会在对话界面看到终端的输出。</p><p>大多数情况下你不需要显式告诉 Claude 用终端——它会在需要的时候自动调用。</p><h3>你能让 Claude 做什么</h3><ul><li><strong>装依赖：</strong>「安装 lodash 和 date-fns」→ 自动 <code>npm install</code></li><li><strong>跑脚本：</strong>「执行 build」→ 跑 <code>npm run build</code>，把报错返回给你</li><li><strong>环境检查：</strong>「看看我的 Node 版本够不够」→ <code>node -v</code></li><li><strong>文件操作：</strong>「把所有 .js 文件改成 .ts」→ 结合命令和 import 更新</li><li><strong>数据库操作：</strong>「跑 migrations」→ 执行项目的 migration 脚本</li></ul><h3>重要：权限模式</h3><p>默认情况下 Claude 会显示要执行的命令并询问你是否允许。你可以设置为「始终允许」某些类别的命令（比如 npm install 总是允许），但对于 <code>rm</code>、<code>git push --force</code> 这类命令，保持手动确认。</p><pre><code>// Claude Code 的权限设置在 settings.json 里\n{\n  \"permissions\": {\n    \"allow\": [\"npm test\", \"npm run build\", \"git status\"]\n  }\n}</code></pre><h3>让 Claude 处理报错</h3><p>这是最实用的终端用法——报错直接丢给 Claude：</p><pre><code>npm run build 报错了，帮我看看什么问题并修复</code></pre><p>Claude 会：再跑一次拿到完整报错 → 分析 → 修改代码 → 重新 build 验证。如果修错了——把新的报错再丢给它，它会换一个方案。</p><h3>管道和链式命令</h3><pre><code>找出项目中所有 TODO 注释，统计每个文件有多少个，按数量排序</code></pre><p>Claude 会构造 grep + sort + uniq 的组合命令。你不必记住这些命令怎么写，只需要描述你要什么。</p><h3>今天的小练习</h3><pre><code>帮我在项目里装一个 prettier，配置好，然后格式化 src/ 下所有文件</code></pre><p>看着 Claude 一步一步：装包 → 写配置 → 执行格式化 → 展示改了哪些文件。</p><div class=\"highlight\"><strong>今日小结：</strong>Claude 的手和脚就是终端。把重复的命令交给它，你只做决定。</div>"},
+{"day":6,"date":"5月14日 周三","title":"Git 工作流：让 Claude 帮你管理版本","content":"<p>今天讲 Claude Code 最省力的功能之一：Git 操作。不用离开终端，不用手打 commit message，整个版本控制都交给 Claude。</p><h3>查看状态和差异</h3><pre><code>看看 git 的当前状态</code></pre><p>→ <code>git status</code></p><pre><code>展示所有未提交的改动</code></pre><p>→ <code>git diff</code></p><p>比你自己跑命令更舒服——Claude 会帮你解读 diff，告诉你「你改了三个文件，主要修改了认证逻辑」。</p><h3>智能提交</h3><pre><code>提交所有改动</code></pre><p>Claude 会：查看所有 diff → 自动生成 commit message（基于实际改动内容）→ 展示给你确认 → 执行 commit。你不用写「fix: update user auth flow」这种东西，Claude 写的往往比你写的好。</p><p>你也可以要求：</p><pre><code>只提交 src/auth/ 下的文件，其他改动先留着</code></pre><pre><code>用 conventional commits 格式提交</code></pre><pre><code>把这两次提交合并成一个</code></pre><h3>创建分支和 PR</h3><pre><code>创建一个新分支 feature/email-notification，然后提交当前改动</code></pre><p>如果项目连了 GitHub：</p><pre><code>推送到远端，然后帮我创建一个 PR，描述清楚改了什么</code></pre><p>Claude 会写 PR 标题、描述（包含改动摘要），甚至列出测试步骤。</p><h3>代码审查（PR Review）</h3><pre><code>看看 PR #42 的改动，帮我做代码审查</code></pre><p>Claude 会：获取 PR 的 diff → 逐文件分析 → 指出潜在问题、命名建议、性能问题 → 给出整体评价。</p><h3>处理冲突</h3><pre><code>合并 main 分支进来，有冲突的话帮我解决</code></pre><p>Claude 会展示冲突位置，解释冲突原因，给出解决方案。简单冲突直接解决，复杂的会问你。</p><h3>今天的小练习</h3><ol><li>让 Claude 查看 git 状态</li><li>让它生成 commit message 并提交</li><li>让它创建一个新分支并切过去</li><li>用 <code>git log</code> 看看 Claude 写的 commit 历史</li></ol><div class=\"highlight\"><strong>今日小结：</strong>Claude + Git = 你只管写代码，版本管理自动跟上。</div>"},
+{"day":7,"date":"5月15日 周四","title":"上下文与 CLAUDE.md：让 Claude 真正懂你的项目","content":"<p>前面六天你一直在用 Claude，但可能感觉到一个问题：每次新会话开始，Claude 会「忘记」你们之前说好的约定。要重新解释编码风格、项目结构、命名规范……今天解决这个问题。</p><h3>CLAUDE.md 是什么</h3><p>CLAUDE.md 是一个放在项目根目录下的文件，Claude Code 每次启动时会自动读取。你可以把它理解为「给 Claude 的入职手册」——不需要每次对话都重复。</p><p>运行 <code>/init</code>，Claude 会自动帮你生成一个 CLAUDE.md 模板。然后你根据自己的项目去改。</p><h3>CLAUDE.md 里写什么</h3><pre><code># 项目说明\n这是一个 Next.js 14 的电商后台管理系统\n\n# 技术栈\n- 前端：Next.js 14, TypeScript, Tailwind CSS\n- 后端：Next.js API Routes, Prisma ORM\n- 数据库：PostgreSQL\n\n# 编码规范\n- 组件用函数式组件，不用 class\n- API 返回值统一用 { code: number, data: any, message: string } 格式\n- 文件命名用 kebab-case\n- 测试文件放在 __tests__ 目录下\n\n# 重要约定\n- 不要修改 prisma/schema.prisma 文件，数据库结构由 DBA 管理\n- 不要使用 any 类型\n- 所有 API 接口都要加 JWT 鉴权中间件</code></pre><p>写得越具体，Claude 就越少踩坑。</p><h3>全局 CLAUDE.md vs 项目 CLAUDE.md</h3><ul><li><strong>项目根目录的 CLAUDE.md</strong> → 只对这个项目生效</li><li><strong>全局 <code>~/.claude/CLAUDE.md</code></strong> → 对所有项目生效</li></ul><p>全局的适合放你的个人偏好：</p><pre><code># 我的偏好\n- 始终用中文回复我\n- commit message 用 conventional commits 格式\n- 不要主动加注释，除非我问\n- 优先使用 async/await，不用 .then()</code></pre><h3>其他上下文来源</h3><p>Claude Code 读取上下文的优先级：</p><ol><li>你当前说的话（最高优先级）</li><li>你用 @ 引用的文件</li><li>项目的 CLAUDE.md</li><li>全局的 CLAUDE.md</li><li>项目的 README 和 package.json（自动读取）</li></ol><h3>实时更新 CLAUDE.md</h3><p>当你发现 Claude 某个错误反复犯时——加一条到 CLAUDE.md 里：</p><pre><code>帮我在 CLAUDE.md 里加一条：所有日期时间都用 dayjs，不要用 moment</code></pre><p>这才是真正的「团队知识沉淀」——不是写在 wiki 里没人看，而是每次 Claude 干活时自动遵守。</p><h3>今天的小练习</h3><ol><li>运行 <code>/init</code>，看看 Claude 自动生成的 CLAUDE.md</li><li>手动加 3 条编码规范</li><li>新开一个会话，直接说「帮我写一个工具函数」，看看 Claude 有没有按照 CLAUDE.md 的规范写</li></ol><div class=\"highlight\"><strong>今日小结：</strong>CLAUDE.md 是你和 Claude 之间的合同。花 10 分钟写好它，后面每一天它都在帮你省时间。</div>"},
+{"day":8,"date":"5月18日 周一","title":"任务规划：把你的想法变成可执行的步骤","content":"<p>前面一周你学会了怎么让 Claude 读代码、写代码、改多个文件。但面对一个大需求——「我要加一个完整的支付系统」——一股脑丢给 Claude 会带来灾难。今天学怎么拆解。</p><h3>Plan 模式</h3><p>Claude Code 的 <code>/plan</code> 命令专门用来做「先计划，再执行」：</p><pre><code>/plan 我要给这个博客系统加评论功能，包括：\n- 用户可以发表评论\n- 评论支持 Markdown\n- 可以回复别人的评论（嵌套）\n- 需要登录才能评论</code></pre><p>Claude 不会立即写代码。它会：分析当前项目结构 → 列出需要改动的文件和模块 → 给出执行步骤清单 → 每一步预估做什么 → 等你确认后才开始执行。</p><p>你可以说「第三步改成用 PostgreSQL 存储」，Claude 会调整计划。反复讨论直到你满意，然后说「开始执行」——Claude 严格按照计划走。</p><h3>不用 Plan 模式的手动拆解</h3><p>你可以在对话中自己拆：</p><p>第一轮：「我要加评论功能。先帮我分析：需要改哪些文件？涉及哪些模块？」<br>第二轮：「好，先从数据模型开始。给我设计评论表的结构。」<br>第三轮：「现在写 API 接口。先做发表评论的接口。」<br>第四轮：「加上嵌套回复的逻辑。」<br>第五轮：「前端组件。评论区组件 + 发表框。」</p><p>每轮确认一次，你不会一天后发现 Claude 写了一堆你不知道为什么存在的东西。</p><h3>拆解原则</h3><p>❌ 太大：「实现支付系统」<br>✅ 刚好：「创建 Payment 数据模型和数据库迁移」<br>✅ 刚好：「实现创建订单并生成支付链接的 API」<br>✅ 刚好：「前端支付确认页面」</p><p>一次一个文件或一个功能模块。</p><h3>任务依赖</h3><ol><li>先搞数据模型（Prisma schema / TypeScript 接口）</li><li>再搞后端逻辑（API / service）</li><li>再搞前端（组件 / 页面）</li><li>最后搞测试</li></ol><p>反过来——先写前端再定义数据模型——Claude 会在前端里编造不存在的接口字段，后面得全部返工。</p><h3>今天的小练习</h3><p>想一个你项目里真实需要的功能，用 <code>/plan</code> 让 Claude 规划，你审阅并修改计划，然后说「开始」。</p><div class=\"highlight\"><strong>今日小结：</strong>不会拆任务的程序员不是好 AI 搭档。你把大象切成块，Claude 才能一口一口吃。</div>"},
+{"day":9,"date":"5月19日 周二","title":"测试与调试：让 Claude 自己修自己写的 bug","content":"<p>AI 写的代码有 bug 吗？当然有。但好消息是——AI 也能修。今天学怎么让 Claude 测试自己的代码，并在出错时自己调试。</p><h3>让 Claude 写测试</h3><pre><code>给这个 validateToken 函数写单元测试，用 vitest</code></pre><p>Claude 会：阅读函数代码 → 分析边界条件和异常路径 → 生成测试用例（正常 token、过期 token、空 token、恶意 token）→ 创建测试文件。然后：</p><pre><code>跑一下测试</code></pre><p>如果通过——基本没问题。不过——让 Claude 自己看报错。</p><h3>TDD 式开发</h3><p>这是 Claude Code 最高效的用法之一：</p><pre><code>我要写一个解析日期字符串的函数。\n先写测试用例，然后再实现这个函数。</code></pre><p>Claude 会：写测试（红）→ 写实现（绿）→ 跑测试验证 → 如果不过，自己排查。你只需要看最后的结果。</p><h3>报错调试</h3><pre><code>npm run dev 启动报错了，帮我排查并修复</code></pre><p>Claude 会：重跑命令拿到报错 → 定位到出错文件 → 分析原因 → 修改代码 → 重新跑命令验证。如果还报错，它会换一个方向。你不需要给提示，它自己会迭代。</p><h3>让 Claude 做代码审查</h3><pre><code>审查一下今天改的所有文件，看看有没有潜在 bug、性能问题、或不一致的地方</code></pre><p>Claude 会逐个文件检查：空值处理、异步调用遗漏、命名一致性、死代码、性能问题（循环里的数据库查询等）。</p><h3>今天的小练习</h3><ol><li>找一个没有测试的函数，让 Claude 给它写测试</li><li>跑测试，看看覆盖面全不全</li><li>故意在函数里改错一行代码</li><li>让 Claude 跑测试看看能不能发现</li><li>让它根据失败的测试修复 bug</li></ol><div class=\"highlight\"><strong>今日小结：</strong>写得快不重要，写得对才重要。Claude 写的测试是它给自己上的保险——你多花 2 分钟让它写测试，明天少花 2 小时修 bug。</div>"},
+{"day":10,"date":"5月20日 周三","title":"Hooks：让 Claude 自动做你每次都做的事","content":"<p>你发现没有——每次 Claude 改完代码，你都要手动跑 lint、格式化、跑测试？每次 commit 之前都要检查一遍？这就是 Hooks 要解决的问题：让机器做重复的事。</p><h3>Hooks 是什么</h3><p>Hooks 是 Claude Code 的一种自动化机制。你定义「当发生 X 时，自动执行 Y」。比如：</p><ul><li>当 Claude 编辑完文件 → 自动运行 prettier 格式化</li><li>当 Claude 要执行危险命令（rm -rf）→ 拦截并警告</li><li>当 Claude 完成一个任务 → 桌面弹通知</li><li>当 Claude 提交代码 → 自动跑一遍全部测试</li></ul><h3>怎么配置 Hooks</h3><p>Claude Code 的 Hooks 配置在 <code>~/.claude/settings.json</code> 的 <code>hooks</code> 字段里。也可以通过 <code>/hooks</code> 命令在 Claude Code 里交互式地配置。</p><pre><code>{\n  \"hooks\": {\n    \"PostToolUse\": [\n      {\n        \"matcher\": \"Edit|Write\",\n        \"command\": \"npx prettier --write ${CLAUDE_TOOL_OUTPUT_FILE}\"\n      }\n    ],\n    \"PreToolUse\": [\n      {\n        \"matcher\": \"Bash\",\n        \"command\": \"if echo \\\"${CLAUDE_TOOL_INPUT}\\\" | grep -q 'rm -rf'; then exit 2; fi\"\n      }\n    ]\n  }\n}</code></pre><h3>四种核心事件</h3><table><tr><th>事件</th><th>触发时机</th><th>典型用途</th></tr><tr><td><code>PreToolUse</code></td><td>Claude 用工具之前</td><td>安全检查、拦截危险操作</td></tr><tr><td><code>PostToolUse</code></td><td>Claude 用工具之后</td><td>自动格式化、跑 lint、记录日志</td></tr><tr><td><code>Notification</code></td><td>Claude 需要通知你</td><td>桌面弹窗、发送到 Slack/钉钉</td></tr><tr><td><code>Stop</code></td><td>会话结束</td><td>自动 commit、清理临时文件</td></tr></table><h3>退出码的含义</h3><ul><li><code>0</code> — 正常，继续</li><li><code>2</code> — 阻塞，阻止当前操作</li><li>其他 — 非阻塞警告，提示但不阻止</li></ul><h3>今天的小练习</h3><ol><li>用 <code>/hooks</code> 命令打开互动配置界面</li><li>配一个 PostToolUse hook：每次 Claude 编辑 <code>.ts</code> 文件后自动跑格式化</li><li>让 Claude 改一个 TypeScript 文件，看看 Hook 有没有自动触发</li></ol><div class=\"highlight\"><strong>今日小结：</strong>如果你做某件事超过三次，就应该把它变成 Hook。好的 Hook 就像一个永远不会忘事的实习生。</div>"},
+{"day":11,"date":"5月21日 周四","title":"MCP 工具：给 Claude 接上外部世界","content":"<p>Claude Code 默认的能力已经很强大——读文件、写代码、跑终端。但有时候你需要它和外部服务交互：查数据库、调用 API、操作浏览器。这就是 MCP 的用武之地。</p><h3>MCP 是什么</h3><p>MCP（Model Context Protocol）是一个标准化协议，让 Claude 可以调用外部工具。相当于给 Claude 装了一个「工具商店」——你需要什么能力，就装上对应的 MCP server。</p><p>常见的 MCP 工具：</p><ul><li><strong>数据库</strong>：直接查询 PostgreSQL / MySQL / SQLite</li><li><strong>浏览器</strong>：让 Claude 操控浏览器做端到端测试</li><li><strong>文件系统</strong>：增强的文件管理能力</li><li><strong>GitHub</strong>：直接操作 Issues、PR、Actions</li><li><strong>Slack / 飞书</strong>：发送消息通知</li><li><strong>Notion / Obsidian</strong>：读写笔记和文档</li></ul><h3>怎么添加 MCP 工具</h3><pre><code>// ~/.claude/claude.json 或项目级 .claude/claude.json\n{\n  \"mcpServers\": {\n    \"sqlite\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@anthropic/mcp-server-sqlite\", \"--db-path\", \"./data.db\"]\n    }\n  }\n}</code></pre><p>配置好后，Claude 会在需要时自动调用。你也可以用 <code>/mcp</code> 命令查看和管理已安装的工具。</p><h3>实用场景</h3><p><strong>场景 1：数据库查询</strong> — 「帮我查一下最近 7 天注册的用户数量」→ Claude 通过 MCP 直连数据库</p><p><strong>场景 2：浏览器自动化</strong> — 「打开我们的网站，走一遍完整的注册流程」→ Claude 操控浏览器自动测试</p><p><strong>场景 3：文档同步</strong> — 「把这次改动的 API 变更同步到 Notion」→ Claude 读取代码变更 → 更新 Notion</p><h3>注意安全</h3><ul><li>数据库用只读账号（除非确实需要写）</li><li>浏览器自动化限制在测试环境</li><li>不要把生产环境的 API key 配在 MCP 里</li></ul><h3>今天的小练习</h3><ol><li>搜索并安装一个适合你项目的 MCP server（比如 SQLite 或 PostgreSQL）</li><li>配置好连接，让 Claude 查询一条数据</li><li>没有数据库的话，装一个文件系统 MCP，让 Claude 做全项目文件统计</li></ol><div class=\"highlight\"><strong>今日小结：</strong>Claude Code 的能力边界 = 终端 + MCP。MCP 就是 Claude 伸出去的手，能碰到什么取决于你给它什么。</div>"},
+{"day":12,"date":"5月25日 周一","title":"CLAUDE.md 进阶：自定义指令的高级玩法","content":"<p>第 7 天你学会了 CLAUDE.md 的基本用法。今天把它用到极致——让你的 CLAUDE.md 像一个真正的团队规范文档。</p><h3>分层指令</h3><pre><code>~/.claude/CLAUDE.md          ← 全局：你的个人偏好（所有项目生效）\n~/项目A/CLAUDE.md            ← 项目：这个项目的规范\n~/项目A/src/api/CLAUDE.md    ← 子目录：这个模块的特殊规则</code></pre><p>Claude 会从全局读到项目再读到当前目录。子目录的规则可以覆盖上层的。</p><h3>越细越好</h3><p>❌ 太粗：<br><code># 代码规范\n写好代码</code></p><p>✅ 足够细：<br><code># 代码规范\n- 用 TypeScript 严格模式\n- 异步函数必须返回 Promise&lt;T&gt;，不得使用 any\n- 函数超过 20 行需要拆分成更小的函数\n- 错误处理：API 层统一用 try-catch，返回 { success: boolean, data?: T, error?: string }\n- 命名：组件文件用 PascalCase.tsx，工具函数用 camelCase.ts\n- 常量用 UPPER_SNAKE_CASE，接口名前不加 I</code></p><h3>用 CLAUDE.md 引导工作方式</h3><pre><code># 工作流程\n在开始写代码之前：\n1. 先搜索项目中是否有类似的功能可以复用\n2. 如果有现成的库可以用，不要自己写\n3. 先给出方案和修改文件清单，等我确认后再写代码\n4. 写完代码后自动跑相关测试</code></pre><h3>条件指令</h3><pre><code># 条件规则\n- 如果你在改 API 接口：自动更新 API 文档注释\n- 如果你在改数据模型：同时生成数据库迁移文件\n- 如果你在写新功能：至少要写一个核心场景的测试</code></pre><h3>团队共享 CLAUDE.md</h3><p>上半部分（团队规范）进 git，下半部分（个人偏好）进 .gitignore 或全局配置。</p><h3>今天的小练习</h3><ol><li>加 3 条 Claude 屡犯的规则</li><li>加一个「工作流程」段</li><li>加一条条件规则</li><li>新开会话，看 Claude 有没有遵守新规则</li></ol><div class=\"highlight\"><strong>今日小结：</strong>CLAUDE.md 不是写完就不管的——它是活的，每次 Claude 犯错都是更新它的时机。</div>"},
+{"day":13,"date":"5月26日 周二","title":"会话管理与成本控制：别让账单吓到你","content":"<p>用了一周多，你可能已经跑了不少会话。今天讲两件现实的事：怎么管理你的会话，怎么控制成本。</p><h3>会话是什么</h3><p>每次你在终端输入 <code>claude</code> 启动的对话窗口，就是一个「会话」。一个会话里面，Claude 记得你说过的所有话——直到你输入 <code>/clear</code> 或关闭终端。会话之间不共享记忆（除非你配了 CLAUDE.md）。</p><h3>什么时候清空会话</h3><ul><li>上下文太长导致 Claude 变慢 → <code>/clear</code> 重新开始</li><li>上一个任务是 A，新任务是完全无关的 B → 清空避免干扰</li><li>Claude 开始在回复里「忘记」你前面说的话 → 上下文溢出，该清了</li></ul><p>但清空前让 Claude 总结一下：</p><pre><code>帮我把这次会话的关键决策和改动总结成一段话，我要清空对话了</code></pre><h3>恢复上一个会话</h3><pre><code>继续我们上次的对话</code></pre><p>Claude 会自动加载最近的会话历史。</p><h3>成本：怎么看、怎么控</h3><p><code>/cost</code> 命令显示当前会话的花费。影响成本的因素：</p><ul><li>模型选择（Sonnet 便宜，Opus 贵）</li><li>上下文长度（对话越长，每次请求发送的 token 越多）</li><li>工具调用频率（每次读文件、跑命令都消耗 token）</li></ul><h3>省钱技巧</h3><ol><li><strong>及时清空对话。</strong> 上下文越长越贵。</li><li><strong>用 CLAUDE.md 代替重复解释。</strong> 每次会话都解释一遍项目背景？白费 token。</li><li><strong>先想清楚再问。</strong> 不要在对话里反复试。</li><li><strong>用 Sonnet 处理大部分工作。</strong> 深度推理才切 Opus。</li><li><strong>关闭不用的 MCP 工具。</strong> 每个工具都会增加上下文开销。</li></ol><h3>设置预算上限</h3><pre><code>{\n  \"budget\": {\n    \"monthlyLimit\": 20\n  }\n}</code></pre><h3>今天的小练习</h3><ol><li><code>/cost</code> — 看看当前会话花费</li><li><code>/clear</code> — 让 Claude 总结后清空</li><li>新会话让 Claude「恢复上次对话」，看看能恢复多少</li></ol><div class=\"highlight\"><strong>今日小结：</strong>AI 编程不是免费的，但花得值不值取决于你的用法。聪明地用，一个月 20 美金能干出 2000 美金的活。</div>"},
+{"day":14,"date":"5月27日 周三","title":"高级提示技巧：怎么让 Claude 一次做对","content":"<p>两周下来你已经是 Claude Code 的熟练用户了。今天讲一些不写在文档里但影响巨大的技巧——怎么让你的 prompt 让 Claude 一次就做对。</p><h3>给 Claude 一个角色</h3><pre><code>你是一个精通 React 性能优化的高级前端工程师。帮我审查这个组件。</code></pre><p>Claude 会自动调整回复的深度和专业度。角色会影响 Claude 回答时的「参考系」和详细程度。</p><h3>给输出格式</h3><pre><code>帮我总结，分三点，每点不超过 20 个字</code></pre><p>越精确的格式要求，Claude 的输出越可控。</p><h3>正向指令 > 负向指令</h3><p>❌ 「不要写太多注释」<br>✅ 「注释只写在复杂逻辑处，不超过代码行数的 10%」</p><p>❌ 「不要用复杂的写法」<br>✅ 「用最直接的方式实现，优先可读性」</p><p>告诉 Claude 你要什么，比告诉它不要什么更有效。</p><h3>提供「锚点」</h3><pre><code>// 好\n帮我优化这个函数。它目前在大数据量时很慢，我怀疑是里面那个\n嵌套循环的问题。参考 src/utils/fastSort.ts 里的优化思路。</code></pre><p>给的锚点越多（你的怀疑、参考文件、你试过的方法），Claude 越不需要猜。</p><h3>渐进式细化</h3><p>第一轮：「我要一个搜索功能，先告诉我你的整体方案」<br>第二轮：「方案可以，但把搜索结果缓存加上」<br>第三轮：「缓存时间改成 5 分钟」<br>第四轮：「现在开始写代码」</p><p>每一轮只是在上一轮基础上加一个条件。这比一次性写 10 个条件更不容易遗漏。</p><h3>让 Claude 自我反思</h3><pre><code>现在审查一遍你刚写的代码，列出三个你觉得可以改进的地方</code></pre><p>Claude 通常会发现自己代码里的问题——因为它有完整的上下文和规范意识。</p><h3>今天的小练习</h3><p>找一个小功能，用两种方式让 Claude 实现：1. 一次说清楚；2. 渐进式。看看两种方式的代码质量、遗漏率、修改次数。</p><div class=\"highlight\"><strong>今日小结：</strong>好的 prompt 不是长，是精确。像给同事交代任务一样——告诉他背景、目标、约束、参考。</div>"},
+{"day":15,"date":"5月28日 周四","title":"完整实战：从零到一个可发布的功能","content":"<p>最后一天，不学新知识了。我们把前面 14 天学到的东西串起来，完整走一遍。假设你要给一个项目加一个「收藏文章」功能。</p><h3>第 1 轮：分析现状</h3><pre><code>我要加收藏功能。先分析一下项目的现有结构，告诉我需要改哪些地方。</code></pre><p>Claude 读取项目文件，给出方案：新建收藏表、两个 API、修改文章页面、用户收藏列表页。你用 <code>/plan</code> 确认这个方案。</p><h3>第 2 轮：数据模型</h3><pre><code>先在 Prisma schema 里加 Favorite 模型：\n- id, userId, articleId, createdAt\n- userId + articleId 联合唯一索引</code></pre><p>Claude 修改 schema → 生成迁移。</p><h3>第 3 轮：API</h3><pre><code>创建 POST /api/articles/:id/favorite 接口，\n切换收藏状态（已收藏就取消，未收藏就添加）</code></pre><h3>第 4 轮：测试</h3><pre><code>给这个接口写测试：\n- 首次收藏成功\n- 重复收藏变成取消\n- 未登录请求返回 401</code></pre><p>Claude 写测试 → 跑测试 → 全绿。</p><h3>第 5 轮：前端</h3><pre><code>在文章详情页加收藏按钮，\n根据当前收藏状态显示实心/空心</code></pre><h3>第 6 轮：Git</h3><pre><code>查看所有改动，用 conventional commits 格式提交，\n推送到远端，创建 PR</code></pre><p>Claude 生成 commit message → 创建 PR（标题 + 描述 + 改动摘要）。</p><h3>第 7 轮：审查</h3><pre><code>审查一下这个 PR 的代码，看看有没有问题</code></pre><p>Claude 自检 → 给你审查意见 → 你确认没问题 → 合并。</p><hr><p>这就是 Claude Code 的完整工作流。15 天下来，你应该能：让 Claude 读懂你的项目、写改重构代码、管理 Git、自动化重复操作（Hooks）、扩展能力（MCP）、控制成本和会话。</p><div class=\"highlight\"><strong>最后一句话：</strong>Claude Code 是你能力的放大器，不是替代品。你越强，它越强。你什么都&#1076;懂，它也帮不了你。你懂架构、懂取舍、懂判断——它就会让你快得像开了挂。<br><br>祝你写得爽。</div>"}
+];
+
+function showDay(n) {
+  const day = days[n-1];
+  document.getElementById('content').innerHTML = `
+    <article class="active">
+      <h1>第 ${day.day} 天 · ${day.title}</h1>
+      <div class="meta">${day.date}<span>Day ${day.day}/15</span></div>
+      ${day.content}
+    </article>
+  `;
+  document.querySelectorAll('nav a').forEach((a,i) => {
+    a.classList.toggle('active', i === n-1);
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+showDay(1);
+</script>
+</body>
+</html>
