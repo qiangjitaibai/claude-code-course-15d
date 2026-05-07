@@ -17,15 +17,13 @@
     --tag-bg: #1a2332;
     --tag-text: #58a6ff;
     --heading: #f0f6fc;
-    --warning: #d29922;
-    --success: #3fb950;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", sans-serif;
     background: var(--bg);
     color: var(--text);
-    line-height: 1.8;
+    line-height: 1.85;
     display: flex;
     min-height: 100vh;
   }
@@ -110,14 +108,6 @@
   article strong { color: var(--heading); }
   article ul, article ol { margin: 8px 0 8px 24px; }
   article li { margin: 5px 0; }
-  article blockquote {
-    border-left: 3px solid var(--accent);
-    padding: 8px 16px;
-    margin: 16px 0;
-    background: var(--accent-glow);
-    border-radius: 0 6px 6px 0;
-    color: var(--text);
-  }
   article pre {
     background: var(--code-bg);
     border: 1px solid var(--border);
@@ -158,20 +148,11 @@
     padding: 10px 14px;
     border-bottom: 1px solid var(--border);
   }
-  article tr:hover td { background: rgba(88,166,255,0.03); }
-  article .highlight {
-    background: linear-gradient(135deg, var(--accent-glow), transparent);
-    border: 1px solid var(--accent);
-    border-radius: 8px;
-    padding: 18px 22px;
-    margin: 28px 0;
-  }
   article hr {
     border: none;
     border-top: 1px solid var(--border);
     margin: 36px 0;
   }
-  article a { color: var(--accent); }
   @media (max-width: 768px) {
     body { flex-direction: column; }
     nav {
@@ -204,109 +185,2381 @@
 <body>
 <nav>
   <h2>Claude Code 入门 · 深度版</h2>
-  <a onclick="showDay(1)"><span class="day-num">01</span>启动与第一段对话</a>
-  <a onclick="showDay(2)"><span class="day-num">02</span>读代码</a>
-  <a onclick="showDay(3)"><span class="day-num">03</span>写代码</a>
-  <a onclick="showDay(4)"><span class="day-num">04</span>多文件编辑</a>
-  <a onclick="showDay(5)"><span class="day-num">05</span>终端命令</a>
-  <a onclick="showDay(6)"><span class="day-num">06</span>Git 工作流</a>
-  <a onclick="showDay(7)"><span class="day-num">07</span>上下文与 CLAUDE.md</a>
-  <a onclick="showDay(8)"><span class="day-num">08</span>任务规划</a>
-  <a onclick="showDay(9)"><span class="day-num">09</span>测试与调试</a>
-  <a onclick="showDay(10)"><span class="day-num">10</span>Hooks 自动化</a>
-  <a onclick="showDay(11)"><span class="day-num">11</span>MCP 工具</a>
-  <a onclick="showDay(12)"><span class="day-num">12</span>CLAUDE.md 进阶</a>
-  <a onclick="showDay(13)"><span class="day-num">13</span>会话管理与成本控制</a>
-  <a onclick="showDay(14)"><span class="day-num">14</span>高级提示技巧</a>
-  <a onclick="showDay(15)"><span class="day-num">15</span>完整实战</a>
+<a onclick="showDay(1)" class="active"><span class="day-num">01</span>启动与第一段对话</a>
+<a onclick="showDay(2)"><span class="day-num">02</span>读代码</a>
+<a onclick="showDay(3)"><span class="day-num">03</span>写代码</a>
+<a onclick="showDay(4)"><span class="day-num">04</span>多文件编辑</a>
+<a onclick="showDay(5)"><span class="day-num">05</span>终端命令</a>
+<a onclick="showDay(6)"><span class="day-num">06</span>Git 工作流</a>
+<a onclick="showDay(7)"><span class="day-num">07</span>上下文与 CLAUDE.md</a>
+<a onclick="showDay(8)"><span class="day-num">08</span>任务规划</a>
+<a onclick="showDay(9)"><span class="day-num">09</span>测试与调试</a>
+<a onclick="showDay(10)"><span class="day-num">10</span>Hooks 自动化</a>
+<a onclick="showDay(11)"><span class="day-num">11</span>MCP 工具</a>
+<a onclick="showDay(12)"><span class="day-num">12</span>CLAUDE.md 进阶</a>
+<a onclick="showDay(13)"><span class="day-num">13</span>会话管理与成本控制</a>
+<a onclick="showDay(14)"><span class="day-num">14</span>高级提示技巧</a>
+<a onclick="showDay(15)"><span class="day-num">15</span>完整实战</a>
 </nav>
-<main id="content"></main>
+<main id="content">
+<article id="day1" class="active">
+<h1>第 1 天 · 启动与第一段对话：Claude Code 到底怎么用</h1>
+<div class="meta">5月7日 周三<span>Day 1/15</span></div>
+<p>你已经装好了 Claude Code。打开终端，进入你的项目目录，输入：</p>
+<pre><code>claude</code></pre>
+<p>回车。一个蓝色终端界面（TUI）出现。没有侧边栏、没有设置面板，就是一个对话窗口。</p>
+<h2>界面速览</h2>
+<ul>
+<li>上方：对话历史区域，滚动查看你和 Claude 的每一句话</li>
+<li>下方：输入区，你打字的地方</li>
+<li>左上角：当前模型名称和会话标识</li>
+<li>按 <code>Esc</code> 可以退出输入模式，用方向键浏览历史消息</li>
+</ol>
+<p>所有操作通过打字或斜杠命令完成。简洁到极致。</p>
+<h2>启动参数：进入项目的方式不止一种</h2>
+<pre><code># 基础启动
+claude
 
-<script>
-const days = [
-{"day":1,"date":"5月7日 周三","title":"启动与第一段对话：Claude Code 到底怎么用","content":"你已经装好了 Claude Code。打开终端，进入你的项目目录，输入：\n\n```bash\nclaude\n```\n\n回车。一个蓝色终端界面（TUI）出现。没有侧边栏、没有设置面板，就是一个对话窗口。\n\n## 界面速览\n\n- 上方：对话历史区域，滚动查看你和 Claude 的每一句话\n- 下方：输入区，你打字的地方\n- 左上角：当前模型名称和会话标识\n- 按 `Esc` 可以退出输入模式，用方向键浏览历史消息\n\n所有操作通过打字或斜杠命令完成。简洁到极致。\n\n## 启动参数：进入项目的方式不止一种\n\n```bash\n# 基础启动\nclaude\n\n# 指定模型启动（跳过模型选择菜单）\nclaude --model sonnet\nclaude --model opus\n\n# 恢复上一次会话（不用重新解释项目背景）\nclaude --resume\n# 或启动后在对话里说「继续上次的对话」\n\n# 打印模式：不进入 TUI，一次性执行完成后输出结果并退出\nclaude -p "这个项目的入口文件是哪个？"\nclaude -p "帮我修复 src/utils/auth.ts 里的所有类型错误"\n\n# 从 stdin 传入内容（适合管道场景）\ncat error.log | claude -p "分析这些报错，告诉我怎么修"\ngit diff HEAD~3 | claude -p "审查这些改动，总结主要变更"\n\n# 指定工作目录\nclaude --cwd ~/projects/my-app\n```\n\n`-p` 打印模式是自动化脚本里的利器——比如在 CI 里让 Claude 分析构建报错，输出结果直接写入日志。\n\n## 第一条消息发什么\n\n不要上来就说「帮我写一个网站」。Claude Code 需要先理解你的项目：\n\n```\n帮我看看这个项目的结构，告诉我它是什么、怎么组织的\n```\n\nClaude 会自动读取文件结构、package.json、README，给你一个项目概览。相当于新人入职第一天先看一眼代码库再干活。\n\n**进阶版第一条消息：**\n\n```\n仔细读一遍这个项目的代码，然后回答：\n1. 项目的核心功能是什么\n2. 技术栈是什么（框架、数据库、关键依赖）\n3. 代码的目录组织逻辑是什么\n4. 有没有明显的不合理设计\n5. 如果我接下来要开发新功能，入口在哪里\n```\n\n这个 prompt 让 Claude 不仅「看一遍」，还做一次迷你代码审查。你会得到一个比 README 还准确的项目地图。\n\n## 斜杠命令完整指南\n\n输入 `/` 弹出命令菜单。按使用频率排序：\n\n| 命令 | 作用 | 频率 |\n|---|---|---|\n| `/help` | 列出所有命令 | 偶尔 |\n| `/clear` | 清空对话历史 | 日常 |\n| `/cost` | 查看会话花费（token 数和金额） | 日常 |\n| `/doctor` | 诊断 Claude Code 配置问题 | 出问题时 |\n| `/init` | 初始化项目的 CLAUDE.md | 新项目 |\n| `/compact` | 压缩上下文，Claude 把历史总结成摘要后继续 | 长篇会话 |\n| `/status` | 查看令牌使用量、上下文窗口占用率 | 时不时 |\n| `/config` | 打开配置文件 | 调配置时 |\n| `/bug` | 提交 Claude Code 本身的 bug 报告 | 很少 |\n| `/pr-comments` | 查看当前会话中 Claude 写过的 PR 评论 | GitHub 协作时 |\n\n**高阶技巧：`/compact` 什么时候用**\n\n当你发现 Claude 回复变慢、或者它开始忘记你前面说的话，说明上下文窗口快满了。此时输入 `/compact`，Claude 会把整个对话历史压缩成一个结构化摘要，释放空间继续干活。比 `/clear` 好——不会丢信息。\n\n**高阶技巧：`-p` 模式 + shell 管道实战**\n\n```bash\n# 用 Claude 审查你的代码改动\ngit diff main | claude -p "审查这段 diff。指出：1. 潜在 bug 2. 性能问题 3. 命名建议"\n\n# 用 Claude 写 commit message\ngit diff --staged | claude -p "基于这个 diff 生成一个 conventional commits 格式的 commit message"\n\n# 用 Claude 分析日志\njournalctl -u myapp --since "1 hour ago" | claude -p "分析日志，找出异常模式，按严重程度排序"\n```\n\n## 三个最重要的操作习惯\n\n1. **先让它看，再让它做。** 给它上下文，它会聪明十倍。\n2. **一次说一件事。** 「顺便也」是效率杀手。拆成多轮对话。\n3. **看 diff。** Claude 每次编辑文件后会显示差异对比。花 5 秒扫一眼，你不看就没人帮你看。\n4. **（新加）让它解释自己做了什么。** 重要操作后加一句「解释一下你为什么这样改」，理解它的思路，你也在学习。\n\n## 常见踩坑\n\n**坑 1：Claude 改了不该改的文件**\n你说「优化这个函数」，Claude 可能顺便把同一个文件里其他函数也改了。修复方法：明确说「只改这个函数，不要碰文件里其他代码」。\n\n**坑 2：Claude 的修改破坏了别的地方**\n你改了 A 文件的函数签名，但 B 文件还在用旧的。修复方法：加一句「改完后检查所有调用处，确保兼容」。\n\n**坑 3：上下文丢得太快**\n你跟 Claude 聊了 50 轮，忽然让它处理一个不相关的新任务——它被旧上下文干扰。修复方法：新任务前先用 `/compact` 或 `/clear`。\n\n## 今天的小练习\n\n```\n# 1. 用 -p 模式快速分析项目\nclaude -p "看看这个项目，用三句话总结它"\n\n# 2. 启动 TUI 模式，用扩展版第一条消息让 Claude 做完整分析\n# （上面那个5条问题的版本）\n\n# 3. 输入 /cost 看看花了多少\n# 4. 输入 /status 看看上下文占用\n# 5. 试试管道模式：把 git diff 喂给 Claude\n```\n\n---\n\n**今日小结：** Claude Code 不是搜索引擎，是能读懂你代码库的配对程序员。TUI 和 -p 两种模式覆盖交互和自动化两种场景。你的核心任务：给它上下文。"},
-{"day":2,"date":"5月8日 周四","title":"读代码：让 Claude 成为你的代码导航仪","content":"很多开发者打开 Claude Code 第一反应是「帮我写个功能」——等价于第一次去健身房就杠铃深蹲。先学会看，再学会写。\n\n## 六个提问模式（含高阶变体）\n\n### 模式 1：定位型\n\n```\n用户登录的逻辑在哪里实现的？带我去看。\n```\n\n**高阶变体：**\n```\n跟踪一下这个项目的请求生命周期：\n1. HTTP 请求进来后经过了哪些中间件？\n2. 路由分发在哪一层？\n3. 业务逻辑在哪一层？\n4. 数据库查询在哪一层？\n给每一步标上文件名和行号。\n```\n\n### 模式 2：解释型\n\n```\n逐行解释 src/services/payment.ts 里的 processRefund 函数，\n特别是那段 Promise.all 的逻辑——为什么要用 Promise.all？\n```\n\n**高阶变体：**\n```\n用「一个完全没有编程经验的 PM」能听懂的语言，\n解释这段代码在做什么。不要用任何术语。\n```\n\n这个方法出奇地有用——如果你能用 PM 语言讲清楚，说明你自己也真懂了。如果 Claude 讲不清楚，说明这段代码设计本身就有问题。\n\n### 模式 3：追踪型\n\n```\n找出所有调用 validateToken 的地方，画出调用链。\n如果 validateToken 抛出异常，每个调用处会怎么处理？\n```\n\n**高阶变体：**\n```\n做一次「死亡路径分析」：\n如果这个 API 调用第三方服务超时了，\n1. 错误会怎样一层层传播？\n2. 最终用户会看到什么？\n3. 有没有哪一层吞掉了错误？\n```\n\n### 模式 4：对比型\n\n```\nsrc/services/ 下有两个文件 auth-v1.ts 和 auth-v2.ts。\n它们有什么区别？能合并吗？合并的风险是什么？\n```\n\n### 模式 5：安全审查型（新增）\n\n```\n审查 src/api/ 下所有接口的安全性：\n1. 哪些接口没有鉴权？\n2. 有没有 SQL 注入风险？\n3. 用户输入有没有被校验和清洗？\n4. 是否有敏感信息泄漏到日志或错误消息里？\n```\n\n### 模式 6：性能审查型（新增）\n\n```\n分析 src/services/order.ts 里 createOrder 函数的性能问题。\n重点关注：\n1. 有没有 N+1 查询？\n2. 循环里有没有数据库操作？\n3. 有没有可以并行的操作被串行执行了？\n4. 缓存机会在哪里？\n```\n\n## @ 引用的高级用法\n\n```\n# 引用文件\n@src/utils/auth.ts — 解释这个文件的设计\n\n# 引用目录（Claude 会分析整个目录结构）\n@src/api/ — 这个目录下所有接口有没有重复的逻辑？\n\n# 引用多个文件做交叉分析\n@src/models/User.ts @src/services/userService.ts —\n这两个文件的职责边界清楚吗？\n\n# 在一个 prompt 里引用多个信息源\n@src/types/order.ts 定义了 Order 接口，\n@src/services/payment.ts 使用了 Order，\n但 @src/api/orders.ts 里返回的格式和 Order 不一致——\n帮我找出来，修复。\n```\n\n## 让 Claude 画出结构\n\n```\n# ER 图\n帮我画出这个项目的数据库模型关系图（用 Mermaid 格式）\n\n# 依赖图\n画出 src/ 下所有模块之间的依赖关系图，标出循环依赖\n\n# 数据流图\n画出用户注册功能的完整数据流：\n从前端表单 → API → Service → 数据库 → 邮件发送\n\n# 状态机\n用户订单的状态转换：待支付→已支付→发货中→已签收→已完成。\n画出状态机图，包括哪些状态可以回退\n```\n\n## 高阶读码技巧\n\n### 技巧 1：让 Claude 当你的 onboarding 导师\n\n```\n我是一个新加入团队的开发者。这个项目的代码是\n一个 3 年积累下来的 NestJS 项目。帮我写一份\n「新人 30 分钟上手指南」：\n1. 最重要的 5 个文件（列出并解释）\n2. 核心业务逻辑流程图\n3. 最危险的操作（改了会出事的地方）\n4. 本地开发环境搭建步骤\n```\n\n### 技巧 2：逆向理解遗留代码\n\n```\n这个文件 src/legacy/reportGenerator.ts 有 800 行，\n没有任何注释，原始作者已经离职。帮我：\n1. 拆成逻辑段（每段起个名字）\n2. 画出输入→输出的数据流\n3. 找出所有 hardcode 的配置值\n4. 标记你觉得可删的 dead code\n```\n\n### 技巧 3：生成文档\n\n```\n给 src/services/ 下所有 public 方法生成 JSDoc 注释，\n但不要改代码逻辑，只加注释。格式：\n- @param 描述每个参数\n- @returns 描述返回值\n- @throws 描述可能抛出的异常\n- @example 给一个使用示例\n```\n\n## 今天的小练习\n\n1. 用「PM 语言」让 Claude 解释你项目里最复杂的那个函数\n2. 做一次「死亡路径分析」——找一个 API，让 Claude 画出所有异常路径\n3. 让 Claude 生成你项目的 Mermaid ER 图\n4. 试试多文件引用：`@fileA @fileB` 让 Claude 找出不一致的地方\n\n---\n\n**今日小结：** 读代码不只是让 Claude 帮你找文件——它是你的代码考古学家、安全审计师、性能顾问、和新人导师。70% 时间在读数，学会问，才是真功夫。"},
-{"day":3,"date":"5月9日 周五","title":"写代码：从一行到一整个文件","content":"读了两天，开始写。别一上来就让 Claude 写一千行——从一行开始。\n\n## 修改现有代码\n\n```\n# 基础：重命名\n把这个函数名从 getUser 改成 fetchUserById，\n更新所有调用它的地方，包括测试文件里的引用。\n\n# 进阶：重构函数签名\n把 createOrder(userId, items, callback) 改成\ncreateOrder({ userId, items, onSuccess, onError })，\n使用对象参数而不是位置参数，更新所有调用处。\n\n# 实战：加功能\n给 src/api/products.ts 的 GET /products 接口加三个查询参数：\n- category?: string — 按分类过滤\n- minPrice?: number — 最低价格\n- sort?: \'price_asc\' | \'price_desc\' | \'newest\' — 排序方式\n同时更新 TypeScript 类型定义和参数校验逻辑。\n```\n\n## 从零创建文件：五个实战例子\n\n```\n# 例子 1：工具函数\n创建 src/utils/retry.ts：\n- retry(fn, options) 函数，自动重试失败的异步操作\n- options.maxRetries 默认 3\n- options.delay 默认 1000ms，每次重试翻倍（指数退避）\n- 如果全部失败，抛出原始错误\n\n# 例子 2：React 组件\n创建 src/components/InfiniteScroll.tsx：\n- Props: loadMore: () => Promise<void>, hasMore: boolean\n- 滚动到底部自动触发 loadMore\n- 加载中显示 spinner\n- 用 IntersectionObserver 实现（不用 scroll 事件监听，性能更好）\n- 支持自定义 threshold 和 rootMargin\n\n# 例子 3：API 路由\n创建 src/app/api/webhook/stripe/route.ts：\n- POST 接口，接收 Stripe webhook 事件\n- 验证 Stripe 签名（从环境变量读 webhook secret）\n- 处理 checkout.session.completed 事件：更新订单状态\n- 其他事件类型记录日志并返回 200\n- 返回标准格式 { code: number, data?: any, message: string }\n\n# 例子 4：数据库迁移\n创建一个 Prisma 迁移：在 User 表上加 lastLoginAt 和 loginCount 字段，\n不要改已有字段，不要删除数据。\n\n# 例子 5：测试文件（配合 vitest）\n给 src/utils/retry.ts 写测试：\n- 第一次成功 → 不重试\n- 失败两次后成功 → 重试 2 次\n- 全部失败 → 跑满 maxRetries，最终抛错\n- 每次重试间隔递增\n```\n\n## 三种编码模式（含选择策略）\n\n| 模式 | 何时用 | 例子 |\n|---|---|---|\n| 直接写 | 小函数、工具类、没有歧义的需求 | 「写一个 deepClone 函数」 |\n| 先讨论再写 | 有技术选型需要权衡 | 「我要做文件上传——用 AWS S3 还是 Cloudflare R2？先分析利弊」 |\n| Plan 模式 | 涉及多个文件、多个模块 | `/plan 用户邀请系统` → Claude 先出方案 |\n\n**高阶技巧：让 Claude 给出多个方案**\n\n```\n实现一个搜索功能，给我三个方案：\n1. 最简单的（5分钟搞定）\n2. 最完整的（生产就绪）\n3. 你最推荐的一个（平衡速度和质量）\n每个方案列清楚：用什么库、改哪些文件、优缺点\n```\n\n这样你先看菜单再点菜，而不是直接吃了一盘你不想要的东西。\n\n## 让 Claude 自我迭代\n\n```\n刚写的这个函数：\n1. 自己审查一遍，有没有边界条件没处理？\n2. 能不能减少时间复杂度？\n3. TypeScript 类型够不够严格？（不要用 any）\n4. 重新写一遍，重点提高可读性\n```\n\nClaude 通常能在第二步发现自己的问题——比如忘了处理 null、类型不够精确、缓存可以加。\n\n## 实战：让 Claude 写一个完整的 CRUD 模块\n\n```\n我要给项目加一个「标签管理」模块。按这个顺序来：\n\n第 1 步：先给我列出需要创建/修改的文件清单，等我确认。\n第 2 步：创建数据模型（Prisma schema）。\n第 3 步：写 API 路由（RESTful，4 个接口）。\n第 4 步：写输入校验（zod schema）。\n第 5 步：写单元测试。\n第 6 步：代码审查（你自己审查自己的代码）。\n\n每一步我确认后再做下一步。\n```\n\n## 常见踩坑\n\n**坑 1：Claude 的 import 顺序乱了**\n修复：在 CLAUDE.md 里加「import 按以下顺序排列：第三方库 → 内部模块 → 类型 → 样式」\n\n**坑 2：Claude 编造了一个不存在的 API**\n你让它写前端组件调用 `/api/user/profile`，但这个接口还不存在。修复：先让它写 API 再写前端，或者明确说「这个接口已经存在，调用方式是这样……」\n\n**坑 3：类型定义不严格**\nClaude 有时候会用 `any` 或 `Record<string, any>` 偷懒。修复：在 prompt 里加「禁止使用 any 类型」或放 CLAUDE.md 里。\n\n## 今天的小练习\n\n1. 找一个函数，让 Claude 改参数签名并更新所有调用处\n2. 让 Claude 用「三个方案」模式帮你设计一个新功能\n3. 让它写完代码后自我审查并优化\n4. 故意给它一个模糊需求，看它怎么回应——然后给精确需求，对比输出质量\n\n---\n\n**今日小结：** 好需求 = 精确位置 + 明确接口 + 验收标准 + 技术选型。写代码不只是「让它写」，而是「设计→实现→自我审查→你审核」的完整链路。"},
-{"day":4,"date":"5月12日 周一","title":"多文件编辑：重构、重命名与批量操作","content":"单文件编辑只是热身。真正的开发工作里，改一个需求通常要动 5 个文件——模型定义、服务层、API 路由、类型文件、测试。今天学的是怎么让 Claude 一次性、干净地处理跨多个文件的编辑。\n\n## 全局重命名：不只是查找替换\n\n全局重命名最怕的就是看起来改了，实际上漏了——或者改错了不该改的东西。Claude 能处理语义级别的重命名，而不是文本匹配。\n\n```\n# 基础：函数重命名\n把整个项目里 \n- getAllUsers 重命名为 listUsers\n- updateUserProfile 重命名为 updateProfile\n确保：\n1. 所有 .ts / .tsx 文件里的调用都更新\n2. 测试文件里的 mock 和断言也更新\n3. 文档和注释里的引用也更新\n4. package.json 里的 scripts 如果有引用也更新\n```\n\n**实战：组件重命名 + 路径迁移**\n\n```\nsrc/components/common/Button.tsx 改成 src/components/ui/PrimaryButton.tsx。\n操作：\n1. 移动文件到新位置\n2. 更新组件名和 export\n3. 找到所有 import 了这个组件的地方，更新 import 路径\n4. Storybook stories 文件如果有也要更新\n5. 完成后运行 tsc --noEmit 确保没有类型错误\n```\n\n**坑：Claude 改了 node_modules 里的东西**\n\nClaude 不会被 .gitignore 限制，如果你说「整个项目里」，它可能真的扫进 node_modules。所以永远指定范围：\n\n```\n只改 src/ 目录下的文件，不要碰 node_modules/、dist/、.next/\n```\n\n## 文件拆分：600 行 → 3 个文件\n\n单文件长到几百行的时候，维护成本骤升。Claude 能帮你做外科手术式的拆分。\n\n**拆分前：`src/services/orderService.ts` —— 600 行**\n\n```\n这个文件 src/services/orderService.ts 有 600 行，\n包含三个职责：订单创建、订单支付、订单通知。\n\n帮我拆成三个文件：\n1. src/services/order/orderCreate.ts \n   - 所有创建订单相关的函数：validateOrder、calculateTotal、createOrderRecord\n2. src/services/order/orderPayment.ts\n   - 支付相关：processPayment、refundPayment、verifyPaymentStatus\n3. src/services/order/orderNotify.ts\n   - 通知相关：sendOrderConfirmation、notifyShipping\n\n要求：\n- 保持一个 index.ts 作为统一入口，重新导出所有函数\n- 共享的工具函数抽到 src/services/order/helpers.ts\n- 拆分后运行测试，确保全部通过\n- 外部调用 orderService 的地方要保持兼容\n```\n\n**拆分策略对比**\n\n| 策略 | 适用场景 | 风险 |\n|---|---|---|\n| 按职责拆分 | 函数自然分组明显 | 低——各组独立性强 |\n| 按数据类型拆分 | 多种实体混在一个文件 | 中——可能有交叉引用 |\n| 按依赖方向拆分 | 有明确的内/外层依赖 | 中——要小心循环依赖 |\n\n拆分后让 Claude 验证：\n\n```\n拆分完成。现在帮我：\n1. 检查有没有循环依赖\n2. 运行 madge 或手动分析导入关系\n3. 确认所有旧的 import 路径都能正确解析\n```\n\n## 批量生成：一套模板，多个文件\n\n这是一个杀手级场景——你定义好模式，Claude 按模式批量生成。\n\n**场景：给项目所有 API 路由加错误处理**\n\n```\nsrc/api/ 下面有 12 个路由文件，它们缺少统一的错误处理。\n\n帮我给每个路由加上一个 try-catch 包装，格式如下：\n\n// 统一错误处理格式\nexport async function handler(req: Request) {\n  try {\n    // 原有逻辑\n  } catch (error) {\n    if (error instanceof ValidationError) {\n      return Response.json({ code: 400, message: error.message }, { status: 400 });\n    }\n    if (error instanceof NotFoundError) {\n      return Response.json({ code: 404, message: error.message }, { status: 404 });\n    }\n    console.error(\'Unhandled error:\', error);\n    return Response.json({ code: 500, message: \'Internal server error\' }, { status: 500 });\n  }\n}\n\n要求：\n- 不要改变原有业务逻辑\n- 保留原有的 import，新增的 import 放在最上面\n- 完成后运行 npm run test 确保通过\n```\n\n**场景：批量创建 CRUD 路由**\n\n```\nsrc/entities/ 下有 5 个 Prisma 模型：User、Product、Order、Category、Review。\n给每个模型创建标准的 CRUD 路由文件：\n\n模板：\n- src/api/{model}Router.ts\n  - GET /api/{model}s — 分页列表（支持 ?page, ?limit, ?sort）\n  - GET /api/{model}s/:id — 单条详情\n  - POST /api/{model}s — 创建（含 zod 校验）\n  - PUT /api/{model}s/:id — 更新\n  - DELETE /api/{model}s/:id — 软删除\n\n注意：\n- User 模型排除 password 字段\n- Order 模型禁止直接 DELETE\n- 所有接口加鉴权中间件\n```\n\n## One-Shot vs Step-by-Step：选择你的策略\n\n多文件编辑有两种策略，选对效率翻倍：\n\n### One-Shot（一次性）\n\n适合：改动模式统一、范围明确、自己心中有数\n\n```\n把所有 src/components/ 下的组件从 React.FC 改成 function 声明，\n从 Props interface 改成 inline type。一口气改完。\n\n示例改动：\n// 改前\ninterface ButtonProps { label: string; onClick: () => void }\nconst Button: React.FC<ButtonProps> = ({ label, onClick }) => { ... }\n\n// 改后\ntype ButtonProps = { label: string; onClick: () => void }\nfunction Button({ label, onClick }: ButtonProps) { ... }\n\n只改 src/components/ 目录。改完后我验证。\n```\n\n**One-Shot 的风险：** 如果 Claude 理解错了你的意图，一次改 20 个文件，回滚的代价很肉疼。\n\n### Step-by-Step（分步）\n\n适合：不确定性高、每个文件改动不同、想边改边审\n\n```\n我需要重构 src/services/ 下的服务层，\n但每个文件的改动逻辑不一样。\n\n第 1 步：先分析所有文件，告诉我改动计划，等我确认\n第 2 步：改 userService.ts\n第 3 步：改 productService.ts\n第 4 步：改 orderService.ts\n...\n每一步改完我确认后再继续。\n```\n\n**Step-by-Step 的优势：** 每一步都能 review diff，发现问题立即刹车，不会亡羊补牢。\n\n### 选择决策矩阵\n\n| 维度 | One-Shot | Step-by-Step |\n|---|---|---|\n| 速度 | 快 | 慢 |\n| 安全性 | 低（回滚成本高） | 高（随时刹车） |\n| 适用场景 | 机械式重复操作 | 有判断和决策的操作 |\n| 审查方式 | 改完后一次审查全部 diff | 每一步审查 |\n| 最佳 prompt | 清晰模板 + 明确范围 | 「先计划，等我确认再执行」 |\n\n## 跨文件一致性检查\n\n改完多个文件后，最容易出的问题是「改了这里忘了那里」。让 Claude 做一致性审查：\n\n```\n我刚刚重构了用户模块。现在帮我做一次跨文件一致性检查：\n\n1. 类型检查：API 返回的类型和前端组件的 props 类型是否匹配？\n2. 命名检查：同一个概念在不同文件里是否用了不同的名字？\n   （比如有的文件叫 userId，有的叫 user_id）\n3. 导入检查：有没有 import 路径失效的？\n4. 异常处理：所有异步函数有没有错误处理？\n5. API 签名检查：前端调用的 API 地址和参数格式是否和后端一致？\n\n列出所有不一致的地方，我逐条确认是否修复。\n```\n\n**实战：接口契约验证**\n\n```\n后端 @src/api/users/route.ts 返回：\n{ id: number, name: string, email: string, role: \'admin\' | \'user\' }\n\n前端 @src/components/UserTable.tsx 期望的类型是：\n{ id: number, name: string, email: string, role: string }\n\n帮我找出所有前后端类型不一致的地方，\n包括：字段名不匹配、类型不匹配、可选/必选不匹配。\n```\n\n## 今日小练习\n\n1. 在你项目里找一个改过多次名字但没改干净的东西（函数名、变量名），让 Claude 一次性全局修复\n2. 找一个超过 300 行的文件，让 Claude 分析和建议拆分方案\n3. 用 One-Shot 策略批量给 5 个文件加同一个模式（比如加日志、加错误处理）\n4. 改完后让 Claude 做一次跨文件一致性检查\n\n---\n\n**今日小结：** 多文件编辑是 Claude Code 真正的生产力爆发点。掌握两种策略（One-Shot 求快，Step-by-Step 求稳），善用一致性检查，一个下午能干以前一天半的重构活。记住：范围要明确（目录限定），验证要到位（跑测试），审查要过眼（看 diff）。"},
-{"day":5,"date":"5月13日 周二","title":"终端命令：让 Claude 替你操作服务器","content":"Claude Code 最被低估的能力不是写代码——是跑命令。它能读 stdout、识别错误、自动修复、迭代重试。等于你有了个会自己 debug 的终端搭档。\n\n## 命令能力与权限模型\n\nClaude 可以执行三类命令，权限由 `settings.json` 控制：\n\n| 命令类型 | 描述 | 权限设置 |\n|---|---|---|\n| 读取类 | ls, cat, grep, find, git log, npm list | 通常默认允许 |\n| 修改类 | git commit, npm install, cp, mv, rm | 需要确认或预先批准 |\n| 危险类 | rm -rf, git push --force, 修改系统配置 | 默认阻止或要求显式批准 |\n\n**settings.json 权限配置示例：**\n\n```json\n{\n  "permissions": {\n    "allow": [\n      "Bash(npm test:*)",\n      "Bash(npm run build:*)",\n      "Bash(git diff:*)",\n      "Bash(git status:*)",\n      "Bash(ls:*)",\n      "Bash(find:*)"\n    ],\n    "deny": [\n      "Bash(rm -rf:*)",\n      "Bash(git push --force:*)",\n      "Bash(curl:*)"\n    ]\n  }\n}\n```\n\n**三种权限模式：**\n\n1. **手动确认（默认）：** Claude 运行每个非读命令前弹窗让你确认。适合日常开发。\n2. **自动批准列表：** 把 `npm test`、`npm run lint` 等高频安全命令加入白名单。适合信任度高时。\n3. **完全自动（高级模式）：** 在 settings.json 里设置，CI 环境中常用——你不在跟前，让 Claude 全权处理。\n\n```json\n{\n  "permissions": {\n    "mode": "acceptEdits"\n  }\n}\n```\n\n## 自动 Debug 循环：Claude 修复构建错误\n\n这是终端命令最实用的场景——编译报错了，不用你盯着报错一行行改：\n\n```\nnpm run build 报错了。帮我：\n1. 先跑一次 npm run build，看完整输出\n2. 分析所有报错，分类（类型错误、导入错误、配置错误）\n3. 逐个修复\n4. 每次修复后重新 build 验证\n5. 直到 build 成功\n```\n\nClaude 会进入一个迭代循环：跑命令 → 读输出 → 分析 → 编辑文件 → 再跑命令。你可以在旁边喝咖啡看着。\n\n**实战：修复 CI 构建失败**\n\n```\nCI 刚刚挂了。这是构建日志（粘贴日志内容或 URL）。\n帮我：\n1. 找出失败的根本原因，不要只看报错的那一行\n2. 区分是代码问题还是环境问题（Node 版本、依赖缺失）\n3. 如果是代码问题，修复并本地验证\n4. 如果是环境问题，告诉我怎么改 CI 配置\n```\n\n**实战：依赖冲突诊断**\n\n```\nnpm install 报 ERESOLVE 冲突。帮我：\n1. 用 npm ls 找出冲突的依赖树\n2. 分析哪些包需要升级或降级\n3. 给出最保守的解决方案（改动最小）\n4. 如果不行，给出替代方案\n```\n\n## 管道与链式命令\n\nClaude 可以直接使用管道和链式命令，比你自己敲还快：\n\n**日志分析链路：**\n\n```bash\n# Claude 可以帮你构造这种链式命令\ncat /var/log/app.log | grep ERROR | awk \'{print $NF}\' | sort | uniq -c | sort -rn | head -20\n```\n\n你只需要说：「帮我找出最近一小时内最常见的 10 种错误」——Claude 会构造对应命令并运行。\n\n**数据处理链路：**\n\n```\n找出 package.json 里所有依赖的版本号，按字母排序，\n只显示 dependencies（不包括 devDependencies），\n用 jq 一行命令完成。\n```\n\nClaude 输出：\n```bash\njq -r \'.dependencies | to_entries | sort_by(.key) | .[] | "\\(.key): \\(.value)"\' package.json\n```\n\n## Docker 操作：通过 Claude 管理容器\n\n```\n# 启动开发环境\n帮我用 docker compose 启动这个项目的所有服务：\n- 检查 docker-compose.yml 是否正确\n- 构建需要的镜像\n- 启动并等待健康检查通过\n- 如果某个服务启动失败，分析日志并修复\n\n# 清理和诊断\n帮我：\n1. 列出所有运行中的容器和它们的资源占用\n2. 找出占用超过 80% 内存的容器\n3. 清理所有已退出的容器和 dangling images\n\n# 进入容器调试\n帮我进入 api 容器，执行 npm run test:e2e，\n如果测试失败，直接在容器里修改代码调试。\n```\n\n## Git 深度命令（明天详细讲）\n\n今天先预热几个高频组合：\n\n```\n# 查看今天自己的提交\ngit log --author="$(git config user.name)" --since="midnight" --oneline\n\n# 找出哪个提交引入了特定错误信息\ngit log -S "TypeError: Cannot read properties of undefined" --source --all\n\n# 查看某个文件的完整修改历史，每次显示 diff 摘要\ngit log -p --follow -- src/services/auth.ts\n```\n\n## CI/CD 集成模式\n\nClaude Code 的 `-p` 模式天然适合 CI 场景：\n\n**GitHub Actions 中的 Claude Code：**\n\n```yaml\n# .github/workflows/claude-review.yml\nname: Claude Code Review\non: [pull_request]\njobs:\n  review:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - name: Claude Code Review\n        run: |\n          git diff origin/main | claude -p "\n          审查这个 PR 的改动。按以下格式输出：\n          ### 概述\n          （一句话总结改动）\n          ### 风险点\n          ${按严重程度排序}\n          ### 建议\n          ${具体改进建议}\n          ### 总体评价\n          ✅ 可以合并 / ⚠️ 有条件合并 / ❌ 需要修改\n          " > review.md\n      - name: Post Review\n        uses: actions/github-script@v7\n        with:\n          script: |\n            const fs = require(\'fs\');\n            const review = fs.readFileSync(\'review.md\', \'utf8\');\n            github.rest.issues.createComment({\n              ...context.repo,\n              issue_number: context.issue.number,\n              body: review\n            });\n```\n\n## 让 Claude 教你学 Shell\n\n这可能是最被低估的用法——把 Claude 当你的命令行导师：\n\n```\n# 学一个新命令\n给我讲解 sed 命令的常用模式，用实际例子：\n- 替换文件中的文本\n- 删除特定行\n- 提取匹配正则的内容\n- 多个 sed 命令组合\n\n每个例子用我自己项目里的真实文件演示。\n\n# 理解一个复杂命令\n解释这个命令每一步做了什么：\nfind . -name "*.ts" | xargs grep -l "@deprecated" | xargs wc -l | sort -rn\n\n# 把你的 shell 技能教给同事\n我经常用这 10 个命令来处理日志、部署、调试。\n帮我写一份「团队 Shell 速查手册」，\n每个命令带一句话解释和实际例子，适合新人。\n```\n\n## 终端组合技实战\n\n**场景：找出慢的 API 并修复**\n\n```\n帮我做一次 API 性能排查：\n1. 用 grep/awk 从访问日志里提取最近 1000 条请求的响应时间\n2. 按响应时间排序，找出最慢的 5 个接口\n3. 读取这些接口的代码，分析性能瓶颈\n4. 给出优化方案并实施\n```\n\n**场景：批量处理文件**\n\n```\nsrc/images/ 下有 200 张图片，需要：\n1. 找出大于 1MB 的文件\n2. 压缩成 webp 格式（如果装好了 imagemagick 就用它）\n3. 生成一个 HTML 页面，展示压缩前后的对比\n```\n\n## 今日小练习\n\n1. 把 `npm test` 加入 settings.json 的 allow 列表\n2. 故意引入一个构建错误，让 Claude 自动诊断并修复\n3. 用 Claude 构造一个管道命令处理一段日志\n4. 让 Claude 用 jq 处理你项目里的一个 JSON 文件\n5. 如果项目用了 Docker，让 Claude 管理一次容器操作\n\n---\n\n**今日小结：** Claude Code 的命令能力 = 你有了一双能在终端里执行、观察、分析、修复的手。权限控制给你安全感，自动 debug 循环让你从重复劳动里脱身。学会让 Claude 教你 shell，你的命令行水平会跟着涨——这是做中学的极致版本。"},
-{"day":6,"date":"5月14日 周三","title":"Git 工作流：提交、分支、PR 一条龙","content":"Git 操作占日常工作很大比例，但很多操作你每次都要查文档（`git cherry-pick` 的参数顺序是什么来着？）。Claude Code 不仅能帮你执行，更能帮你做 Git 决策。\n\n## 智能提交：不只是 git commit -m\n\nClaude 能生成比你手写更好的 commit message——因为它读得懂 diff 的含义。\n\n**基础用法：**\n\n```\n基于当前暂存区的改动，生成一个 conventional commits 格式的 commit message。\n格式：type(scope): description\n\nbody 部分要写清楚：\n- 为什么改（动机）\n- 怎么改的（技术方案一句话）\n- 影响范围（哪些功能受影响）\n```\n\nClaude 会输出类似：\n\n```\nfeat(order): add refund support with payment gateway integration\n\nAdd refund flow that integrates with Stripe refund API. Previously\ncancelled orders would just change status without actually refunding.\n\n- Created RefundService with Stripe integration\n- Added POST /api/orders/:id/refund endpoint\n- Added refund status tracking in Order model\n- Updated email notification for refund confirmations\n\nBREAKING CHANGE: Order.cancel() no longer auto-refunds. Use Order.refund() instead.\n```\n\n**进阶：拆分提交**\n\n你可能一口气改了 5 个文件，但它们逻辑上应该是 3 个 commit。让 Claude 分析并拆分：\n\n```\n当前工作区有这些改动：\n@src/models/User.ts （加了 lastLoginAt 字段）\n@src/api/login.ts （改了登录逻辑，记录登录时间）\n@src/utils/format.ts （改了日期格式化函数）\n@src/pages/profile.tsx （改了个人页面 UI）\n@package.json （升级了 next.js 版本）\n\n这些改动逻辑上应该分成几个 commit。帮我：\n1. 分析哪些文件属于同一个逻辑组\n2. 建议拆分方案（几个 commit，每个包含哪些文件）\n3. 为每个 commit 生成 message\n4. 等你确认后，用 git add 逐组暂存并提交\n```\n\n**实战：整理提交历史**\n\n```\n我今天的 6 个 commit 很乱：\n- 有 3 个是修复同一个 bug 的反复尝试\n- 有 1 个是不小心提交的 debug 日志\n- 剩下 2 个才是正经功能\n\n帮我做一次 interactive rebase：\n1. 把 3 个 bugfix commit squash 成一个\n2. 删掉 debug 日志那个 commit\n3. 保持功能 commit 不变\n4. 重新写好 commit message\n\n操作前先告诉我 plan，等我确认后再执行 rebase。\n```\n\n## 分支管理\n\n**创建功能分支：**\n\n```\n基于 main 创建分支 feature/user-invite，\n用来开发用户邀请功能。\n```\n\n**Cherry-pick：把一个 commit 拿到另一个分支**\n\n```\nhotfix 分支上有个 commit abc1234 修复了支付安全问题，\n需要同时应用到 main 和 develop 分支。\n帮我 cherry-pick，处理可能出现的冲突。\n```\n\n**分支清理：**\n\n```\n帮我列出所有已经合并到 main 但还没删除的本地分支，\n先让我确认，然后批量删除。\n```\n\nClaude 执行：\n```bash\ngit branch --merged main | grep -v "main\\|develop" | sed \'s/^[ *]*//\'\n```\n\n## PR 全生命周期\n\nClaude Code 可以把创建 PR 这件事自动化到极致：\n\n**第一阶段：创建 PR**\n\n```\n帮我：\n1. 对比 feature/user-invite 和 main 的差异\n2. 总结所有改动，按模块分类\n3. 生成 PR 描述（包含：背景、改动摘要、测试计划、截图说明）\n4. 用 gh pr create 创建 PR\n5. 如果是修复 bug，关联对应的 issue\n```\n\n生成的高质量 PR 描述会自动包含：\n\n```markdown\n## 背景\n用户反馈无法邀请团队成员，缺少邀请入口和邮件通知。\nCloses #234\n\n## 改动摘要\n- **数据模型**: 新增 Invitation 表，关联 User 和 Team\n- **API**: 新增 POST /api/teams/:id/invite, GET /api/invitations/:token\n- **前端**: 新增邀请弹窗组件 InviteDialog.tsx\n- **邮件**: 集成 Resend 发送邀请邮件\n\n## 测试计划\n- [ ] 单元测试：邀请创建、token 验证、重复邀请处理\n- [ ] E2E：从发送邀请到被邀请者注册的完整流程\n- [ ] 边界：无效 token、过期邀请、已使用邀请\n\n## 部署注意\n需要添加环境变量 RESEND_API_KEY\n```\n\n**第二阶段：审查 PR**\n\n```\n审查这个 PR（https://github.com/org/repo/pull/123）：\n1. 拉取代码并切换到 PR 分支\n2. 对比改动，按严重程度列出问题\n3. 重点关注：安全性、性能、异常处理、类型安全\n4. 如果有测试覆盖不足的地方，指出来\n5. 生成审查评论\n```\n\n**第三阶段：对比两个 PR**\n\n```\nPR #245 和 PR #246 都在改支付模块。帮我：\n1. 对比两个 PR 的改动范围和差异\n2. 判断合并顺序——先合哪个后合哪个？\n3. 有没有可能产生语义冲突（不冲突但逻辑矛盾）？\n```\n\n## 冲突解决\n\n冲突是 Git 操作里最让人头疼的。Claude 能帮你：\n\n```\n合并 feature/payment-v2 到 main 时冲突了。\n这是我的合并策略偏好：\n- 对于 import 语句：取两边的并集\n- 对于函数实现：以我的分支为准（这是我的新实现）\n- 对于类型定义：手动检查，不要自动决定\n\n按这个策略解决所有冲突文件，提交合并。\n```\n\n**让 Claude 理解你的偏好：**\n\n```\n我的 Git 冲突解决偏好（写入 CLAUDE.md）：\n1. import 冲突 → 取并集，去重，按字母排序\n2. 配置冲突 → 保留新配置，注释掉旧配置（不删除）\n3. 业务逻辑冲突 → 暂停，让我手动判断\n4. 格式化冲突 → 接受格式化更好的那一边\n```\n\n## Changelog 自动生成\n\n```\n自 v2.3.0 以来（git tag），帮我：\n1. 提取所有 commit message\n2. 按类型分类（feat, fix, refactor, docs, chore）\n3. 根据改动大小判断版本号（semver：major/minor/patch）\n4. 生成 CHANGELOG.md 条目\n5. 找到所有 breaking change\n```\n\n输出示例：\n\n```markdown\n## [2.4.0] - 2024-05-14\n\n### Added\n- 用户邀请功能，支持邮件邀请和链接邀请 (#234)\n- 订单退款支持 Stripe 集成 (#245)\n\n### Fixed\n- 修复高并发下订单状态不一致问题 (#241)\n- 修复 Safari 下日期选择器显示异常 (#248)\n\n### Changed\n- 升级 Next.js 到 14.2（性能提升约 15%）(#250)\n- 重构支付模块，拆分 PaymentService 为三个子服务\n\n### Deprecated\n- Order.cancel() 不再自动退款，请使用 Order.refund()\n```\n\n## Git 考古学：找到 Bug 的源头\n\n这是 Claude 非常擅长的分析型任务：\n\n```\n用户反馈「登录后偶尔跳转到 404 页面」。\n这个 bug 是最近两周才出现的。帮我：\n\n1. 用 git log --since="2 weeks ago" -- src/api/auth/ 找出相关的提交\n2. 逐个检查每个提交的 diff，看哪次改动可能引入 redirect 逻辑问题\n3. 找到可疑 commit 后，读当时修改的完整文件上下文\n4. 判断是不是这个 commit 导致的，以及怎么修\n```\n\n**Git Bisect 辅助：**\n\n```\n帮我用 git bisect 定位 bug：\n- 好的 commit：v2.3.0（tag）\n- 坏的 commit：HEAD\n- 测试命令：npm run test:e2e -- --grep "login redirect"\n- 每步告诉我当前测试的是哪个 commit，等我反馈测试结果\n```\n\n## 常用 Git Alias（可放进 CLAUDE.md）\n\n```bash\n# 让 Claude 帮你设置这些 alias\ngit config --global alias.lg "log --graph --oneline --decorate --all"\ngit config --global alias.unstage "reset HEAD --"\ngit config --global alias.amend "commit --amend --no-edit"\ngit config --global alias.undo "reset --soft HEAD~1"\ngit config --global alias.cleanup "!git branch --merged | grep -v \'main\\\\|master\\\\|develop\' | xargs git branch -d"\n```\n\n## 今日小练习\n\n1. 让 Claude 生成一个 conventional commit message，和你的对比质量\n2. 模拟一次冲突——创建两个分支改同一个文件，让 Claude 用你的偏好解决冲突\n3. 让 Claude 为你的项目生成一份 CHANGELOG\n4. 用 Claude 做一次 git bisect（如果有一个已知的回归 bug）\n5. 把 Git 冲突解决偏好写进 CLAUDE.md\n\n---\n\n**今日小结：** Git 本身不难，难的是决策——这个改动该拆几个 commit？这个冲突该以谁为准？这个版本号该不该升 major？Claude 把这些决策从「拍脑袋」变成「有依据」。自动生成 commit message 和 PR 描述不是偷懒，是提高团队协作的信息密度。"},
-{"day":7,"date":"5月15日 周四","title":"上下文与 CLAUDE.md：Claude 的操作系统","content":"如果 Claude Code 是一台电脑，CLAUDE.md 就是它的操作系统——定义了它怎么工作、懂什么规则、和谁配合。今天把它的底层逻辑讲透。\n\n## CLAUDE.md 是什么\n\n它是一个放在项目根目录的纯文本文件，Claude 每次启动会话时自动读取。它不是可选的——是你在 Claude Code 上投入回报率最高的 10 分钟。\n\n```\n/init\n```\n\n运行这个命令，Claude 会分析你的项目并生成一个基础版 CLAUDE.md。但不要止步于此——自动生成的太泛，你需要自己精调。\n\n## 一个生产级 CLAUDE.md 模板\n\n```markdown\n# Project: MyApp\n\n## Stack\n- Frontend: Next.js 14 (App Router), TypeScript, Tailwind CSS, shadcn/ui\n- Backend: Next.js API routes, Prisma ORM, PostgreSQL 16\n- Auth: NextAuth.js v5 with GitHub + Google OAuth\n- Payments: Stripe\n- Email: Resend\n- Testing: Vitest (unit), Playwright (E2E)\n- Package manager: pnpm (不要用 npm 或 yarn)\n\n## Architecture\n- `src/app/` — Next.js App Router pages and API routes\n- `src/components/` — React components, 按功能分组\n- `src/lib/` — 纯工具函数，不能依赖 React 或数据库\n- `src/services/` — 业务逻辑层，可依赖数据库，但不能依赖 HTTP 请求对象\n- `src/db/` — Prisma schema 和数据库工具\n- `src/emails/` — react-email 模板\n\n## Code Conventions\n\n### TypeScript\n- 禁止使用 `any`，如果必须用，用 `unknown` 加类型守卫\n- 类型导入使用 `import type`\n- Props 使用 `type` 而不是 `interface`（除非需要 extends）\n- 导出函数必须显式标注返回类型\n\n### Naming\n- React 组件：PascalCase，文件名和组件名一致\n- 函数/变量：camelCase\n- 数据库字段：snake_case\n- API 路由：kebab-case\n- 常量：UPPER_SNAKE_CASE\n\n### Import Order（自动排序，不要手调）\n1. React/Next.js 相关\n2. 第三方库\n3. 内部模块（@/ 别名）\n4. 类型导入\n5. 样式/资源\n\n### Error Handling\n- API 路由永远有 try-catch，返回 { code, data, message } 格式\n- 不要在 catch 里吞掉错误——至少 console.error\n- 用户可见的错误消息用中文，开发者日志用英文\n\n## Git Workflow\n- Commit message: Conventional Commits (feat/fix/refactor/docs/chore)\n- 分支命名: feature/xxx, fix/xxx, chore/xxx\n- 不要在 commit 里包含 secrets\n\n## Testing\n- 写测试文件放在 `__tests__` 目录下，与被测文件同级\n- 使用 describe/it 结构，测试名用中文描述场景\n- 覆盖：正常路径、边界条件、错误路径、并发场景\n\n## Rules for Claude\n- 修改代码前先说计划（除非是很小的改动）\n- 只改我明确指定的文件，不要顺手优化其他文件\n- 新依赖要先问，不要直接 npm install\n- 不要生成多余的注释（代码自解释）, 但复杂逻辑要加为什么这样做的注释\n- 永远不要修改 .env 或 .env.local\n```\n\n## 三层 CLAUDE.md 体系\n\nClaude Code 支持多层 CLAUDE.md，优先级从高到低：\n\n| 层级 | 位置 | 作用范围 | 示例内容 |\n|---|---|---|---|\n| 全局 | `~/.claude/CLAUDE.md` | 所有项目 | 你的编码风格偏好、Git 习惯 |\n| 项目 | `<project>/CLAUDE.md` | 当前项目 | 技术栈、架构、项目专属规则 |\n| 子目录 | `<project>/src/api/CLAUDE.md` | 子目录下的文件 | API 专属规则、接口规范 |\n\n**全局 CLAUDE.md 示例：**\n\n```markdown\n# Personal Preferences (applies to all projects)\n\n- 我喜欢写单元测试，每次写完代码主动问我要不要加测试\n- 用中文和我对话，但代码和注释用英文\n- 简短解释优于长篇大论，除非我追问\n- 如果发现项目里有反模式（比如 props drilling），温和提醒但不要强行重构\n- 我会用 /plan 来做大任务，所以平时不用主动列计划\n```\n\n**子目录 CLAUDE.md 示例（`src/api/CLAUDE.md`）：**\n\n```markdown\n# API Rules\n\n- 所有 API 路由必须用 zod 校验输入\n- 返回格式统一：{ code: number, data?: T, message: string }\n- 鉴权用 getServerSession，不要自己读 cookie\n- 分页接口统一用 { page, limit } 参数，返回含 total 的响应\n- 不要在这个目录里写业务逻辑——调用 src/services/ 里的函数\n```\n\n## 上下文优先级：Claude 怎么决定听谁的\n\nClaude 处理指令时有优先级：\n\n```\n当前对话的明确指令（最高优先级）\n  ↓\nCLAUDE.md（子目录 > 项目 > 全局）\n  ↓\n对话历史中的信息\n  ↓\n文件内容\n  ↓\nClaude 的默认行为（最低优先级）\n```\n\n**这意味着：** 你在对话里的一句「这次不用 zod」，会覆盖 CLAUDE.md 里「所有 API 必须用 zod 校验」的规则。会话级指令 > 文件级指令。\n\n## 动态更新 CLAUDE.md：让 Claude 从错误中学习\n\n这是 CLAUDE.md 最实用的用法——Claude 犯了错，你纠正它，然后让它把这个教训写进 CLAUDE.md。\n\n```\n你刚才在 src/utils/format.ts 里用了 dayjs，\n但这个项目已经决定用 date-fns 了。\n\n帮我做两件事：\n1. 把刚才的改动改成用 date-fns 实现\n2. 把这个规则加到 CLAUDE.md 里：\n   「日期处理统一用 date-fns，不要用 dayjs 或 moment」\n```\n\n**这个模式的价值：** 你不需要事先想到所有规则。遇到了，纠正了，记录为永久规则。CLAUDE.md 是一个活的文档，会随着项目一起成长。\n\n**实战示例集合：**\n\n```\n# 你发现 Claude 在用 Tailwind 时写了内联 style\n把这条规则加到 CLAUDE.md：\n「样式统一用 Tailwind utility class，禁止 inline style 和 CSS module，\n除非 Tailwind 确实做不到（比如动态计算的颜色值）」\n\n# Claude 写的错误处理太啰嗦\n「API 路由的错误处理不要每个都写 console.error + 完整堆栈，\n封装一个 handleApiError 函数统一处理」\n\n# Claude 擅自升级了依赖版本\n「永远不要修改 package.json 里的版本号，除非我明确要求升级」\n```\n\n## 条件规则：让 CLAUDE.md 更聪明\n\n不是所有规则在所有场景都适用。你可以写条件规则：\n\n```markdown\n## Conditional Rules\n\n### 当修改 API 路由文件时\n- 自动检查 zod schema 是否和 TypeScript 类型一致\n- 确保有 try-catch\n- 检查是否加了鉴权（除非路由名包含 public）\n\n### 当修改数据库相关代码时\n- 检查是否需要在 Prisma schema 里改模型\n- 如果新增了字段，提醒是否需要数据库迁移\n- 不要在查询里使用 select *，显式列出需要的字段\n\n### 当写 React 组件时\n- 检查是否可以用 Server Component（不涉及 state/effect 就用 RSC）\n- 如果有用户交互，把交互部分抽成 Client Component\n- 移动端适配不要用 hidden sm:block 这种模式，默认移动端优先\n\n### 当处理外部 API 调用时\n- 必须加超时控制（默认 10 秒）\n- 必须加重试逻辑（指数退避，最多 3 次）\n- 必须处理网络错误和超时错误，给出友好的用户提示\n```\n\n## CLAUDE.md vs /init\n\n`/init` 命令是个好起点，但它只生成项目级 CLAUDE.md，内容是静态快照。你的工作是：\n\n1. **删掉没用的。** `/init` 可能生成了「这是一个 TypeScript 项目」这种废话。删。\n2. **补充隐式知识。** 哪些库被弃用了但还没删？哪个函数有隐藏副作用？写进去。\n3. **加上你的偏好。** 你喜欢怎么写代码、怎么组织文件——这只有你知道。\n\n## 今日小练习\n\n1. 在项目里运行 `/init`，看自动生成的 CLAUDE.md，逐条审查\n2. 补充至少 10 条自己的规则——从过去两周踩过的坑里提取\n3. 创建一个全局 `~/.claude/CLAUDE.md`，写入跨项目偏好\n4. 在某个子目录（如 `src/api/`）创建一个局部的 CLAUDE.md\n5. 下次 Claude 犯错时，纠正后让它把规则加到 CLAUDE.md\n\n---\n\n**今日小结：** CLAUDE.md 是你在 Claude Code 上的「可复用的指导费」。写 10 分钟，省 100 小时。诀窍：不要试图一开始就写完美——每次纠正 Claude 后顺手加一条规则，让它从一个骨架长成你自己的编程规范书。"},
-{"day":8,"date":"5月18日 周一","title":"任务规划：用 /plan 把复杂需求变成可执行方案","content":"程序员最怕的不是写代码，是面对一个模糊的需求不知道该从哪下手。`/plan` 模式就是为这个时刻设计的——它把 Claude 从「执行者」变成「架构师」，先给方案等你审批，然后再动手。\n\n## /plan 模式详解\n\n输入 `/plan` 后，Claude 会进入规划模式。它不会再改代码，而是分析需求、阅读相关代码、输出一个结构化的执行计划。\n\n**基本用法：**\n\n```\n/plan 我需要给订单系统加一个「部分退款」功能。\n目前只支持全额退款。\n\n要考虑：\n- 一个订单可以多次部分退款\n- 退款总额不能超过订单总额\n- 退款需要经过审批（金额超过 500 元需要管理员审批）\n- 退款状态需要实时同步到前端\n```\n\nClaude 会输出类似这样的计划（大幅简化版）：\n\n```markdown\n## Plan: 部分退款功能\n\n### 1. 数据模型变更\n- 修改 Order 表：新增 refundableAmount 字段\n- 新建 RefundRequest 表：amount, reason, status, approverId\n- 新建 RefundApproval 表：requestId, approverId, decision, comment\n\n### 2. API 变更\n- POST /api/orders/:id/refund — 创建退款申请\n- GET /api/orders/:id/refunds — 查询退款历史\n- POST /api/refunds/:id/approve — 审批退款\n- WebSocket 事件：refund:status_changed\n\n### 3. 前端变更\n- 修改 OrderDetail 页面：退款按钮改为「申请退款」\n- 新建 RefundDialog 组件：输入金额和原因\n- 新建 RefundHistory 组件：显示退款记录时间线\n- 新建 ApproveRefund 页面（管理员）\n\n### 4. 业务规则\n- 退款金额 ≤ 剩余可退金额\n- >500 元触发审批流\n- 审批中不可重复申请\n- 退款成功后释放库存\n\n### 5. 测试\n- 单元测试：退款金额校验、审批流状态机\n- 集成测试：完整退款流程\n- E2E：用户申请退款 → 管理员审批 → 退款到账\n\n### 预估工作量\n- 数据模型：30 分钟\n- API：1 小时\n- 前端：1.5 小时\n- 测试：1 小时\n- 总计：约 4 小时\n```\n\n## 手动任务分解：5 轮推进法\n\n`/plan` 给的是计划，真正干活是按轮次推进。这是经过验证的高效模式：\n\n**第 1 轮：定义边界**\n\n```\n我要给项目加一个「收藏夹」功能。帮我：\n1. 分析现有代码中与用户、内容相关的模块\n2. 列出所有需要创建和修改的文件\n3. 列出所有需要明确的决策点（比如：收藏的是文章还是商品？要不要分类？）\n\n先别写代码，只列清单。\n```\n\n**第 2 轮：数据建模**\n\n```\n基于第 1 轮的清单。帮我设计数据模型：\n- Prisma schema 改动\n- 字段类型、关系、索引\n- 迁移策略（是否影响现有数据）\n```\n\n**第 3 轮：API 设计**\n\n```\n基于第 2 轮的模型。设计 API：\n- 接口列表和路由\n- 请求/响应格式\n- 错误处理\n- 鉴权策略\n```\n\n**第 4 轮：逐步实现**\n\n```\n按顺序实现：\n1. 先改数据模型\n2. 再写 API\n3. 接着写前端\n4. 最后写测试\n\n每一步我确认后再继续。\n```\n\n**第 5 轮：审查与收尾**\n\n```\n全部实现完成。做一次全面审查：\n1. 代码质量：命名、结构、重复逻辑\n2. 安全性：鉴权、输入校验、注入风险\n3. 性能：N+1 查询、无索引查询\n4. 测试覆盖：关键路径都有测试吗\n```\n\n## 任务分解原则\n\n好分解和烂分解的区别：\n\n| 原则 | 好例子 | 坏例子 |\n|---|---|---|\n| 可独立验证 | 「改 User 模型，加 favoriteIds 字段，然后运行 prisma migrate」 | 「改模型和 API」 |\n| 有明确产出 | 「创建 POST /api/favorites 接口，返回 201」 | 「实现收藏接口」 |\n| 顺序清楚 | 「先模型，再 API，再前端」 | 「全部一起做」 |\n| 可估算 | 「5 个文件改动，预计 30 分钟」 | 「改代码」 |\n| 有验收标准 | 「运行 npm test，3 个新测试通过」 | 「大概没问题」 |\n\n## 依赖排序：什么先做什么后做\n\n让 Claude 帮你找出任务依赖：\n\n```\n这是我需要改的文件列表：\n- src/types/favorite.ts （新文件）\n- src/services/favoriteService.ts （新文件）\n- src/api/favorites/route.ts （新文件）\n- src/components/FavoriteButton.tsx （新文件）\n- src/pages/product/[id].tsx （修改）\n- src/pages/user/favorites.tsx （新文件）\n\n帮我分析它们的依赖关系，给出最优实现顺序。\n\n输出格式：\nLevel 0（无依赖，可以最先做）：...\nLevel 1（依赖 Level 0）：...\nLevel 2（依赖 Level 1）：...\n```\n\n## 估算复杂度\n\n在开始写代码前，让 Claude 给出复杂度评估：\n\n```\n在实现收藏夹功能之前，帮我评估每个部分的复杂度：\n\n评级标准：\n- 🟢 简单（模式化，有现成例子可抄）\n- 🟡 中等（需要一些设计决策）\n- 🔴 复杂（涉及跨模块协调、状态管理、并发）\n\n对 🔴 的部分，详细说明为什么复杂，有什么风险。\n对 🟡 的部分，列出关键决策点。\n```\n\n## 中途改计划：Plan 不是合同\n\n需求变了怎么办？没关系——计划本身就是为变更设计的。\n\n```\n等一下。第 3 步的 API 设计里，我没提到但需要加上：\n- 收藏时需要记录收藏时的商品价格\n- 取消收藏时不要真删除，做软删除（保留数据用于推荐算法）\n\n帮我更新计划，重新评估影响范围。\n哪些已经实现的部分需要改？改动成本多大？\n```\n\n**关键心态：** 用 `/plan` 不是为了写一份完美的计划然后严格执行——计划帮你看到全貌、找到坑、理清依赖。在实现过程中发现新信息？更新计划。这是探索式编程，不是瀑布模型。\n\n## 实战：从一句话需求到完整计划\n\n```\n需求：用户反馈「希望搜索能更准一些」。\n\n先别做任何事。帮我拆解这个需求：\n1. 「更准」是什么意思？列出可能的方向：\n   - 模糊搜索（拼音、同义词）\n   - 搜索结果排序优化\n   - 搜索建议/自动补全\n   - 按多字段搜索（标题+内容+标签）\n   \n2. 每个方向的技术方案和成本\n3. 根据我们现有的技术栈（PostgreSQL），推荐优先级\n4. 给出 MVP 方案（最小改动，最大效果）\n```\n\nClaude 会告诉你：PostgreSQL 自带 `pg_trgm` 扩展可以做模糊搜索和相似度排序，改动极小。比引入 Elasticsearch 划算得多。\n\n## 今日小练习\n\n1. 从你 backlog 里挑一个需求，用 `/plan` 出完整计划\n2. 实践 5 轮推进法：定义一个任务，逐轮执行\n3. 给任务做复杂度评估，看看 🔴 的部分是不是真的需要那么复杂\n4. 故意在计划执行到一半时「改需求」，看 Claude 怎么调整\n\n---\n\n**今日小结：** `/plan` 解决的是「不知道该做什么」的问题，5 轮推进法解决的是「知道做什么但不知道从哪开始」的问题。加起来，复杂需求的实现时间能缩短一半以上——不是因为 Claude 写得快，是因为你不再走弯路了。计划最重要的价值不是「执行」，是让你在写第一行代码之前就看到坑在哪。"},
-{"day":9,"date":"5月19日 周二","title":"测试与调试：让 Claude 做你的 QA 工程师","content":"没人喜欢写测试，但人人都希望代码有测试。好消息：Claude 写测试比写业务代码还快——因为它擅长穷举边界条件，而测试本质上就是穷举。\n\n## 自动生成测试\n\n**基础：给一个函数写全套测试**\n\n```\n给 src/utils/pagination.ts 里的 paginate 函数写测试：\n\n函数签名：\npaginate<T>(items: T[], page: number, pageSize: number) => {\n  data: T[], total: number, page: number, totalPages: number\n}\n\n测试要求：\n- 正常情况：10 个元素，第 1 页，每页 3 个\n- 最后一页不满：10 个元素，第 4 页（只剩 1 个）\n- 空数组：返回空数据和 totalPages=0\n- 边界：page=0、page=负数、pageSize=0\n- 超范围：page 超过总页数\n- 大数据集：10000 个元素，性能验证\n```\n\nClaude 生成的测试通常比你手写的更全面——因为它不漏边界条件。\n\n**进阶：基于现有代码反推测试**\n\n```\n分析 src/services/orderService.ts 里 createOrder 函数的代码逻辑，\n帮我写一份测试计划，然后实现。\n\n测试计划要包含：\n1. 正常路径测试\n2. 异常路径测试（库存不足、用户余额不够、优惠券过期）\n3. 边界测试（最大数量、最小金额、极端并发）\n4. 集成测试（如果涉及第三方 API，mock 掉）\n\n用 vitest + @testing-library（如果需要渲染组件）\n```\n\n## TDD 工作流：Red-Green-Refactor\n\nClaude Code 做 TDD 特别顺手，因为三个步骤都是它在做：\n\n**Red 阶段：先写失败测试**\n\n```\n我要实现一个 validatePassword 函数，规则是：\n- 至少 8 个字符\n- 包含至少一个大写字母\n- 包含至少一个数字\n- 包含至少一个特殊字符（!@#$%^&*）\n\n先写测试（Red 阶段），不要写实现。\n```\n\n**Green 阶段：让测试通过**\n\n```\n测试写好了。现在实现 validatePassword，让所有测试通过。\n不要过度设计——只要让测试绿就行。\n```\n\n**Refactor 阶段：优化但不破坏测试**\n\n```\n测试全绿。现在重构 validatePassword：\n- 提高可读性（正则太长了，拆开）\n- 优化性能（预编译正则）\n- 加上详细的错误消息（告诉用户哪条规则没满足）\n\n重构后重新跑测试，确保全部通过。\n```\n\n**完整 TDD 对话示例：**\n\n```\n# 一个 prompt 完成整个 TDD 循环\n用 TDD 方式实现 src/utils/slug.ts 的 generateSlug 函数：\n\n1. 先写测试（Red）：\n   - 英文标题 → 小写+连字符\n   - 中文标题 → 拼音或保留原样\n   - 特殊字符 → 移除\n   - 连续空格 → 单个连字符\n   - 首尾空格 → trim\n   - 空字符串 → 返回空\n   - 超长标题 → 截断到 80 字符\n\n2. 实现让测试通过（Green）\n3. 重构优化（Refactor）\n\n每步完成后告诉我状态。\n```\n\n## Debug 循环：Claude 的自我修复能力\n\n这是 Claude Code 最魔幻的能力——它会自己 debug 自己写的 bug：\n\n```\n我刚运行了你写的测试，3 个没过。\n这是完整的报错输出：（粘贴终端输出）\n\n自己分析、修复、重新跑测试。循环直到全绿。\n```\n\nClaude 会：读报错 → 定位 → 修改 → 跑测试 → 看结果 → 如果还失败，再改。这个过程完全不需要你参与。\n\n**实战：修复一个复杂 Bug**\n\n```\n用户反馈：创建订单时偶尔报「库存不足」，但实际库存充足。\n\n帮我 debug：\n1. 读 createOrder 相关代码，理解库存检查逻辑\n2. 分析并发场景：是不是两个请求同时读到了旧库存？\n3. 检查数据库事务隔离级别\n4. 如果是竞态条件，用悲观锁还是乐观锁？\n5. 写出修复方案并实施\n6. 写一个测试模拟并发创建订单的场景\n```\n\nClaude 的分析路径通常：读代码 → 发现竞态 → 建议 `SELECT ... FOR UPDATE` → 你确认 → 实施 → 写并发测试验证。\n\n## 让 Claude 做 Code Review\n\n```\n审查当前分支上所有改动的代码。\n检查以下维度（每个维度打分 1-5）：\n\n1. 逻辑正确性：\n   - 有没有 off-by-one 错误？\n   - 条件判断有没有遗漏？\n   - 异步操作有没有正确处理？\n\n2. 安全性：\n   - 用户输入有没有校验？\n   - SQL 有没有参数化？\n   - 有没有信息泄漏到错误消息里？\n\n3. 性能：\n   - 循环里有没有不必要的操作？\n   - 有没有 N+1 查询？\n   - 大数据集有没有分页？\n\n4. 可维护性：\n   - 命名是否清晰？\n   - 函数是否过长（>50 行）？\n   - 有没有重复逻辑？\n\n输出：每个维度的分数 + 问题列表（含文件名和行号） + 修复建议\n```\n\n**审查 PR 的实战 prompt：**\n\n```\n用 gh pr diff 拉取 PR #128 的改动。\n你是主审查者，用以下标准：\n- 🔴 必须改（安全漏洞、数据丢失风险、逻辑错误）\n- 🟡 建议改（性能问题、可读性差、缺少测试）\n- 🟢 可选项（命名建议、注释补充、代码风格）\n\n每个问题引用具体行号，给出修复建议。\n```\n\n## 性能测试\n\n```\n分析 src/services/searchService.ts 的 search 函数性能：\n\n1. 用 console.time 包裹关键路径，跑 100 次查询取平均值\n2. 分析哪些操作最耗时（数据库查询？数据处理？排序？）\n3. 检查数据库查询计划（PostgreSQL EXPLAIN ANALYZE）\n4. 给出优化方案：加索引？缓存？改写查询？\n5. 实施优化，对比优化前后的耗时\n\n输出对比表格：\n| 操作 | 优化前 | 优化后 | 提升 |\n| ...\n```\n\n## 快照测试（Snapshot Testing）\n\n```\n给 src/components/OrderCard.tsx 写快照测试：\n- 渲染不同状态的订单（待支付、已支付、已发货、已退款）\n- 每种状态渲染对应的快照\n- 如果组件修改后快照变了，提醒我审查变化是否预期\n```\n\n## E2E 测试提示\n\n```\n用 Playwright 给用户注册流程写 E2E 测试：\n\n场景：\n1. 打开注册页 → 填写表单 → 提交 → 验证成功跳转到首页\n2. 必填字段为空 → 验证错误提示出现\n3. 邮箱已注册 → 验证后端错误消息显示\n4. 密码太短 → 验证前端校验提示\n\n要求：\n- 使用 data-testid 选择器（不要用 CSS class 或文本内容）\n- 每个测试独立，不依赖执行顺序\n- 用 test.beforeEach 清理测试数据\n```\n\n## 今日小练习\n\n1. 找你项目里一个没有测试的工具函数，让 Claude 写全套测试\n2. 实践一次 TDD 循环：先写测试，再实现，再重构\n3. 故意在代码里引入一个 bug，然后让 Claude debug 并修复\n4. 让 Claude 审查你今天写的所有代码改动\n5. 对项目中一个慢函数做性能分析，让 Claude 给出优化方案\n\n---\n\n**今日小结：** 测试和调试可能是 Claude Code 最能替你省时间的领域。不是因为测试本身难写，而是因为它不偷懒——你不愿写的边界测试、你懒得查的 debug 日志、你总是跳过的性能分析，它都老老实实做。把测试和审查变成习惯性的「改完后让 Claude 看一眼」，代码质量会悄悄上一个台阶。"},
-{"day":10,"date":"5月20日 周三","title":"Hooks 自动化：打造你的安全网和工作流","content":"Hooks 是 Claude Code 的事件系统——在特定时刻自动触发脚本。你可以把它理解为 Claude Code 的「if this then that」：文件被修改了 → 自动格式化；要执行危险命令 → 弹窗确认。今天学会配置，你的工作流会自动运转。\n\n## 四种 Hook 事件类型\n\n| 事件 | 触发时机 | 典型用途 |\n|---|---|---|\n| `PreToolUse` | Claude 准备调用某个工具之前 | 拦截危险操作、注入检查逻辑 |\n| `PostToolUse` | Claude 调用某个工具之后 | 自动格式化、运行 lint、提交后通知 |\n| `Notification` | Claude 发送通知时 | 桌面通知、Slack 消息 |\n| `Stop` | Claude 响应完成时 | 自动运行测试、检查文件状态 |\n\n## Hooks 配置格式\n\nHooks 配置在 `settings.json` 或项目的 `.claude/settings.json` 中：\n\n```json\n{\n  "hooks": {\n    "PreToolUse": [\n      {\n        "matcher": "Bash",\n        "hooks": [\n          {\n            "type": "command",\n            "command": "node .claude/hooks/confirm-dangerous.js"\n          }\n        ]\n      }\n    ],\n    "PostToolUse": [\n      {\n        "matcher": "Write|Edit",\n        "hooks": [\n          {\n            "type": "command",\n            "command": "npx prettier --write ${CLAUDE_TOOL_INPUT_FILE}"\n          }\n        ]\n      }\n    ],\n    "Notification": [\n      {\n        "matcher": "",\n        "hooks": [\n          {\n            "type": "command",\n            "command": "osascript -e \'display notification \\"Claude 处理完成\\" with title \\"Claude Code\\"\'"\n          }\n        ]\n      }\n    ],\n    "Stop": [\n      {\n        "matcher": "",\n        "hooks": [\n          {\n            "type": "command",\n            "command": "npm run typecheck 2>&1 | head -20"\n          }\n        ]\n      }\n    ]\n  }\n}\n```\n\n## 实战 Hook 1：自动格式化（PostToolUse）\n\n每次 Claude 写完代码后自动格式化——最基础也最必要的 hook：\n\n```json\n{\n  "PostToolUse": [\n    {\n      "matcher": "Write|Edit",\n      "hooks": [\n        {\n          "type": "command",\n          "command": "npx prettier --write ${CLAUDE_TOOL_INPUT_FILE_PATH}"\n        }\n      ]\n    }\n  ]\n}\n```\n\n**高级版：区分语言格式化**\n\n```bash\n#!/bin/bash\n# .claude/hooks/format.sh\nFILE="$CLAUDE_TOOL_INPUT_FILE_PATH"\n\nif [[ "$FILE" == *.ts || "$FILE" == *.tsx ]]; then\n  npx prettier --write "$FILE"\n  npx eslint --fix "$FILE"\n  echo "✔ Formatted + linted: $FILE"\nelif [[ "$FILE" == *.json ]]; then\n  npx prettier --write "$FILE"\n  echo "✔ Formatted: $FILE"\nfi\n```\n\n## 实战 Hook 2：安全守卫（PreToolUse）\n\n在你最关心的操作上设置关卡：\n\n```javascript\n// .claude/hooks/confirm-dangerous.js\nconst command = process.env.CLAUDE_TOOL_INPUT_COMMAND || \'\';\n\nconst dangerous = [\n  { pattern: /rm\\s+-rf/, reason: \'递归强制删除\' },\n  { pattern: /git\\s+push\\s+.*--force/, reason: \'强制推送\' },\n  { pattern: /DROP\\s+(TABLE|DATABASE)/i, reason: \'数据库删除操作\' },\n  { pattern: /curl.*\\|\\s*bash/, reason: \'管道执行远程脚本\' },\n  { pattern: /chmod\\s+777/, reason: \'过度开放权限\' },\n  { pattern: /npm\\s+unpublish/, reason: \'取消发布 npm 包\' },\n];\n\nconst match = dangerous.find(d => d.pattern.test(command));\n\nif (match) {\n  console.error(`⚠️  [安全守卫] 检测到危险操作: ${match.reason}`);\n  console.error(`   命令: ${command}`);\n  console.error(`   此操作已被阻止。如果确实需要执行，请手动在终端运行。`);\n  process.exit(2); // 退出码 2：阻止执行\n}\n\nprocess.exit(0);\n```\n\n对应的 hook 配置：\n\n```json\n{\n  "PreToolUse": [\n    {\n      "matcher": "Bash",\n      "hooks": [\n        {\n          "type": "command",\n          "command": "node .claude/hooks/confirm-dangerous.js"\n        }\n      ]\n    }\n  ]\n}\n```\n\n## 实战 Hook 3：桌面通知（Notification + Stop）\n\n让你不用一直盯着 Claude——它干完了会告诉你：\n\n```bash\n#!/bin/bash\n# .claude/hooks/notify.sh\n# macOS 桌面通知\nosascript -e \'display notification "Claude 已完成当前任务" with title "Claude Code" sound name "Glass"\'\n\n# 如果装了 terminal-notifier，效果更好\n# terminal-notifier -title "Claude Code" -message "任务完成" -sound default\n```\n\n## Exit Code 说明\n\nHook 脚本的退出码决定 Claude 的行为：\n\n| 退出码 | 含义 | Claude 的行为 |\n|---|---|---|\n| 0 | 成功 | 继续执行操作 |\n| 1 | 一般错误 | 向用户报告错误，但继续 |\n| 2 | 阻止 | 不执行该操作，并告知用户原因 |\n\n**坑：exit code 2 只对 PreToolUse 有效。** 在 PostToolUse 里 exit 2，操作已经执行了，阻止不了。\n\n## 高级：条件 Hook\n\n不是所有文件都需要格式化。你可以让 hook 有条件地运行：\n\n```bash\n#!/bin/bash\n# .claude/hooks/conditional-format.sh\n\nFILE="$CLAUDE_TOOL_INPUT_FILE_PATH"\n\n# 跳过 node_modules 和 dist\nif [[ "$FILE" == *"node_modules"* ]] || [[ "$FILE" == *"dist"* ]]; then\n  exit 0\nfi\n\n# 只处理特定类型的文件\nif [[ "$FILE" == *.ts ]] || [[ "$FILE" == *.tsx ]] || [[ "$FILE" == *.json ]]; then\n  npx prettier --write "$FILE"\n  echo "✔ Formatted: $FILE"\nfi\n\nexit 0\n```\n\n## 高级：Hook 链\n\n一个 matcher 可以触发多个 hook，按注册顺序执行：\n\n```json\n{\n  "PostToolUse": [\n    {\n      "matcher": "Write|Edit",\n      "hooks": [\n        {\n          "type": "command",\n          "command": ".claude/hooks/format.sh"\n        },\n        {\n          "type": "command",\n          "command": ".claude/hooks/typecheck.sh"\n        },\n        {\n          "type": "command",\n          "command": ".claude/hooks/git-add.sh"\n        }\n      ]\n    }\n  ]\n}\n```\n\n每次 Claude 写文件后：先格式化 → 再类型检查 → 再自动 git add。一条龙。\n\n## Hook 调试\n\n```\n# 检查 hook 是否生效\nclaude --debug 2>&1 | grep -i hook\n\n# 在 hook 脚本里加日志\n#!/bin/bash\necho "[HOOK DEBUG] File: $CLAUDE_TOOL_INPUT_FILE_PATH" >> /tmp/claude-hooks.log\necho "[HOOK DEBUG] Tool: $CLAUDE_TOOL_NAME" >> /tmp/claude-hooks.log\n```\n\n## 社区 Hook 示例\n\n**每次提交后自动推送到远程（慎用）：**\n\n```json\n{\n  "PostToolUse": [\n    {\n      "matcher": "Bash(git commit:*)",\n      "hooks": [\n        {\n          "type": "command",\n          "command": "git push 2>&1"\n        }\n      ]\n    }\n  ]\n}\n```\n\n**阻止在 main 分支上直接编辑：**\n\n```javascript\n// .claude/hooks/protect-main.js\nconst { execSync } = require(\'child_process\');\nconst branch = execSync(\'git branch --show-current\').toString().trim();\n\nif (branch === \'main\' || branch === \'master\') {\n  console.error(\'❌ 禁止在 main 分支上直接编辑。请切换到 feature 分支。\');\n  process.exit(2);\n}\n```\n\n## 今日小练习\n\n1. 配置一个 Prettier 自动格式化的 PostToolUse hook\n2. 写一个安全守卫 hook，阻止 `rm -rf` 和 `git push --force`\n3. 配置桌面通知 hook，Claude 完成时提醒你\n4. 试写一个条件 hook：仅当改动的文件在 `src/` 下时才运行 lint\n5. 用 `claude --debug` 验证所有 hook 正确触发\n\n---\n\n**今日小结：** Hooks 让 Claude Code 从「你盯着它干活」变成「它自己按规则运转」。自动格式化省手工，安全守卫省心跳，桌面通知省盯着屏幕的时间。配置一次，受益整个项目周期。关键是不要只配不测——每个 hook 加上去后，触发一次看看效果。"},
-{"day":11,"date":"5月21日 周四","title":"MCP 工具：打开 Claude Code 的外部世界","content":"Claude Code 内置能力有限——读文件、写代码、跑命令。MCP（Model Context Protocol）让它能连接数据库、浏览器、API、聊天工具……等于给 Claude Code 装了无数个插件。\n\n## MCP 是什么\n\nMCP 是一个开放协议，让 AI 助手能通过标准接口调用外部工具。架构很简单：\n\n```\n┌──────────────┐     ┌──────────────┐     ┌──────────────┐\n│  Claude Code │ ←→  │  MCP Server  │ ←→  │  外部服务     │\n│  (Client)    │     │  (中间层)     │     │  (DB/API/...) │\n└──────────────┘     └──────────────┘     └──────────────┘\n```\n\n你配好 MCP Server 后，Claude 就能像调用自己的工具一样调用它们。比如：\n\n```\n# 有了 PostgreSQL MCP Server 后\n帮我查一下最近 24 小时内注册的用户数\n\n# 有了 Browser MCP Server 后  \n打开 https://myapp.com/login，用测试账号登录，检查首页是否正常\n\n# 有了 GitHub MCP Server 后\n帮我看看我们团队的 open PR，按紧急程度排序\n```\n\n## 热门 MCP Server 目录\n\n| Server | 能力 | 安装量 |\n|---|---|---|\n| `@anthropic/postgres-mcp` | PostgreSQL 数据库查询、schema 管理 | ⭐⭐⭐⭐⭐ |\n| `@anthropic/filesystem-mcp` | 增强文件系统操作，支持搜索和批量处理 | ⭐⭐⭐⭐ |\n| `@anthropic/browser-mcp` | 控制浏览器：导航、点击、截图、表单填写 | ⭐⭐⭐⭐ |\n| `@anthropic/github-mcp` | GitHub API：issues、PRs、repos、actions | ⭐⭐⭐⭐⭐ |\n| `@anthropic/slack-mcp` | Slack 消息收发、频道管理 | ⭐⭐⭐ |\n| `@anthropic/notion-mcp` | Notion 页面和数据库操作 | ⭐⭐⭐ |\n| `@anthropic/google-drive-mcp` | Google Drive 文件操作 | ⭐⭐ |\n| `@anthropic/jira-mcp` | Jira issue 管理 | ⭐⭐⭐ |\n\n## MCP 配置格式\n\nMCP Server 在 `~/.claude/mcp.json` 或 `.claude/mcp.json` 中配置：\n\n```json\n{\n  "mcpServers": {\n    "postgres": {\n      "command": "npx",\n      "args": ["-y", "@anthropic/postgres-mcp"],\n      "env": {\n        "DATABASE_URL": "postgresql://localhost:5432/myapp"\n      }\n    },\n    "github": {\n      "command": "npx",\n      "args": ["-y", "@anthropic/github-mcp"],\n      "env": {\n        "GITHUB_TOKEN": "${GITHUB_TOKEN}"\n      }\n    },\n    "browser": {\n      "command": "npx",\n      "args": ["-y", "@anthropic/browser-mcp"],\n      "env": {\n        "BROWSER_HEADLESS": "true"\n      }\n    },\n    "filesystem": {\n      "command": "npx",\n      "args": ["-y", "@anthropic/filesystem-mcp"],\n      "args": ["--root", "/home/user/projects"]\n    },\n    "slack": {\n      "command": "npx",\n      "args": ["-y", "@anthropic/slack-mcp"],\n      "env": {\n        "SLACK_BOT_TOKEN": "${SLACK_BOT_TOKEN}"\n      }\n    }\n  }\n}\n```\n\n## 实战场景 1：数据库查询\n\n配置好 PostgreSQL MCP Server 后：\n\n```\n# 自然语言查询数据库\n帮我查一下 users 表里 role="admin" 的用户，\n按 created_at 倒序，显示他们的 email 和最后登录时间。\n\n# 分析数据\n分析 orders 表最近一个月的趋势：\n1. 按天统计订单量和金额\n2. 找出订单量异常的日期（超过均值 2 倍标准差）\n3. 分析异常日期是否和某个促销活动相关\n\n# Schema 审查\n检查数据库里有没有没用索引的慢查询。\n帮我列出所有表、它们的索引，分析缺失的索引。\n```\n\n**注意事项：**\n- 始终用只读账号配置数据库 MCP，除非你真的需要写入\n- 产线数据库的操作必须加确认步骤\n- 敏感列（password、token）要在查询里排除\n\n## 实战场景 2：浏览器测试\n\nBrowser MCP 让 Claude 能操作真实浏览器——做 E2E 测试的好帮手：\n\n```\n打开 localhost:3000/products 页面，帮我：\n1. 截图首页\n2. 点击第一个商品的「加入购物车」按钮\n3. 检查购物车数量是否变成 1\n4. 点击购物车图标，确认商品在购物车中\n5. 模拟删除操作\n6. 每一步截图保存\n```\n\n**Browser MCP 的高效模式：**\n\n```\n帮我做一次冒烟测试：\n- 首页加载正常\n- 登录流程走通\n- 核心页面（商品列表、购物车、个人中心）无 500 错误\n- 生成一份 HTML 报告，包含每步的截图和状态\n```\n\n## 实战场景 3：文档同步\n\n```\n# Slack + Notion 联动\n把今天最重要的 Slack 消息总结成一条 Notion 记录，\n按项目分类，标记发信人和紧急程度。\n\n# GitHub + Notion 联动  \n把我们团队本周合并的 PR 总结成一份周报，\n发布到 Notion 的「团队周报」页面。\n```\n\n## 安全考虑\n\nMCP 给了 Claude 很大的外部能力，安全必须认真对待：\n\n```markdown\n### MCP 安全原则（写入你的 CLAUDE.md）\n\n1. **数据库只读原则**：生产环境数据库 MCP 连接必须用只读账号\n2. **Token 最小权限**：GitHub token 只给需要的 scope，不给 write:all\n3. **敏感操作确认**：涉及数据库写、API 调用、发送消息的操作，必须我确认\n4. **不要提交 mcp.json**：包含 token 的话，加入 .gitignore\n5. **网络隔离**：MCP Server 尽量本地运行，不要暴露端口到公网\n```\n\n## 自建 MCP Server（概念概述）\n\nMCP Server 本质是一个实现了标准接口的本地进程。最小的 MCP Server 就几十行代码：\n\n```typescript\n// 概念示意：一个简单的天气 MCP Server\nimport { Server } from "@anthropic/mcp-sdk";\n\nconst server = new Server({\n  name: "weather-mcp",\n  version: "1.0.0"\n});\n\nserver.addTool({\n  name: "get_weather",\n  description: "获取指定城市的当前天气",\n  parameters: {\n    type: "object",\n    properties: {\n      city: { type: "string", description: "城市名，如 Beijing" }\n    },\n    required: ["city"]\n  },\n  handler: async ({ city }) => {\n    // 调天气 API\n    const weather = await fetchWeather(city);\n    return {\n      temperature: weather.temp,\n      condition: weather.description,\n      humidity: weather.humidity\n    };\n  }\n});\n\nserver.start();\n```\n\n什么时候值得自己写？当你有内部工具、私有 API、特殊数据源——MCP 把它们变成 Claude 可以调用的原语。\n\n## 今日小练习\n\n1. 配置一个 Filesystem MCP Server，让 Claude 搜索范围更广\n2. 如果项目用了 PostgreSQL，配置 Postgres MCP Server 并做几次自然语言查询\n3. 配置 GitHub MCP Server，让 Claude 帮你查 issues 和 PRs\n4. 试写一个概念性的自建 MCP Server（比如查公司内部 API）\n5. 在 CLAUDE.md 里加上 MCP 安全规则\n\n---\n\n**今日小结：** MCP 把 Claude Code 从一个「代码编辑器里的助手」变成「能连接整个工具生态的指挥官」。数据库、浏览器、GitHub、Slack——都是 Claude 可以调用的能力。关键不在于配置多，而在于想清楚：哪些信息源接入后真正提高效率？安全边界在哪里？只接你需要的，给最小权限。"},
-{"day":12,"date":"5月25日 周一","title":"CLAUDE.md 进阶：团队协作与工作流设计","content":"第七天讲了 CLAUDE.md 的基础。现在深入：多人团队怎么共用一套规则？怎么让规则在特定场景自动生效？怎么把 CLAUDE.md 从一个文件变成一个活的系统？\n\n## 分层规则体系回顾与深化\n\n```\n~/.claude/CLAUDE.md          ← 你的个人偏好（所有项目共享）\n  ↓ 被覆盖\nproject/CLAUDE.md            ← 项目级规则（团队共享，纳入 Git）\n  ↓ 被覆盖\nproject/src/api/CLAUDE.md    ← 子目录级规则（特定模块）\n  ↓ 被覆盖\n对话中的明确指令              ← 临时覆盖（仅当前会话）\n```\n\n**实际例子：规则如何层层生效**\n\n全局 CLAUDE.md：\n```markdown\n- 代码注释用英文\n- 优先用函数式风格\n```\n\n项目 CLAUDE.md：\n```markdown\n- 本项目注释用中文（因为团队都在国内）\n- 本项目是 OOP 风格，用 class 组织业务逻辑\n```\n\n`src/api/CLAUDE.md`：\n```markdown\n- API 层特别要求：所有接口返回 { code, data, message } 格式\n```\n\n结果：Claude 在写 API 代码时会用中文注释 + class 风格 + 统一返回格式。全局的英文注释和函数式偏好被下级覆盖了。\n\n## 精细化规则：DO/DON\'T 模式\n\n模糊的规则没用，精确的规则才是好规则：\n\n```markdown\n## 规则（按精确度排序）\n\n### ❌ 模糊（几乎没用）\n- 写干净的代码\n\n### ⚠️ 半模糊（有一点用）\n- 变量名要有意义\n\n### ✅ 精确（真正有用）\n\n#### DO\n- 数据库模型用 snake_case 字段名\n- API 响应用 camelCase（通过 Prisma 序列化转换）\n- 异步函数命名以动词开头：fetchXxx, createXxx, updateXxx, deleteXxx\n- 超过 3 个参数的函数用对象参数\n- 涉及金额的计算用整数（分）而不是浮点数\n\n#### DON\'T\n- 不要在组件里直接调 fetch——封装到 service 层\n- 不要在循环里执行数据库查询\n- 不要用 `as` 做类型断言（除非有类型守卫在前）\n- 不要在 catch 里吞掉错误不处理\n- 不要引入超过 50KB 的新依赖（除非必需）\n```\n\n**验证规则是否有效的方法：** 如果规则写成「Claude 应该……」，这是愿望。写成「用 X」「不要用 Y」，这是规则。\n\n## 工作流定义\n\nCLAUDE.md 不只是规则列表——你可以定义完整的工作流：\n\n```markdown\n## 工作流：新增 API 接口\n\n当我要求新增一个 API 接口时，按以下步骤执行：\n\n1. **类型定义**\n   - 在 src/types/api.ts 里定义请求和响应的 TypeScript 类型\n   - 导出类型供前端使用\n\n2. **Zod Schema**\n   - 在 src/schemas/ 下创建对应的 zod schema\n   - Schema 名和类型名对应：CreateUserRequest → createUserSchema\n\n3. **Service 层**\n   - 在 src/services/ 下实现业务逻辑\n   - 不依赖 HTTP 请求对象（纯函数或依赖注入数据库客户端）\n\n4. **API 路由**\n   - 在 src/app/api/ 下创建路由文件\n   - 使用 zod schema 校验输入\n   - 调用 service 层\n   - 返回统一格式 { code, data, message }\n\n5. **测试**\n   - Service 层单元测试：正常 + 异常 + 边界\n   - API 层集成测试：HTTP 请求模拟\n\n6. **文档**\n   - 如果接口是给前端用的，更新 API 文档（OpenAPI 注释）\n```\n\n有了这个工作流定义后，你只需要说：「加一个创建评论的 API 接口」——Claude 会自动按 6 步执行。\n\n## 条件规则\n\n```markdown\n## 条件规则\n\n### [文件类型: *.test.ts, *.spec.ts]\n- 使用 describe/it 结构\n- 测试名用中文，描述被测场景\n- 每个测试独立，不依赖其他测试的状态\n- 使用 beforeEach 重置 mock\n\n### [目录: src/db/migrations/]\n- 迁移文件只能用 Prisma Migrate 生成，不要手写\n- 迁移文件只读，不要修改\n- 如果迁移有问题，回滚或新建迁移，不要改旧迁移\n\n### [关键词: security, auth, payment]\n- 涉及这些关键词的改动，先讨论方案再写代码\n- 必须有至少 2 个测试覆盖异常路径\n- 改动后运行安全相关的测试套件\n\n### [Git 分支: hotfix/*]\n- 改动最小化，只修 bug 不重构\n- 不要引入新依赖\n- commit message 以 fix: 开头\n\n### [文件大小 > 400 行]\n- 提醒我考虑拆分\n- 如果确实要在这个文件里改，只改必要的部分\n```\n\n## 团队共享 CLAUDE.md\n\n多人团队用 Claude Code，需要分层管理：\n\n**方案：拆成两个文件**\n\n```\nproject/\n├── CLAUDE.md              ← 个人私有的（在 .gitignore 里）\n├── CLAUDE.team.md         ← 团队共享的（纳入 Git）\n```\n\n项目 CLAUDE.md 里引入团队配置：\n\n```markdown\n# 团队共享规则（不要改，改 CLAUDE.team.md 然后 PR）\n@CLAUDE.team.md\n\n# 我的个人偏好（下面写你自己的）\n- 我喜欢在看代码前先看测试文件\n- 提醒我写 commit message 时用中文 body\n```\n\n**CLAUDE.team.md 示例内容：**\n\n```markdown\n# 团队编码规范 v2.1（最后更新：2024-05-20）\n\n## 技术决策记录\n- 状态管理：Zustand（不用 Redux）\n- 日期处理：date-fns（不用 dayjs）\n- 表单：React Hook Form + zod\n- HTTP 客户端：原生 fetch + 封装（不用 axios）\n\n## 禁止项（DON\'T）\n1. 不要引入新的状态管理库\n2. 不要用 CSS-in-JS（项目统一用 Tailwind）\n3. 不要手写 Prisma raw query（除非 ORM 真的做不到）\n4. 不要在客户端暴露 API key 或 secret\n\n## 代码审查检查清单\n- [ ] 新增文件有对应的测试吗？\n- [ ] API 接口有错误处理吗？\n- [ ] 数据库查询有索引支持吗？\n- [ ] 导入语句干净吗？（无未使用的 import）\n- [ ] 类型安全吗？（无 any、无 as）\n```\n\n## CLAUDE.md 作为活文档\n\n```markdown\n## 变更记录\n\n### 2024-05-20\n- 新增：禁止在循环里做数据库查询（踩坑后加的）\n- 修改：API 返回格式从 { success, data } 统一为 { code, data, message }\n\n### 2024-05-15\n- 新增：条件规则——hotfix 分支的改动规范\n- 删除：不再要求每个组件写 Storybook（时间不够）\n\n### 2024-05-10\n- 新增：工作流——新增 API 接口的 6 步流程\n```\n\n## 今日小练习\n\n1. 审查你现有的 CLAUDE.md，把模糊的规则改成精确的 DO/DON\'T\n2. 为你最常见的开发场景定义一个工作流\n3. 添加 3 个条件规则（基于文件类型、目录、Git 分支）\n4. 如果团队共享 CLAUDE.md，拆成 team 版本和个人版本\n5. 在 CLAUDE.md 里加个「变更记录」段，开始追踪规则的演变\n\n---\n\n**今日小结：** CLAUDE.md 写了一周，规则攒了 30 条。区分什么是「愿望」（写干净代码）和「规则」（用 camelCase 命名变量），把高频操作定义成工作流，确保团队用同一套规范。最好的 CLAUDE.md 是那种新人入职第一天就能靠着它开始写合规代码的那种——不解释、不废话、可执行。"},
-{"day":13,"date":"5月26日 周二","title":"会话管理与成本控制","content":"Claude Code 按 token 计费。不管理会话，你就不知道钱花哪了；不控制成本，月底账单会让你想把电脑合上。今天把会话的生命周期和成本优化全部讲清楚。\n\n## 会话生命周期\n\n一个 Claude Code 会话从启动到关闭经历了什么：\n\n```\n启动 claude\n  ↓ 读取 CLAUDE.md、项目结构（一次性 token 开销）\n  ↓\n第 1 轮对话\n  ↓ Claude 处理：读文件 + 思考 + 写回复\n  ↓\n第 2 轮对话\n  ↓ 上下文 = CLAUDE.md + 第 1 轮完整内容 + 第 2 轮你的输入\n  ↓\n第 N 轮对话\n  ↓ 上下文越来越长，token 消耗越来越大\n  ↓\n关闭会话 / 执行 /compact 或 /clear\n```\n\n关键洞察：**第 10 轮的 token 消耗通常比第 1 轮高 3-5 倍**，因为历史对话全部在上下文里。\n\n## /compact vs /clear：选对策略\n\n| 操作 | 效果 | 什么时候用 |\n|---|---|---|\n| `/compact` | Claude 把对话历史压缩成摘要，释放空间 | 对话很长但后续任务还需要之前的背景 |\n| `/clear` | 清空全部对话历史 | 新任务完全不相关，旧上下文会干扰 |\n| 新会话 | 重新启动 claude | `/clear` 还不够——想要全新的 CLAUDE.md 加载 |\n\n**最佳实践：**\n\n```markdown\n# 你的 Claude Code 会话管理策略\n\n1. 每个功能/任务一个会话（不要一个会话做所有事）\n2. 超过 30 轮对话 → /compact\n3. 换新任务 → /clear\n4. 一天开始 → 新会话（确保读取最新的 CLAUDE.md）\n5. 用 /cost 定期检查，单次会话超过 $2 时警惕\n```\n\n## 成本构成分析\n\nClaude Code 的成本来自几个部分：\n\n| 成本来源 | 占比（典型） | 说明 |\n|---|---|---|\n| 上下文加载 | ~10-15% | CLAUDE.md、文件读取、对话历史 |\n| 你的输入 | ~5% | 你的 prompt |\n| Claude 的输出 | ~20-25% | 生成的代码、解释、回复 |\n| 工具调用结果 | ~50-60% | 文件内容、命令输出、搜索结果 |\n\n**最大的隐性成本：工具调用返回的内容。** 你让 Claude 读了一个 2000 行的文件，这 2000 行全部作为 token 计费——不管 Claude 只看了其中 50 行。\n\n## 如何查看花费\n\n```\n# 在当前会话中\n/cost\n\n# 输出示例\nTotal tokens: 45,230\n  Input:  38,120 tokens  ($0.11)\n  Output:  7,110 tokens  ($0.10)\n  Total:                 ($0.21)\n```\n\n```bash\n# 查看历史花费（如果 Claude Code 有记录的话）\ncat ~/.claude/usage.json | jq \'.total_cost\'\n```\n\n## 省钱技巧（5+ 条实战经验）\n\n### 技巧 1：精确引用，不要「读整个目录」\n\n```\n# ❌ 浪费钱\n帮我看看 src/ 下所有文件\n# → Claude 读了 50 个文件，40000 token\n\n# ✅ 精确\n帮我分析 src/services/orderService.ts 的 createOrder 函数\n# → Claude 只读 1 个文件，800 token\n```\n\n### 技巧 2：拆分大任务\n\n```\n# ❌ 一个超长会话\n做用户系统（注册、登录、权限、团队、邀请、审计）\n# → 300 轮对话，上下文爆炸\n\n# ✅ 拆成多个会话\n会话 1：注册 + 登录\n会话 2：权限系统\n会话 3：团队 + 邀请\n# → 每个会话 30-50 轮，上下文干净，token 线性增长\n```\n\n### 技巧 3：用 CLAUDE.md 减少重复解释\n\n你每次在新会话里说「这个项目用 PostgreSQL + Prisma，API 格式是 { code, data, message }」都是钱。放进 CLAUDE.md 里，说一次就够。\n\n### 技巧 4：让 Claude 「看完总结」而不是「逐字记忆」\n\n```\n# ❌ 浪费\n读这个 800 行的文件，记住每一个细节\n\n# ✅ 高效\n分析这个文件的核心逻辑和关键函数，给我一个 10 行的总结\n```\n\n### 技巧 5：避免「试错式」对话\n\n```\n# ❌ 浪费\n「不对，再改一下」「还是不对，换种方式」「算了回到第一版」\n→ 每次重来都在消耗 token\n\n# ✅ 高效\n「先分析为什么不对，确认根因后再改」\n→ 一次改到位\n```\n\n### 技巧 6：模型降级策略\n\n```\n# 简单任务用 Sonnet（便宜）\n- 生成 commit message → sonnet\n- 格式化代码 → sonnet\n- 写文档注释 → sonnet\n\n# 复杂任务用 Opus（贵但强）\n- 架构设计 → opus\n- 复杂重构 → opus\n- 安全审查 → opus\n- Debug 难解 bug → opus\n```\n\n### 技巧 7：-p 模式比 TUI 模式便宜\n\n`-p` 模式不保留历史，每次执行后退出。对于一次性的分析、审查、生成任务，比在 TUI 里开一个长会话便宜得多。\n\n## 预算设置\n\n```json\n// settings.json\n{\n  "budget": {\n    "maxPerSession": 5.0,\n    "maxPerDay": 20.0,\n    "warnAt": 3.0\n  }\n}\n```\n\n超过 `warnAt` 时 Claude 会提醒，超过 `maxPerSession` 时暂停。不是严格限制（取决于实现），但心理上有个锚点。\n\n## 模型选择策略\n\n| 场景 | 推荐模型 | 原因 |\n|---|---|---|\n| 日常编码 | Sonnet | 性价比高，速度快 |\n| 代码审查 | Sonnet | 准确度够，没必要用 Opus |\n| 架构设计 | Opus | 需要更深的理解和推理 |\n| 复杂 Debug | Opus | 需要多步推理和精确分析 |\n| 批量生成 | Sonnet | 模式化操作，量大优先便宜 |\n| 学习/探索 | Sonnet | 对话量大，用便宜的 |\n| 安全审计 | Opus | 遗漏一个漏洞代价远大于模型差价 |\n\n## Token 估算\n\n```\n粗略估算方法：\n- 1 个中文字 ≈ 2-3 token\n- 1 个英文单词 ≈ 1-2 token\n- 100 行代码 ≈ 500-800 token\n- 一个标准 JSON 响应 ≈ 200-500 token\n\n一个典型会话（10 轮代码相关对话）：\n- 输入 token: ~15,000-30,000\n- 输出 token: ~5,000-10,000\n- 总花费 (Sonnet): ~$0.15-$0.40\n- 总花费 (Opus): ~$0.70-$1.80\n```\n\n## 今日小练习\n\n1. 用 `/cost` 检查当前会话的花费\n2. 回顾一个长会话，分析哪些轮次 token 消耗最大\n3. 在 CLAUDE.md 里加入你的模型选择策略\n4. 设置 `settings.json` 的预算上限\n5. 尝试一个简单任务用 `-p` 模式 vs TUI 模式，对比体验\n\n---\n\n**今日小结：** Claude Code 不贵——滥用才贵。核心原则：上下文只放相关信息、长任务拆短会话、简单任务别用 Opus。把 `/cost` 养成肌肉记忆，就像看 IDE 右下角的内存占用一样——习惯性地瞟一眼，你就自然学会省钱了。"},
-{"day":14,"date":"5月27日 周三","title":"高级提示技巧：让 Claude 准确理解你的意图","content":"同样的工具，不同的人用产出差距巨大。差距不在 Claude 的能力，在提示词的质量。今天把这些「藏在经验里」的技巧整理成可复用的模式。\n\n## 角色指派：定义 Claude 的身份\n\nClaude 的默认身份是「通用编程助手」。指定角色后，它会调整回答的深度、语气和关注点：\n\n```\n# 默认模式\n这段代码有什么问题？\n\n# 角色模式（输出质量大幅提升）\n你是一个安全审计专家，专攻 Web 应用安全。\n审查这段代码的安全性问题，按 OWASP Top 10 分类。\n\n# 另一个角色\n你是一个刚接手这个项目的开发者，\n原开发已经离职，没有交接文档。\n帮我理解 src/services/auth.ts 的设计思路。\n\n# 角色 + 场景\n你是一个 Tech Lead，正在审查我的 PR。\n标准：可维护性、性能、安全性、测试覆盖。\n不要客气——直接告诉我哪里有问题。\n```\n\n**有效角色指派的三要素：**\n1. 角色名称（安全审计专家 / Tech Lead / 新人开发者）\n2. 关注领域（安全性 / 性能 / 可维护性）\n3. 输出标准（按 OWASP 分类 / 不要客气 / 用 PM 语言）\n\n## 输出格式控制\n\n```\n# ❌ 模糊\n总结一下这个模块\n\n# ✅ 精确控制格式\n分析 src/services/ 模块，按以下格式输出：\n\n## 模块概述\n（一句话）\n\n## 依赖关系\n| 文件 | 依赖（外部） | 被依赖（内部） |\n\n## 改进建议\n### 🔴 紧急\n- （安全漏洞、数据丢失风险）\n### 🟡 建议\n- （性能、可维护性）\n### 🟢 可选\n- （命名优化、注释补充）\n```\n\n**格式控制进阶——结构化数据：**\n\n```\n把以下分析结果输出为 JSON 格式，方便我写脚本处理：\n\n{\n  "files": [\n    {\n      "path": "string",\n      "lines": "number",\n      "complexity": "low|medium|high",\n      "issues": [\n        { "severity": "error|warning|info", "line": "number", "message": "string" }\n      ]\n    }\n  ]\n}\n```\n\n## 正向指令 vs 反向指令\n\nClaude 对正面引导的反应比禁止好得多：\n\n| 反向（禁止） | 正向（引导） | 效果差异 |\n|---|---|---|\n| 「不要用 any」 | 「用 unknown + 类型守卫代替 any」 | 正向给出替代方案 |\n| 「代码不要太长」 | 「每个函数不超过 30 行」 | 正向给出量化标准 |\n| 「不要写得复杂」 | 「用早期返回代替深层嵌套」 | 正向给出具体模式 |\n| 「注释别太啰嗦」 | 「注释只写 \'为什么\'，不写 \'是什么\'」 | 正向给出注释原则 |\n\n**实战对比：**\n\n```\n# ❌ 纯禁止（Claude 会困惑：那用什么？）\n重构这个函数，不要用 class，不要太复杂，注释别太多。\n\n# ✅ 正向引导（Claude 知道怎么做了）\n重构这个函数：\n- 用纯函数代替 class，每个函数只做一件事\n- 用 pipe/compose 组合函数而不是嵌套调用\n- 只保留解释「为什么这样做」的注释\n- 最终每个函数不超过 20 行\n```\n\n## 锚定技巧：用例子校准 Claude 的预期\n\nClaude 对「好代码」的理解可能和你不一样。用例子校准：\n\n```\n我要你写一个 React 自定义 hook useDebounce。\n\n先看这个已有的 hook（useThrottle）的风格：\n\n@src/hooks/useThrottle.ts\n\n请用同样的代码风格写 useDebounce：\n- 相同的 JSDoc 格式\n- 相同的函数签名风格（泛型约束、可选参数模式）\n- 相同的测试文件结构\n```\n\n**锚定的另一个用法——告诉 Claude 「什么是不好的」：**\n\n```\n这是之前一个同事写的 usePagination hook（@src/hooks/usePagination.old.ts），\n我们觉得它有几个问题：\n1. 过度抽象——把简单的事搞复杂了\n2. 依赖过多——耦合了路由和 API 层\n3. 测试写得太啰嗦\n\n帮我重写一版，注意避免这三个问题。\n```\n\n## 渐进式优化：从草稿到精品\n\n不要期望一次写出完美代码。用多轮对话逐步优化：\n\n```\n# 第 1 轮：粗稿\n先写一个能跑的 useInfiniteScroll hook。功能优先，不用太在意代码质量。\n\n# 第 2 轮：类型安全\n刚才的 hook 用了几个 any。全部改成严格的 TypeScript 类型。\n\n# 第 3 轮：性能\n审查 IntersectionObserver 的使用：有没有内存泄漏？cleanup 处理好了吗？\n\n# 第 4 轮：边界情况\n考虑这些边界：\n- 快速滚动时多次触发怎么办（防抖）\n- 数据加载失败怎么办（错误状态 + 重试）\n- 没有更多数据时怎么通知调用方\n\n# 第 5 轮：文档和测试\n写 JSDoc、使用示例、完整的测试套件。\n```\n\n## 自我反思技巧\n\n这个技巧非常强——让 Claude 反思自己的输出：\n\n```\n你刚才写的这个函数：\n1. 它能处理所有可能的输入吗？列出你没覆盖的情况。\n2. 如果你是一个恶意的用户，你会怎么攻击这个函数？\n3. 如果 6 个月后你回来看这个函数，哪部分最难理解？\n4. 给出 3 个具体的改进点，并实施。\n```\n\n**自我反思的变体——「扮演反对者」：**\n\n```\n你刚才建议用 Redis 做缓存层。\n现在扮演一个反对这个方案的人，列出所有不用的理由：\n- 运维成本\n- 数据一致性风险\n- 开发复杂度\n- 有没有更简单的方案？\n\n对比双方论据后，重新给出你的最终建议。\n```\n\n## 提示模板库\n\n把常用的提示模式存下来，随时复用：\n\n```markdown\n## 我的提示模板（放在 CLAUDE.md 末尾）\n\n### 模板 1：代码审查\n审查改动：\n1. 逻辑是否正确\n2. 异常路径是否处理\n3. 性能是否有隐患\n4. 类型是否安全\n5. 测试是否充分\n输出：🔴/🟡/🟢 分级问题列表\n\n### 模板 2：技术方案\n问题：[描述]\n约束：[现有技术栈、性能要求、时间限制]\n给出 3 个方案：最简单 / 最完整 / 最推荐\n每个方案：技术选型、改动文件、优缺点、风险\n\n### 模板 3：Debug\n错误：[粘贴错误信息]\n环境：[Node 版本、OS、相关依赖版本]\n尝试过的：[我已经试过的方法]\n帮我：定位根因 → 给出修复方案 → 解释为什么出错\n\n### 模板 4：学习新技术\n我要在 [项目名] 里引入 [新技术]。\n- 核心概念（用简单语言解释）\n- 在本项目的具体集成方式\n- 常见坑和前 3 个该做的配置\n- 小练习：给我一个 10 分钟能跑通的 demo\n```\n\n## 今日小练习\n\n1. 用「角色指派」方式问同一个问题 3 次（默认 / 安全专家 / Tech Lead），对比答案\n2. 把一条反向指令改写成正向引导，贴到你的 CLAUDE.md 里\n3. 找一个现存函数，用「锚定」技巧让 Claude 写一个风格一致的新函数\n4. 用「自我反思」技巧审查 Claude 刚写的代码\n5. 建立你的个人提示模板库，存到 CLAUDE.md\n\n---\n\n**今日小结：** 提示技巧不是玄学——是结构。角色定义告诉我们「以什么身份回答」，格式控制告诉我们「用什么结构输出」，正向引导告诉我们「怎么做而不是不做什么」，锚定告诉我们「什么是好的标准」。把这四个维度用在每个 prompt 上，Claude 的输出质量会从「还行」变成「就是这个」。"},
-{"day":15,"date":"5月28日 周四","title":"完整实战：用 Claude Code 从零构建一个功能","content":"学了 14 天，今天是毕业设计——用 Claude Code 完整走一遍从需求到上线的全流程。不跳过任何一步，不取巧。目标：把「收藏夹」功能从零做出来，含数据模型、API、测试、前端组件、Git 工作流、代码审查。\n\n## 实战设定\n\n- 项目：Next.js 14 + TypeScript + Prisma + PostgreSQL + Tailwind CSS\n- 已有模块：用户系统（NextAuth）、商品模块（列表 + 详情）\n- 新功能：用户可以把商品加入收藏，查看收藏列表，取消收藏\n- 约束：收藏数据需要记录收藏时的价格（用于后续价格波动分析）\n\n## 第 1 轮：需求分析与方案设计\n\n**你的 prompt：**\n\n```\n/plan 我要给项目加一个「商品收藏」功能。\n\n需求：\n- 用户在商品详情页可以点击收藏/取消收藏\n- 个人中心有收藏列表页，显示收藏的商品\n- 收藏时记录当时的商品价格\n- 一个用户可以收藏多个商品，一个商品可以被多个用户收藏\n- 取消收藏用软删除（数据保留，用于推荐算法）\n\n现有代码：\n- 用户模型：User (id, name, email)\n- 商品模型：Product (id, name, price, description, imageUrl)\n- 已有 GET /api/products 和 GET /api/products/:id\n\n先分析需要改动哪些文件，确认后再动手。\n```\n\n**Claude 输出（预期）：**\n\n```markdown\n## Plan：商品收藏功能\n\n### 1. 数据模型\n- 新建 Favorite 模型：\n  - userId (FK → User)\n  - productId (FK → Product)\n  - savedPrice (收藏时的价格)\n  - isActive (软删除标记)\n  - createdAt\n  - 唯一约束：(userId, productId)\n\n### 2. 文件清单\n新建：\n- prisma/schema.prisma（修改：加 Favorite 模型）\n- src/services/favoriteService.ts\n- src/app/api/favorites/route.ts（GET 列表, POST 收藏）\n- src/app/api/favorites/[id]/route.ts（DELETE 取消收藏）\n- src/components/FavoriteButton.tsx\n- src/app/user/favorites/page.tsx\n\n修改：\n- src/app/products/[id]/page.tsx（加收藏按钮）\n- src/types/index.ts（加 Favorite 类型）\n\n### 3. 实现顺序\n1. 数据模型 + 迁移\n2. TypeScript 类型\n3. Service 层\n4. API 路由\n5. 前端组件\n6. 集成到商品详情页\n7. 收藏列表页\n```\n\n**关键决策点（你需要确认的）：**\n- ✅ 软删除方案：用 isActive 字段\n- ✅ 唯一约束：一个用户对同一个商品只能有一条收藏记录\n- ✅ 记录收藏价格：savedPrice 字段\n\n## 第 2 轮：数据模型\n\n**你的 prompt：**\n\n```\n确认计划。先做第 1 步：数据模型。\n\n在 Prisma schema 里加 Favorite 模型，然后运行迁移。\n注意：\n- 不要改已有的 User 和 Product 模型\n- 加 @@unique([userId, productId]) 确保不重复收藏\n- 迁移名用描述性的：add_favorites\n```\n\n**Claude 操作：**\n1. 修改 `prisma/schema.prisma`，添加 Favorite 模型\n2. 运行 `npx prisma migrate dev --name add_favorites`\n3. 验证迁移成功\n\n## 第 3 轮：Service 层 + 类型\n\n**你的 prompt：**\n\n```\n数据模型好了。现在做 Service 层和类型定义。\n\n创建 src/services/favoriteService.ts，实现：\n- addFavorite(userId, productId, savedPrice): Promise<Favorite>\n  - 如果已收藏且 isActive=true → 返回现有记录\n  - 如果已收藏且 isActive=false → 重新激活\n  - 检查 productId 是否存在\n- removeFavorite(userId, productId): Promise<void>\n  - 软删除：设置 isActive=false\n- getFavorites(userId, options?): Promise<Favorite[]>\n  - 只返回 isActive=true 的\n  - 支持分页 { page, limit }\n  - 返回时 include 商品的 name、currentPrice、imageUrl\n  - 按收藏时间倒序\n- isFavorited(userId, productId): Promise<boolean>\n\n类型定义：\n- Favorite 类型、CreateFavoriteInput、FavoriteWithProduct\n- 所有类型导出到 src/types/index.ts\n```\n\n## 第 4 轮：API 路由\n\n**你的 prompt：**\n\n```\nService 层写好了。现在写 API 路由。\n\n创建 src/app/api/favorites/route.ts：\n- GET: 获取当前用户的收藏列表，支持 ?page=1&limit=20\n- POST: 收藏商品，body: { productId: number }\n  - 从数据库读当前 product.price 作为 savedPrice\n  - 返回 { code: 0, data: favorite }\n\n创建 src/app/api/favorites/[id]/route.ts：\n- DELETE: 取消收藏，[id] 是 productId\n\n要求：\n- 所有接口需登录（用 getServerSession 鉴权）\n- 用 zod 校验输入\n- 统一返回格式 { code, data, message }\n- 统一错误处理\n```\n\n## 第 5 轮：测试\n\n**你的 prompt：**\n\n```\nAPI 写完。现在写测试——这是最容易跳过的步骤，别跳。\n\n测试文件：src/services/__tests__/favoriteService.test.ts\n\n测试用例清单：\n1. addFavorite: 正常收藏成功\n2. addFavorite: 收藏不存在的商品 → 抛错\n3. addFavorite: 重复收藏同一商品 → 返回已有记录\n4. addFavorite: 之前取消过，再次收藏 → 重新激活\n5. removeFavorite: 正常取消\n6. removeFavorite: 取消未收藏的商品 → 不抛错（幂等）\n7. getFavorites: 正常分页\n8. getFavorites: 不返回已取消的\n9. getFavorites: 空列表返回空数组\n10. isFavorited: 已收藏返回 true，未收藏返回 false\n\n用 vitest，mock Prisma 客户端。\n```\n\n**Claude 跑测试：**\n\n```\n测试写完了，运行 npm run test。\n所有测试通过！\n\n✅ addFavorite - 正常收藏 (2ms)\n✅ addFavorite - 商品不存在 (1ms)\n✅ addFavorite - 重复收藏返回已有 (1ms)\n✅ addFavorite - 重新激活已取消的收藏 (2ms)\n✅ removeFavorite - 正常取消 (1ms)\n✅ removeFavorite - 幂等取消 (1ms)\n✅ getFavorites - 分页查询 (3ms)\n✅ getFavorites - 过滤已取消 (2ms)\n✅ getFavorites - 空列表 (1ms)\n✅ isFavorited - 状态检查 (1ms)\n\n10/10 passed\n```\n\n## 第 6 轮：前端组件\n\n**你的 prompt：**\n\n```\n测试过了。现在写前端。\n\n第 1 步：FavoriteButton 组件\n创建 src/components/FavoriteButton.tsx：\n- Props: productId: number\n- 显示心形图标（实心=已收藏，空心=未收藏）\n- 点击切换收藏状态\n- 用乐观更新（先切换 UI，再请求 API，失败则回滚）\n- 未登录时点击跳转登录页\n- Loading 状态时按钮禁用\n\n第 2 步：集成到商品详情页\n修改 src/app/products/[id]/page.tsx：\n- 在价格下方加 FavoriteButton\n- 传入 product.id\n\n第 3 步：收藏列表页\n创建 src/app/user/favorites/page.tsx：\n- 服务端组件（RSC），直接查数据库\n- 网格布局展示收藏的商品卡片\n- 每个卡片：图片、名称、收藏时价格、当前价格、价格变动\n- 空状态：显示「还没有收藏任何商品」+ 引导去逛商品\n```\n\n## 第 7 轮：Git 工作流 + 代码审查\n\n**你的 prompt：**\n\n```\n功能写完了，做 Git 操作和最后的代码审查。\n\n第 1 步：提交\n帮我：\n1. git status 查看所有改动\n2. 建议如何拆分 commit（逻辑分组）\n3. 逐个提交，每个 commit 写 conventional commit message\n\n第 2 步：代码审查\n用第 14 天的审查模板，自己做一次完整审查：\n- 🔴 必须改的\n- 🟡 建议改的\n- 🟢 可选的\n\n第 3 步：修复审查出的问题\n针对 🔴 和 🟡 的问题，逐一修复并提交。\n```\n\n## 实战中遇到的常见坑\n\n| 坑 | 为什么 | 怎么避免 |\n|---|---|---|\n| Claude 在前端代码里 import 了 server-only 的模块 | 没区分服务端/客户端 | 明确说「这是 Client Component，不要 import 服务端模块」 |\n| 乐观更新的回滚逻辑漏了 | Claude 只写了乐观更新，没写 error 回滚 | 在 prompt 里明确「失败时回滚到原状态」 |\n| 测试 mock 太深，测的不是真实逻辑 | Claude 可能用 deep mock 让测试无意义 | 要求「mock 只用于外部依赖（数据库、API），不要 mock 内部函数」 |\n| 收藏列表页的 N+1 查询 | 默认查询没 include 关联数据 | 在 Service 层 prompt 里明确「include product 信息，一次查询完成」 |\n| 移动端适配被忽略 | Claude 默认桌面端优先 | 在 CLAUDE.md 里加「默认移动端优先，用 Tailwind responsive class」 |\n\n## 十五天课程总回顾\n\n```\nDay 1-3:   基础 —— 启动、读代码、写代码\nDay 4-5:   效率 —— 多文件编辑、终端命令\nDay 6-7:   协作 —— Git 工作流、CLAUDE.md\nDay 8-9:   质量 —— 任务规划、测试调试\nDay 10-11: 扩展 —— Hooks 自动化、MCP 工具\nDay 12-14: 精进 —— CLAUDE.md 进阶、成本管理、提示技巧\nDay 15:    实战 —— 完整功能开发全流程\n```\n\n**三条带走的原则：**\n\n1. **上下文决定质量。** 给它足够的信息（代码、规则、偏好），它就能产出匹配你预期的结果。信息不足时它猜，猜错了你的代价高。\n2. **小步快跑，持续验证。** 不要让它一口气写 500 行代码。分步骤、每步验证、错了立即刹车。这不是不信任——是聪明的工作方式。\n3. **它学得会，只要你教。** CLAUDE.md 是它的记忆，Hooks 是它的习惯，你的纠正就是它的训练数据。每个项目下来，它越来越懂你。\n\n## 今日小练习\n\n1. 在你自己的项目里选一个待做功能，用今天学到的 7 轮流程完整走一遍\n2. 记录实际花费的时间，和不用 Claude Code 的预估时间对比\n3. 把过程中的坑和 Fix 记录下来，更新你的 CLAUDE.md\n4. 写一份你自己的「Claude Code 工作流 Cheatsheet」——属于你的最佳实践\n\n---\n\n**今日小结：** 15 天只是一个开始。Claude Code 就像一把好工具——头几次用可能不顺手，甚至切到自己。但等你学会了拿捏力道、掌握了使用节奏，它会成为你最顺手的生产力伙伴。你不需要成为 AI 专家，你只需要在自己的项目里用起来，反复用，犯过错再纠正，慢慢就长成了你的肌肉记忆。祝你写代码愉快。"}
-];
+# 指定模型启动（跳过模型选择菜单）
+claude --model sonnet
+claude --model opus
 
-function showDay(n) {
-  const day = days[n-1];
-  let content = day.content
-    .replace(/\n/g, '\n')
-    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
-    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
-    .replace(/^# (.+)$/gm, '<h2>$1</h2>')
-    .replace(/^\*\*(.+?)\*\*$/gm, '<p><strong>$1</strong></p>')
-    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-    .replace(/`([^`]+)`/g, '<code>$1</code>')
-    .replace(/^---$/gm, '<hr>')
-    .replace(/^\| (.+) \|$/gm, function(m) { return '<tr>' + m.slice(2,-2).split('|').map(c => '<td>' + c.trim() + '</td>').join('') + '</tr>'; })
-    .replace(/^(\d+)\. (.+)$/gm, '<li>$2</li>')
-    .replace(/^- (.+)$/gm, '<li>$1</li>');
+# 恢复上一次会话（不用重新解释项目背景）
+claude --resume
+# 或启动后在对话里说「继续上次的对话」
 
-  // Handle code blocks
-  content = content.replace(/```(\w*)\n([\s\S]*?)```/g, function(m, lang, code) {
-    return '<pre><code>' + code.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</code></pre>';
-  });
+# 打印模式：不进入 TUI，一次性执行完成后输出结果并退出
+claude -p &quot;这个项目的入口文件是哪个？&quot;
+claude -p &quot;帮我修复 src/utils/auth.ts 里的所有类型错误&quot;
 
-  // Handle paragraphs (lines that aren't already wrapped in HTML tags)
-  let lines = content.split('\n');
-  let result = [];
-  let inList = false;
-  let inCode = false;
-  
-  for (let i = 0; i < lines.length; i++) {
-    let line = lines[i].trim();
-    if (!line) { if (inList) { result.push('</ol>'); inList = false; } result.push(''); continue; }
-    if (line.startsWith('<h') || line.startsWith('<hr') || line.startsWith('<pre') || line.startsWith('<tr') || line.startsWith('<table')) {
-      if (inList) { result.push('</ol>'); inList = false; }
-      result.push(line);
-      continue;
+# 从 stdin 传入内容（适合管道场景）
+cat error.log | claude -p &quot;分析这些报错，告诉我怎么修&quot;
+git diff HEAD~3 | claude -p &quot;审查这些改动，总结主要变更&quot;
+
+# 指定工作目录
+claude --cwd ~/projects/my-app</code></pre>
+<p><code>-p</code> 打印模式是自动化脚本里的利器——比如在 CI 里让 Claude 分析构建报错，输出结果直接写入日志。</p>
+<h2>第一条消息发什么</h2>
+<p>不要上来就说「帮我写一个网站」。Claude Code 需要先理解你的项目：</p>
+<pre><code>帮我看看这个项目的结构，告诉我它是什么、怎么组织的</code></pre>
+<p>Claude 会自动读取文件结构、package.json、README，给你一个项目概览。相当于新人入职第一天先看一眼代码库再干活。</p>
+<p><strong>进阶版第一条消息：</strong></p>
+<pre><code>仔细读一遍这个项目的代码，然后回答：
+1. 项目的核心功能是什么
+2. 技术栈是什么（框架、数据库、关键依赖）
+3. 代码的目录组织逻辑是什么
+4. 有没有明显的不合理设计
+5. 如果我接下来要开发新功能，入口在哪里</code></pre>
+<p>这个 prompt 让 Claude 不仅「看一遍」，还做一次迷你代码审查。你会得到一个比 README 还准确的项目地图。</p>
+<h2>斜杠命令完整指南</h2>
+<p>输入 <code>/</code> 弹出命令菜单。按使用频率排序：</p>
+<table><tr><td>命令</td><td>作用</td><td>频率</td></tr><tr><td>`/help`</td><td>列出所有命令</td><td>偶尔</td></tr><tr><td>`/clear`</td><td>清空对话历史</td><td>日常</td></tr><tr><td>`/cost`</td><td>查看会话花费（token 数和金额）</td><td>日常</td></tr><tr><td>`/doctor`</td><td>诊断 Claude Code 配置问题</td><td>出问题时</td></tr><tr><td>`/init`</td><td>初始化项目的 CLAUDE.md</td><td>新项目</td></tr><tr><td>`/compact`</td><td>压缩上下文，Claude 把历史总结成摘要后继续</td><td>长篇会话</td></tr><tr><td>`/status`</td><td>查看令牌使用量、上下文窗口占用率</td><td>时不时</td></tr><tr><td>`/config`</td><td>打开配置文件</td><td>调配置时</td></tr><tr><td>`/bug`</td><td>提交 Claude Code 本身的 bug 报告</td><td>很少</td></tr><tr><td>`/pr-comments`</td><td>查看当前会话中 Claude 写过的 PR 评论</td><td>GitHub 协作时</td></tr></table>
+<p><strong>高阶技巧：<code>/compact</code> 什么时候用</strong></p>
+<p>当你发现 Claude 回复变慢、或者它开始忘记你前面说的话，说明上下文窗口快满了。此时输入 <code>/compact</code>，Claude 会把整个对话历史压缩成一个结构化摘要，释放空间继续干活。比 <code>/clear</code> 好——不会丢信息。</p>
+<p><strong>高阶技巧：<code>-p</code> 模式 + shell 管道实战</strong></p>
+<pre><code># 用 Claude 审查你的代码改动
+git diff main | claude -p &quot;审查这段 diff。指出：1. 潜在 bug 2. 性能问题 3. 命名建议&quot;
+
+# 用 Claude 写 commit message
+git diff --staged | claude -p &quot;基于这个 diff 生成一个 conventional commits 格式的 commit message&quot;
+
+# 用 Claude 分析日志
+journalctl -u myapp --since &quot;1 hour ago&quot; | claude -p &quot;分析日志，找出异常模式，按严重程度排序&quot;</code></pre>
+<h2>三个最重要的操作习惯</h2>
+<ol>
+<li><strong>先让它看，再让它做。</strong> 给它上下文，它会聪明十倍。</li>
+<li><strong>一次说一件事。</strong> 「顺便也」是效率杀手。拆成多轮对话。</li>
+<li><strong>看 diff。</strong> Claude 每次编辑文件后会显示差异对比。花 5 秒扫一眼，你不看就没人帮你看。</li>
+<li><strong>（新加）让它解释自己做了什么。</strong> 重要操作后加一句「解释一下你为什么这样改」，理解它的思路，你也在学习。</li>
+</ol>
+<h2>常见踩坑</h2>
+<p><strong>坑 1：Claude 改了不该改的文件</strong></p>
+<p>你说「优化这个函数」，Claude 可能顺便把同一个文件里其他函数也改了。修复方法：明确说「只改这个函数，不要碰文件里其他代码」。</p>
+<p><strong>坑 2：Claude 的修改破坏了别的地方</strong></p>
+<p>你改了 A 文件的函数签名，但 B 文件还在用旧的。修复方法：加一句「改完后检查所有调用处，确保兼容」。</p>
+<p><strong>坑 3：上下文丢得太快</strong></p>
+<p>你跟 Claude 聊了 50 轮，忽然让它处理一个不相关的新任务——它被旧上下文干扰。修复方法：新任务前先用 <code>/compact</code> 或 <code>/clear</code>。</p>
+<h2>今天的小练习</h2>
+<pre><code># 1. 用 -p 模式快速分析项目
+claude -p &quot;看看这个项目，用三句话总结它&quot;
+
+# 2. 启动 TUI 模式，用扩展版第一条消息让 Claude 做完整分析
+# （上面那个5条问题的版本）
+
+# 3. 输入 /cost 看看花了多少
+# 4. 输入 /status 看看上下文占用
+# 5. 试试管道模式：把 git diff 喂给 Claude</code></pre>
+<hr>
+<p><strong>今日小结：</strong> Claude Code 不是搜索引擎，是能读懂你代码库的配对程序员。TUI 和 -p 两种模式覆盖交互和自动化两种场景。你的核心任务：给它上下文。</p>
+</article>
+<article id="day2">
+<h1>第 2 天 · 读代码：让 Claude 成为你的代码导航仪</h1>
+<div class="meta">5月8日 周四<span>Day 2/15</span></div>
+<p>很多开发者打开 Claude Code 第一反应是「帮我写个功能」——等价于第一次去健身房就杠铃深蹲。先学会看，再学会写。</p>
+<h2>六个提问模式（含高阶变体）</h2>
+<h3>模式 1：定位型</h3>
+<pre><code>用户登录的逻辑在哪里实现的？带我去看。</code></pre>
+<p><strong>高阶变体：</strong></p>
+<pre><code>跟踪一下这个项目的请求生命周期：
+1. HTTP 请求进来后经过了哪些中间件？
+2. 路由分发在哪一层？
+3. 业务逻辑在哪一层？
+4. 数据库查询在哪一层？
+给每一步标上文件名和行号。</code></pre>
+<h3>模式 2：解释型</h3>
+<pre><code>逐行解释 src/services/payment.ts 里的 processRefund 函数，
+特别是那段 Promise.all 的逻辑——为什么要用 Promise.all？</code></pre>
+<p><strong>高阶变体：</strong></p>
+<pre><code>用「一个完全没有编程经验的 PM」能听懂的语言，
+解释这段代码在做什么。不要用任何术语。</code></pre>
+<p>这个方法出奇地有用——如果你能用 PM 语言讲清楚，说明你自己也真懂了。如果 Claude 讲不清楚，说明这段代码设计本身就有问题。</p>
+<h3>模式 3：追踪型</h3>
+<pre><code>找出所有调用 validateToken 的地方，画出调用链。
+如果 validateToken 抛出异常，每个调用处会怎么处理？</code></pre>
+<p><strong>高阶变体：</strong></p>
+<pre><code>做一次「死亡路径分析」：
+如果这个 API 调用第三方服务超时了，
+1. 错误会怎样一层层传播？
+2. 最终用户会看到什么？
+3. 有没有哪一层吞掉了错误？</code></pre>
+<h3>模式 4：对比型</h3>
+<pre><code>src/services/ 下有两个文件 auth-v1.ts 和 auth-v2.ts。
+它们有什么区别？能合并吗？合并的风险是什么？</code></pre>
+<h3>模式 5：安全审查型（新增）</h3>
+<pre><code>审查 src/api/ 下所有接口的安全性：
+1. 哪些接口没有鉴权？
+2. 有没有 SQL 注入风险？
+3. 用户输入有没有被校验和清洗？
+4. 是否有敏感信息泄漏到日志或错误消息里？</code></pre>
+<h3>模式 6：性能审查型（新增）</h3>
+<pre><code>分析 src/services/order.ts 里 createOrder 函数的性能问题。
+重点关注：
+1. 有没有 N+1 查询？
+2. 循环里有没有数据库操作？
+3. 有没有可以并行的操作被串行执行了？
+4. 缓存机会在哪里？</code></pre>
+<h2>@ 引用的高级用法</h2>
+<pre><code># 引用文件
+@src/utils/auth.ts — 解释这个文件的设计
+
+# 引用目录（Claude 会分析整个目录结构）
+@src/api/ — 这个目录下所有接口有没有重复的逻辑？
+
+# 引用多个文件做交叉分析
+@src/models/User.ts @src/services/userService.ts —
+这两个文件的职责边界清楚吗？
+
+# 在一个 prompt 里引用多个信息源
+@src/types/order.ts 定义了 Order 接口，
+@src/services/payment.ts 使用了 Order，
+但 @src/api/orders.ts 里返回的格式和 Order 不一致——
+帮我找出来，修复。</code></pre>
+<h2>让 Claude 画出结构</h2>
+<pre><code># ER 图
+帮我画出这个项目的数据库模型关系图（用 Mermaid 格式）
+
+# 依赖图
+画出 src/ 下所有模块之间的依赖关系图，标出循环依赖
+
+# 数据流图
+画出用户注册功能的完整数据流：
+从前端表单 → API → Service → 数据库 → 邮件发送
+
+# 状态机
+用户订单的状态转换：待支付→已支付→发货中→已签收→已完成。
+画出状态机图，包括哪些状态可以回退</code></pre>
+<h2>高阶读码技巧</h2>
+<h3>技巧 1：让 Claude 当你的 onboarding 导师</h3>
+<pre><code>我是一个新加入团队的开发者。这个项目的代码是
+一个 3 年积累下来的 NestJS 项目。帮我写一份
+「新人 30 分钟上手指南」：
+1. 最重要的 5 个文件（列出并解释）
+2. 核心业务逻辑流程图
+3. 最危险的操作（改了会出事的地方）
+4. 本地开发环境搭建步骤</code></pre>
+<h3>技巧 2：逆向理解遗留代码</h3>
+<pre><code>这个文件 src/legacy/reportGenerator.ts 有 800 行，
+没有任何注释，原始作者已经离职。帮我：
+1. 拆成逻辑段（每段起个名字）
+2. 画出输入→输出的数据流
+3. 找出所有 hardcode 的配置值
+4. 标记你觉得可删的 dead code</code></pre>
+<h3>技巧 3：生成文档</h3>
+<pre><code>给 src/services/ 下所有 public 方法生成 JSDoc 注释，
+但不要改代码逻辑，只加注释。格式：
+- @param 描述每个参数
+- @returns 描述返回值
+- @throws 描述可能抛出的异常
+- @example 给一个使用示例</code></pre>
+<h2>今天的小练习</h2>
+<ol>
+<li>用「PM 语言」让 Claude 解释你项目里最复杂的那个函数</li>
+<li>做一次「死亡路径分析」——找一个 API，让 Claude 画出所有异常路径</li>
+<li>让 Claude 生成你项目的 Mermaid ER 图</li>
+<li>试试多文件引用：<code>@fileA @fileB</code> 让 Claude 找出不一致的地方</li>
+</ol>
+<hr>
+<p><strong>今日小结：</strong> 读代码不只是让 Claude 帮你找文件——它是你的代码考古学家、安全审计师、性能顾问、和新人导师。70% 时间在读数，学会问，才是真功夫。</p>
+</article>
+<article id="day3">
+<h1>第 3 天 · 写代码：从一行到一整个文件</h1>
+<div class="meta">5月9日 周五<span>Day 3/15</span></div>
+<p>读了两天，开始写。别一上来就让 Claude 写一千行——从一行开始。</p>
+<h2>修改现有代码</h2>
+<pre><code># 基础：重命名
+把这个函数名从 getUser 改成 fetchUserById，
+更新所有调用它的地方，包括测试文件里的引用。
+
+# 进阶：重构函数签名
+把 createOrder(userId, items, callback) 改成
+createOrder({ userId, items, onSuccess, onError })，
+使用对象参数而不是位置参数，更新所有调用处。
+
+# 实战：加功能
+给 src/api/products.ts 的 GET /products 接口加三个查询参数：
+- category?: string — 按分类过滤
+- minPrice?: number — 最低价格
+- sort?: &#x27;price_asc&#x27; | &#x27;price_desc&#x27; | &#x27;newest&#x27; — 排序方式
+同时更新 TypeScript 类型定义和参数校验逻辑。</code></pre>
+<h2>从零创建文件：五个实战例子</h2>
+<pre><code># 例子 1：工具函数
+创建 src/utils/retry.ts：
+- retry(fn, options) 函数，自动重试失败的异步操作
+- options.maxRetries 默认 3
+- options.delay 默认 1000ms，每次重试翻倍（指数退避）
+- 如果全部失败，抛出原始错误
+
+# 例子 2：React 组件
+创建 src/components/InfiniteScroll.tsx：
+- Props: loadMore: () =&gt; Promise&lt;void&gt;, hasMore: boolean
+- 滚动到底部自动触发 loadMore
+- 加载中显示 spinner
+- 用 IntersectionObserver 实现（不用 scroll 事件监听，性能更好）
+- 支持自定义 threshold 和 rootMargin
+
+# 例子 3：API 路由
+创建 src/app/api/webhook/stripe/route.ts：
+- POST 接口，接收 Stripe webhook 事件
+- 验证 Stripe 签名（从环境变量读 webhook secret）
+- 处理 checkout.session.completed 事件：更新订单状态
+- 其他事件类型记录日志并返回 200
+- 返回标准格式 { code: number, data?: any, message: string }
+
+# 例子 4：数据库迁移
+创建一个 Prisma 迁移：在 User 表上加 lastLoginAt 和 loginCount 字段，
+不要改已有字段，不要删除数据。
+
+# 例子 5：测试文件（配合 vitest）
+给 src/utils/retry.ts 写测试：
+- 第一次成功 → 不重试
+- 失败两次后成功 → 重试 2 次
+- 全部失败 → 跑满 maxRetries，最终抛错
+- 每次重试间隔递增</code></pre>
+<h2>三种编码模式（含选择策略）</h2>
+<table><tr><td>模式</td><td>何时用</td><td>例子</td></tr><tr><td>直接写</td><td>小函数、工具类、没有歧义的需求</td><td>「写一个 deepClone 函数」</td></tr><tr><td>先讨论再写</td><td>有技术选型需要权衡</td><td>「我要做文件上传——用 AWS S3 还是 Cloudflare R2？先分析利弊」</td></tr><tr><td>Plan 模式</td><td>涉及多个文件、多个模块</td><td>`/plan 用户邀请系统` → Claude 先出方案</td></tr></table>
+<p><strong>高阶技巧：让 Claude 给出多个方案</strong></p>
+<pre><code>实现一个搜索功能，给我三个方案：
+1. 最简单的（5分钟搞定）
+2. 最完整的（生产就绪）
+3. 你最推荐的一个（平衡速度和质量）
+每个方案列清楚：用什么库、改哪些文件、优缺点</code></pre>
+<p>这样你先看菜单再点菜，而不是直接吃了一盘你不想要的东西。</p>
+<h2>让 Claude 自我迭代</h2>
+<pre><code>刚写的这个函数：
+1. 自己审查一遍，有没有边界条件没处理？
+2. 能不能减少时间复杂度？
+3. TypeScript 类型够不够严格？（不要用 any）
+4. 重新写一遍，重点提高可读性</code></pre>
+<p>Claude 通常能在第二步发现自己的问题——比如忘了处理 null、类型不够精确、缓存可以加。</p>
+<h2>实战：让 Claude 写一个完整的 CRUD 模块</h2>
+<pre><code>我要给项目加一个「标签管理」模块。按这个顺序来：
+
+第 1 步：先给我列出需要创建/修改的文件清单，等我确认。
+第 2 步：创建数据模型（Prisma schema）。
+第 3 步：写 API 路由（RESTful，4 个接口）。
+第 4 步：写输入校验（zod schema）。
+第 5 步：写单元测试。
+第 6 步：代码审查（你自己审查自己的代码）。
+
+每一步我确认后再做下一步。</code></pre>
+<h2>常见踩坑</h2>
+<p><strong>坑 1：Claude 的 import 顺序乱了</strong></p>
+<p>修复：在 CLAUDE.md 里加「import 按以下顺序排列：第三方库 → 内部模块 → 类型 → 样式」</p>
+<p><strong>坑 2：Claude 编造了一个不存在的 API</strong></p>
+<p>你让它写前端组件调用 <code>/api/user/profile</code>，但这个接口还不存在。修复：先让它写 API 再写前端，或者明确说「这个接口已经存在，调用方式是这样……」</p>
+<p><strong>坑 3：类型定义不严格</strong></p>
+<p>Claude 有时候会用 <code>any</code> 或 <code>Record<string, any></code> 偷懒。修复：在 prompt 里加「禁止使用 any 类型」或放 CLAUDE.md 里。</p>
+<h2>今天的小练习</h2>
+<ol>
+<li>找一个函数，让 Claude 改参数签名并更新所有调用处</li>
+<li>让 Claude 用「三个方案」模式帮你设计一个新功能</li>
+<li>让它写完代码后自我审查并优化</li>
+<li>故意给它一个模糊需求，看它怎么回应——然后给精确需求，对比输出质量</li>
+</ol>
+<hr>
+<p><strong>今日小结：</strong> 好需求 = 精确位置 + 明确接口 + 验收标准 + 技术选型。写代码不只是「让它写」，而是「设计→实现→自我审查→你审核」的完整链路。</p>
+</article>
+<article id="day4">
+<h1>第 4 天 · 多文件编辑：重构、重命名与批量操作</h1>
+<div class="meta">5月12日 周一<span>Day 4/15</span></div>
+<p>单文件编辑只是热身。真正的开发工作里，改一个需求通常要动 5 个文件——模型定义、服务层、API 路由、类型文件、测试。今天学的是怎么让 Claude 一次性、干净地处理跨多个文件的编辑。</p>
+<h2>全局重命名：不只是查找替换</h2>
+<p>全局重命名最怕的就是看起来改了，实际上漏了——或者改错了不该改的东西。Claude 能处理语义级别的重命名，而不是文本匹配。</p>
+<pre><code># 基础：函数重命名
+把整个项目里 
+- getAllUsers 重命名为 listUsers
+- updateUserProfile 重命名为 updateProfile
+确保：
+1. 所有 .ts / .tsx 文件里的调用都更新
+2. 测试文件里的 mock 和断言也更新
+3. 文档和注释里的引用也更新
+4. package.json 里的 scripts 如果有引用也更新</code></pre>
+<p><strong>实战：组件重命名 + 路径迁移</strong></p>
+<pre><code>src/components/common/Button.tsx 改成 src/components/ui/PrimaryButton.tsx。
+操作：
+1. 移动文件到新位置
+2. 更新组件名和 export
+3. 找到所有 import 了这个组件的地方，更新 import 路径
+4. Storybook stories 文件如果有也要更新
+5. 完成后运行 tsc --noEmit 确保没有类型错误</code></pre>
+<p><strong>坑：Claude 改了 node_modules 里的东西</strong></p>
+<p>Claude 不会被 .gitignore 限制，如果你说「整个项目里」，它可能真的扫进 node_modules。所以永远指定范围：</p>
+<pre><code>只改 src/ 目录下的文件，不要碰 node_modules/、dist/、.next/</code></pre>
+<h2>文件拆分：600 行 → 3 个文件</h2>
+<p>单文件长到几百行的时候，维护成本骤升。Claude 能帮你做外科手术式的拆分。</p>
+<p><strong>拆分前：<code>src/services/orderService.ts</code> —— 600 行</strong></p>
+<pre><code>这个文件 src/services/orderService.ts 有 600 行，
+包含三个职责：订单创建、订单支付、订单通知。
+
+帮我拆成三个文件：
+1. src/services/order/orderCreate.ts 
+   - 所有创建订单相关的函数：validateOrder、calculateTotal、createOrderRecord
+2. src/services/order/orderPayment.ts
+   - 支付相关：processPayment、refundPayment、verifyPaymentStatus
+3. src/services/order/orderNotify.ts
+   - 通知相关：sendOrderConfirmation、notifyShipping
+
+要求：
+- 保持一个 index.ts 作为统一入口，重新导出所有函数
+- 共享的工具函数抽到 src/services/order/helpers.ts
+- 拆分后运行测试，确保全部通过
+- 外部调用 orderService 的地方要保持兼容</code></pre>
+<p><strong>拆分策略对比</strong></p>
+<table><tr><td>策略</td><td>适用场景</td><td>风险</td></tr><tr><td>按职责拆分</td><td>函数自然分组明显</td><td>低——各组独立性强</td></tr><tr><td>按数据类型拆分</td><td>多种实体混在一个文件</td><td>中——可能有交叉引用</td></tr><tr><td>按依赖方向拆分</td><td>有明确的内/外层依赖</td><td>中——要小心循环依赖</td></tr></table>
+<p>拆分后让 Claude 验证：</p>
+<pre><code>拆分完成。现在帮我：
+1. 检查有没有循环依赖
+2. 运行 madge 或手动分析导入关系
+3. 确认所有旧的 import 路径都能正确解析</code></pre>
+<h2>批量生成：一套模板，多个文件</h2>
+<p>这是一个杀手级场景——你定义好模式，Claude 按模式批量生成。</p>
+<p><strong>场景：给项目所有 API 路由加错误处理</strong></p>
+<pre><code>src/api/ 下面有 12 个路由文件，它们缺少统一的错误处理。
+
+帮我给每个路由加上一个 try-catch 包装，格式如下：
+
+// 统一错误处理格式
+export async function handler(req: Request) {
+  try {
+    // 原有逻辑
+  } catch (error) {
+    if (error instanceof ValidationError) {
+      return Response.json({ code: 400, message: error.message }, { status: 400 });
     }
-    if (line === '<li>' + line.slice(4)) {
-      if (!inList) { result.push('<ol>'); inList = true; }
-      result.push(line);
-      continue;
+    if (error instanceof NotFoundError) {
+      return Response.json({ code: 404, message: error.message }, { status: 404 });
     }
-    if (line.startsWith('<strong>') && line.endsWith('</strong>')) {
-      if (inList) { result.push('</ol>'); inList = false; }
-      result.push('<p>' + line + '</p>');
-      continue;
-    }
-    if (!line.startsWith('<')) {
-      if (inList) { result.push('</ol>'); inList = false; }
-      result.push('<p>' + line + '</p>');
-      continue;
-    }
-    result.push(line);
+    console.error(&#x27;Unhandled error:&#x27;, error);
+    return Response.json({ code: 500, message: &#x27;Internal server error&#x27; }, { status: 500 });
   }
-  if (inList) result.push('</ol>');
-  
-  document.getElementById('content').innerHTML = `
-    <article class="active">
-      <h1>第 ${day.day} 天 · ${day.title}</h1>
-      <div class="meta">${day.date}<span>Day ${day.day}/15</span></div>
-      ${result.join('\n')}
-    </article>
-  `;
-  document.querySelectorAll('nav a').forEach((a,i) => {
-    a.classList.toggle('active', i === n-1);
-  });
-  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+要求：
+- 不要改变原有业务逻辑
+- 保留原有的 import，新增的 import 放在最上面
+- 完成后运行 npm run test 确保通过</code></pre>
+<p><strong>场景：批量创建 CRUD 路由</strong></p>
+<pre><code>src/entities/ 下有 5 个 Prisma 模型：User、Product、Order、Category、Review。
+给每个模型创建标准的 CRUD 路由文件：
+
+模板：
+- src/api/{model}Router.ts
+  - GET /api/{model}s — 分页列表（支持 ?page, ?limit, ?sort）
+  - GET /api/{model}s/:id — 单条详情
+  - POST /api/{model}s — 创建（含 zod 校验）
+  - PUT /api/{model}s/:id — 更新
+  - DELETE /api/{model}s/:id — 软删除
+
+注意：
+- User 模型排除 password 字段
+- Order 模型禁止直接 DELETE
+- 所有接口加鉴权中间件</code></pre>
+<h2>One-Shot vs Step-by-Step：选择你的策略</h2>
+<p>多文件编辑有两种策略，选对效率翻倍：</p>
+<h3>One-Shot（一次性）</h3>
+<p>适合：改动模式统一、范围明确、自己心中有数</p>
+<pre><code>把所有 src/components/ 下的组件从 React.FC 改成 function 声明，
+从 Props interface 改成 inline type。一口气改完。
+
+示例改动：
+// 改前
+interface ButtonProps { label: string; onClick: () =&gt; void }
+const Button: React.FC&lt;ButtonProps&gt; = ({ label, onClick }) =&gt; { ... }
+
+// 改后
+type ButtonProps = { label: string; onClick: () =&gt; void }
+function Button({ label, onClick }: ButtonProps) { ... }
+
+只改 src/components/ 目录。改完后我验证。</code></pre>
+<p><strong>One-Shot 的风险：</strong> 如果 Claude 理解错了你的意图，一次改 20 个文件，回滚的代价很肉疼。</p>
+<h3>Step-by-Step（分步）</h3>
+<p>适合：不确定性高、每个文件改动不同、想边改边审</p>
+<pre><code>我需要重构 src/services/ 下的服务层，
+但每个文件的改动逻辑不一样。
+
+第 1 步：先分析所有文件，告诉我改动计划，等我确认
+第 2 步：改 userService.ts
+第 3 步：改 productService.ts
+第 4 步：改 orderService.ts
+...
+每一步改完我确认后再继续。</code></pre>
+<p><strong>Step-by-Step 的优势：</strong> 每一步都能 review diff，发现问题立即刹车，不会亡羊补牢。</p>
+<h3>选择决策矩阵</h3>
+<table><tr><td>维度</td><td>One-Shot</td><td>Step-by-Step</td></tr><tr><td>速度</td><td>快</td><td>慢</td></tr><tr><td>安全性</td><td>低（回滚成本高）</td><td>高（随时刹车）</td></tr><tr><td>适用场景</td><td>机械式重复操作</td><td>有判断和决策的操作</td></tr><tr><td>审查方式</td><td>改完后一次审查全部 diff</td><td>每一步审查</td></tr><tr><td>最佳 prompt</td><td>清晰模板 + 明确范围</td><td>「先计划，等我确认再执行」</td></tr></table>
+<h2>跨文件一致性检查</h2>
+<p>改完多个文件后，最容易出的问题是「改了这里忘了那里」。让 Claude 做一致性审查：</p>
+<pre><code>我刚刚重构了用户模块。现在帮我做一次跨文件一致性检查：
+
+1. 类型检查：API 返回的类型和前端组件的 props 类型是否匹配？
+2. 命名检查：同一个概念在不同文件里是否用了不同的名字？
+   （比如有的文件叫 userId，有的叫 user_id）
+3. 导入检查：有没有 import 路径失效的？
+4. 异常处理：所有异步函数有没有错误处理？
+5. API 签名检查：前端调用的 API 地址和参数格式是否和后端一致？
+
+列出所有不一致的地方，我逐条确认是否修复。</code></pre>
+<p><strong>实战：接口契约验证</strong></p>
+<pre><code>后端 @src/api/users/route.ts 返回：
+{ id: number, name: string, email: string, role: &#x27;admin&#x27; | &#x27;user&#x27; }
+
+前端 @src/components/UserTable.tsx 期望的类型是：
+{ id: number, name: string, email: string, role: string }
+
+帮我找出所有前后端类型不一致的地方，
+包括：字段名不匹配、类型不匹配、可选/必选不匹配。</code></pre>
+<h2>今日小练习</h2>
+<ol>
+<li>在你项目里找一个改过多次名字但没改干净的东西（函数名、变量名），让 Claude 一次性全局修复</li>
+<li>找一个超过 300 行的文件，让 Claude 分析和建议拆分方案</li>
+<li>用 One-Shot 策略批量给 5 个文件加同一个模式（比如加日志、加错误处理）</li>
+<li>改完后让 Claude 做一次跨文件一致性检查</li>
+</ol>
+<hr>
+<p><strong>今日小结：</strong> 多文件编辑是 Claude Code 真正的生产力爆发点。掌握两种策略（One-Shot 求快，Step-by-Step 求稳），善用一致性检查，一个下午能干以前一天半的重构活。记住：范围要明确（目录限定），验证要到位（跑测试），审查要过眼（看 diff）。</p>
+</article>
+<article id="day5">
+<h1>第 5 天 · 终端命令：让 Claude 替你操作服务器</h1>
+<div class="meta">5月13日 周二<span>Day 5/15</span></div>
+<p>Claude Code 最被低估的能力不是写代码——是跑命令。它能读 stdout、识别错误、自动修复、迭代重试。等于你有了个会自己 debug 的终端搭档。</p>
+<h2>命令能力与权限模型</h2>
+<p>Claude 可以执行三类命令，权限由 <code>settings.json</code> 控制：</p>
+<table><tr><td>命令类型</td><td>描述</td><td>权限设置</td></tr><tr><td>读取类</td><td>ls, cat, grep, find, git log, npm list</td><td>通常默认允许</td></tr><tr><td>修改类</td><td>git commit, npm install, cp, mv, rm</td><td>需要确认或预先批准</td></tr><tr><td>危险类</td><td>rm -rf, git push --force, 修改系统配置</td><td>默认阻止或要求显式批准</td></tr></table>
+<p><strong>settings.json 权限配置示例：</strong></p>
+<pre><code>{
+  &quot;permissions&quot;: {
+    &quot;allow&quot;: [
+      &quot;Bash(npm test:*)&quot;,
+      &quot;Bash(npm run build:*)&quot;,
+      &quot;Bash(git diff:*)&quot;,
+      &quot;Bash(git status:*)&quot;,
+      &quot;Bash(ls:*)&quot;,
+      &quot;Bash(find:*)&quot;
+    ],
+    &quot;deny&quot;: [
+      &quot;Bash(rm -rf:*)&quot;,
+      &quot;Bash(git push --force:*)&quot;,
+      &quot;Bash(curl:*)&quot;
+    ]
+  }
+}</code></pre>
+<p><strong>三种权限模式：</strong></p>
+<ol>
+<li><strong>手动确认（默认）：</strong> Claude 运行每个非读命令前弹窗让你确认。适合日常开发。</li>
+<li><strong>自动批准列表：</strong> 把 <code>npm test</code>、<code>npm run lint</code> 等高频安全命令加入白名单。适合信任度高时。</li>
+<li><strong>完全自动（高级模式）：</strong> 在 settings.json 里设置，CI 环境中常用——你不在跟前，让 Claude 全权处理。</li>
+</ol>
+<pre><code>{
+  &quot;permissions&quot;: {
+    &quot;mode&quot;: &quot;acceptEdits&quot;
+  }
+}</code></pre>
+<h2>自动 Debug 循环：Claude 修复构建错误</h2>
+<p>这是终端命令最实用的场景——编译报错了，不用你盯着报错一行行改：</p>
+<pre><code>npm run build 报错了。帮我：
+1. 先跑一次 npm run build，看完整输出
+2. 分析所有报错，分类（类型错误、导入错误、配置错误）
+3. 逐个修复
+4. 每次修复后重新 build 验证
+5. 直到 build 成功</code></pre>
+<p>Claude 会进入一个迭代循环：跑命令 → 读输出 → 分析 → 编辑文件 → 再跑命令。你可以在旁边喝咖啡看着。</p>
+<p><strong>实战：修复 CI 构建失败</strong></p>
+<pre><code>CI 刚刚挂了。这是构建日志（粘贴日志内容或 URL）。
+帮我：
+1. 找出失败的根本原因，不要只看报错的那一行
+2. 区分是代码问题还是环境问题（Node 版本、依赖缺失）
+3. 如果是代码问题，修复并本地验证
+4. 如果是环境问题，告诉我怎么改 CI 配置</code></pre>
+<p><strong>实战：依赖冲突诊断</strong></p>
+<pre><code>npm install 报 ERESOLVE 冲突。帮我：
+1. 用 npm ls 找出冲突的依赖树
+2. 分析哪些包需要升级或降级
+3. 给出最保守的解决方案（改动最小）
+4. 如果不行，给出替代方案</code></pre>
+<h2>管道与链式命令</h2>
+<p>Claude 可以直接使用管道和链式命令，比你自己敲还快：</p>
+<p><strong>日志分析链路：</strong></p>
+<pre><code># Claude 可以帮你构造这种链式命令
+cat /var/log/app.log | grep ERROR | awk &#x27;{print $NF}&#x27; | sort | uniq -c | sort -rn | head -20</code></pre>
+<p>你只需要说：「帮我找出最近一小时内最常见的 10 种错误」——Claude 会构造对应命令并运行。</p>
+<p><strong>数据处理链路：</strong></p>
+<pre><code>找出 package.json 里所有依赖的版本号，按字母排序，
+只显示 dependencies（不包括 devDependencies），
+用 jq 一行命令完成。</code></pre>
+<p>Claude 输出：</p>
+<pre><code>jq -r &#x27;.dependencies | to_entries | sort_by(.key) | .[] | &quot;\(.key): \(.value)&quot;&#x27; package.json</code></pre>
+<h2>Docker 操作：通过 Claude 管理容器</h2>
+<pre><code># 启动开发环境
+帮我用 docker compose 启动这个项目的所有服务：
+- 检查 docker-compose.yml 是否正确
+- 构建需要的镜像
+- 启动并等待健康检查通过
+- 如果某个服务启动失败，分析日志并修复
+
+# 清理和诊断
+帮我：
+1. 列出所有运行中的容器和它们的资源占用
+2. 找出占用超过 80% 内存的容器
+3. 清理所有已退出的容器和 dangling images
+
+# 进入容器调试
+帮我进入 api 容器，执行 npm run test:e2e，
+如果测试失败，直接在容器里修改代码调试。</code></pre>
+<h2>Git 深度命令（明天详细讲）</h2>
+<p>今天先预热几个高频组合：</p>
+<pre><code># 查看今天自己的提交
+git log --author=&quot;$(git config user.name)&quot; --since=&quot;midnight&quot; --oneline
+
+# 找出哪个提交引入了特定错误信息
+git log -S &quot;TypeError: Cannot read properties of undefined&quot; --source --all
+
+# 查看某个文件的完整修改历史，每次显示 diff 摘要
+git log -p --follow -- src/services/auth.ts</code></pre>
+<h2>CI/CD 集成模式</h2>
+<p>Claude Code 的 <code>-p</code> 模式天然适合 CI 场景：</p>
+<p><strong>GitHub Actions 中的 Claude Code：</strong></p>
+<pre><code># .github/workflows/claude-review.yml
+name: Claude Code Review
+on: [pull_request]
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Claude Code Review
+        run: |
+          git diff origin/main | claude -p &quot;
+          审查这个 PR 的改动。按以下格式输出：
+          ### 概述
+          （一句话总结改动）
+          ### 风险点
+          ${按严重程度排序}
+          ### 建议
+          ${具体改进建议}
+          ### 总体评价
+          ✅ 可以合并 / ⚠️ 有条件合并 / ❌ 需要修改
+          &quot; &gt; review.md
+      - name: Post Review
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require(&#x27;fs&#x27;);
+            const review = fs.readFileSync(&#x27;review.md&#x27;, &#x27;utf8&#x27;);
+            github.rest.issues.createComment({
+              ...context.repo,
+              issue_number: context.issue.number,
+              body: review
+            });</code></pre>
+<h2>让 Claude 教你学 Shell</h2>
+<p>这可能是最被低估的用法——把 Claude 当你的命令行导师：</p>
+<pre><code># 学一个新命令
+给我讲解 sed 命令的常用模式，用实际例子：
+- 替换文件中的文本
+- 删除特定行
+- 提取匹配正则的内容
+- 多个 sed 命令组合
+
+每个例子用我自己项目里的真实文件演示。
+
+# 理解一个复杂命令
+解释这个命令每一步做了什么：
+find . -name &quot;*.ts&quot; | xargs grep -l &quot;@deprecated&quot; | xargs wc -l | sort -rn
+
+# 把你的 shell 技能教给同事
+我经常用这 10 个命令来处理日志、部署、调试。
+帮我写一份「团队 Shell 速查手册」，
+每个命令带一句话解释和实际例子，适合新人。</code></pre>
+<h2>终端组合技实战</h2>
+<p><strong>场景：找出慢的 API 并修复</strong></p>
+<pre><code>帮我做一次 API 性能排查：
+1. 用 grep/awk 从访问日志里提取最近 1000 条请求的响应时间
+2. 按响应时间排序，找出最慢的 5 个接口
+3. 读取这些接口的代码，分析性能瓶颈
+4. 给出优化方案并实施</code></pre>
+<p><strong>场景：批量处理文件</strong></p>
+<pre><code>src/images/ 下有 200 张图片，需要：
+1. 找出大于 1MB 的文件
+2. 压缩成 webp 格式（如果装好了 imagemagick 就用它）
+3. 生成一个 HTML 页面，展示压缩前后的对比</code></pre>
+<h2>今日小练习</h2>
+<ol>
+<li>把 <code>npm test</code> 加入 settings.json 的 allow 列表</li>
+<li>故意引入一个构建错误，让 Claude 自动诊断并修复</li>
+<li>用 Claude 构造一个管道命令处理一段日志</li>
+<li>让 Claude 用 jq 处理你项目里的一个 JSON 文件</li>
+<li>如果项目用了 Docker，让 Claude 管理一次容器操作</li>
+</ol>
+<hr>
+<p><strong>今日小结：</strong> Claude Code 的命令能力 = 你有了一双能在终端里执行、观察、分析、修复的手。权限控制给你安全感，自动 debug 循环让你从重复劳动里脱身。学会让 Claude 教你 shell，你的命令行水平会跟着涨——这是做中学的极致版本。</p>
+</article>
+<article id="day6">
+<h1>第 6 天 · Git 工作流：提交、分支、PR 一条龙</h1>
+<div class="meta">5月14日 周三<span>Day 6/15</span></div>
+<p>Git 操作占日常工作很大比例，但很多操作你每次都要查文档（<code>git cherry-pick</code> 的参数顺序是什么来着？）。Claude Code 不仅能帮你执行，更能帮你做 Git 决策。</p>
+<h2>智能提交：不只是 git commit -m</h2>
+<p>Claude 能生成比你手写更好的 commit message——因为它读得懂 diff 的含义。</p>
+<p><strong>基础用法：</strong></p>
+<pre><code>基于当前暂存区的改动，生成一个 conventional commits 格式的 commit message。
+格式：type(scope): description
+
+body 部分要写清楚：
+- 为什么改（动机）
+- 怎么改的（技术方案一句话）
+- 影响范围（哪些功能受影响）</code></pre>
+<p>Claude 会输出类似：</p>
+<pre><code>feat(order): add refund support with payment gateway integration
+
+Add refund flow that integrates with Stripe refund API. Previously
+cancelled orders would just change status without actually refunding.
+
+- Created RefundService with Stripe integration
+- Added POST /api/orders/:id/refund endpoint
+- Added refund status tracking in Order model
+- Updated email notification for refund confirmations
+
+BREAKING CHANGE: Order.cancel() no longer auto-refunds. Use Order.refund() instead.</code></pre>
+<p><strong>进阶：拆分提交</strong></p>
+<p>你可能一口气改了 5 个文件，但它们逻辑上应该是 3 个 commit。让 Claude 分析并拆分：</p>
+<pre><code>当前工作区有这些改动：
+@src/models/User.ts （加了 lastLoginAt 字段）
+@src/api/login.ts （改了登录逻辑，记录登录时间）
+@src/utils/format.ts （改了日期格式化函数）
+@src/pages/profile.tsx （改了个人页面 UI）
+@package.json （升级了 next.js 版本）
+
+这些改动逻辑上应该分成几个 commit。帮我：
+1. 分析哪些文件属于同一个逻辑组
+2. 建议拆分方案（几个 commit，每个包含哪些文件）
+3. 为每个 commit 生成 message
+4. 等你确认后，用 git add 逐组暂存并提交</code></pre>
+<p><strong>实战：整理提交历史</strong></p>
+<pre><code>我今天的 6 个 commit 很乱：
+- 有 3 个是修复同一个 bug 的反复尝试
+- 有 1 个是不小心提交的 debug 日志
+- 剩下 2 个才是正经功能
+
+帮我做一次 interactive rebase：
+1. 把 3 个 bugfix commit squash 成一个
+2. 删掉 debug 日志那个 commit
+3. 保持功能 commit 不变
+4. 重新写好 commit message
+
+操作前先告诉我 plan，等我确认后再执行 rebase。</code></pre>
+<h2>分支管理</h2>
+<p><strong>创建功能分支：</strong></p>
+<pre><code>基于 main 创建分支 feature/user-invite，
+用来开发用户邀请功能。</code></pre>
+<p><strong>Cherry-pick：把一个 commit 拿到另一个分支</strong></p>
+<pre><code>hotfix 分支上有个 commit abc1234 修复了支付安全问题，
+需要同时应用到 main 和 develop 分支。
+帮我 cherry-pick，处理可能出现的冲突。</code></pre>
+<p><strong>分支清理：</strong></p>
+<pre><code>帮我列出所有已经合并到 main 但还没删除的本地分支，
+先让我确认，然后批量删除。</code></pre>
+<p>Claude 执行：</p>
+<pre><code>git branch --merged main | grep -v &quot;main\|develop&quot; | sed &#x27;s/^[ *]*//&#x27;</code></pre>
+<h2>PR 全生命周期</h2>
+<p>Claude Code 可以把创建 PR 这件事自动化到极致：</p>
+<p><strong>第一阶段：创建 PR</strong></p>
+<pre><code>帮我：
+1. 对比 feature/user-invite 和 main 的差异
+2. 总结所有改动，按模块分类
+3. 生成 PR 描述（包含：背景、改动摘要、测试计划、截图说明）
+4. 用 gh pr create 创建 PR
+5. 如果是修复 bug，关联对应的 issue</code></pre>
+<p>生成的高质量 PR 描述会自动包含：</p>
+<pre><code>## 背景
+用户反馈无法邀请团队成员，缺少邀请入口和邮件通知。
+Closes #234
+
+## 改动摘要
+- **数据模型**: 新增 Invitation 表，关联 User 和 Team
+- **API**: 新增 POST /api/teams/:id/invite, GET /api/invitations/:token
+- **前端**: 新增邀请弹窗组件 InviteDialog.tsx
+- **邮件**: 集成 Resend 发送邀请邮件
+
+## 测试计划
+- [ ] 单元测试：邀请创建、token 验证、重复邀请处理
+- [ ] E2E：从发送邀请到被邀请者注册的完整流程
+- [ ] 边界：无效 token、过期邀请、已使用邀请
+
+## 部署注意
+需要添加环境变量 RESEND_API_KEY</code></pre>
+<p><strong>第二阶段：审查 PR</strong></p>
+<pre><code>审查这个 PR（https://github.com/org/repo/pull/123）：
+1. 拉取代码并切换到 PR 分支
+2. 对比改动，按严重程度列出问题
+3. 重点关注：安全性、性能、异常处理、类型安全
+4. 如果有测试覆盖不足的地方，指出来
+5. 生成审查评论</code></pre>
+<p><strong>第三阶段：对比两个 PR</strong></p>
+<pre><code>PR #245 和 PR #246 都在改支付模块。帮我：
+1. 对比两个 PR 的改动范围和差异
+2. 判断合并顺序——先合哪个后合哪个？
+3. 有没有可能产生语义冲突（不冲突但逻辑矛盾）？</code></pre>
+<h2>冲突解决</h2>
+<p>冲突是 Git 操作里最让人头疼的。Claude 能帮你：</p>
+<pre><code>合并 feature/payment-v2 到 main 时冲突了。
+这是我的合并策略偏好：
+- 对于 import 语句：取两边的并集
+- 对于函数实现：以我的分支为准（这是我的新实现）
+- 对于类型定义：手动检查，不要自动决定
+
+按这个策略解决所有冲突文件，提交合并。</code></pre>
+<p><strong>让 Claude 理解你的偏好：</strong></p>
+<pre><code>我的 Git 冲突解决偏好（写入 CLAUDE.md）：
+1. import 冲突 → 取并集，去重，按字母排序
+2. 配置冲突 → 保留新配置，注释掉旧配置（不删除）
+3. 业务逻辑冲突 → 暂停，让我手动判断
+4. 格式化冲突 → 接受格式化更好的那一边</code></pre>
+<h2>Changelog 自动生成</h2>
+<pre><code>自 v2.3.0 以来（git tag），帮我：
+1. 提取所有 commit message
+2. 按类型分类（feat, fix, refactor, docs, chore）
+3. 根据改动大小判断版本号（semver：major/minor/patch）
+4. 生成 CHANGELOG.md 条目
+5. 找到所有 breaking change</code></pre>
+<p>输出示例：</p>
+<pre><code>## [2.4.0] - 2024-05-14
+
+### Added
+- 用户邀请功能，支持邮件邀请和链接邀请 (#234)
+- 订单退款支持 Stripe 集成 (#245)
+
+### Fixed
+- 修复高并发下订单状态不一致问题 (#241)
+- 修复 Safari 下日期选择器显示异常 (#248)
+
+### Changed
+- 升级 Next.js 到 14.2（性能提升约 15%）(#250)
+- 重构支付模块，拆分 PaymentService 为三个子服务
+
+### Deprecated
+- Order.cancel() 不再自动退款，请使用 Order.refund()</code></pre>
+<h2>Git 考古学：找到 Bug 的源头</h2>
+<p>这是 Claude 非常擅长的分析型任务：</p>
+<pre><code>用户反馈「登录后偶尔跳转到 404 页面」。
+这个 bug 是最近两周才出现的。帮我：
+
+1. 用 git log --since=&quot;2 weeks ago&quot; -- src/api/auth/ 找出相关的提交
+2. 逐个检查每个提交的 diff，看哪次改动可能引入 redirect 逻辑问题
+3. 找到可疑 commit 后，读当时修改的完整文件上下文
+4. 判断是不是这个 commit 导致的，以及怎么修</code></pre>
+<p><strong>Git Bisect 辅助：</strong></p>
+<pre><code>帮我用 git bisect 定位 bug：
+- 好的 commit：v2.3.0（tag）
+- 坏的 commit：HEAD
+- 测试命令：npm run test:e2e -- --grep &quot;login redirect&quot;
+- 每步告诉我当前测试的是哪个 commit，等我反馈测试结果</code></pre>
+<h2>常用 Git Alias（可放进 CLAUDE.md）</h2>
+<pre><code># 让 Claude 帮你设置这些 alias
+git config --global alias.lg &quot;log --graph --oneline --decorate --all&quot;
+git config --global alias.unstage &quot;reset HEAD --&quot;
+git config --global alias.amend &quot;commit --amend --no-edit&quot;
+git config --global alias.undo &quot;reset --soft HEAD~1&quot;
+git config --global alias.cleanup &quot;!git branch --merged | grep -v &#x27;main\\|master\\|develop&#x27; | xargs git branch -d&quot;</code></pre>
+<h2>今日小练习</h2>
+<ol>
+<li>让 Claude 生成一个 conventional commit message，和你的对比质量</li>
+<li>模拟一次冲突——创建两个分支改同一个文件，让 Claude 用你的偏好解决冲突</li>
+<li>让 Claude 为你的项目生成一份 CHANGELOG</li>
+<li>用 Claude 做一次 git bisect（如果有一个已知的回归 bug）</li>
+<li>把 Git 冲突解决偏好写进 CLAUDE.md</li>
+</ol>
+<hr>
+<p><strong>今日小结：</strong> Git 本身不难，难的是决策——这个改动该拆几个 commit？这个冲突该以谁为准？这个版本号该不该升 major？Claude 把这些决策从「拍脑袋」变成「有依据」。自动生成 commit message 和 PR 描述不是偷懒，是提高团队协作的信息密度。</p>
+</article>
+<article id="day7">
+<h1>第 7 天 · 上下文与 CLAUDE.md：Claude 的操作系统</h1>
+<div class="meta">5月15日 周四<span>Day 7/15</span></div>
+<p>如果 Claude Code 是一台电脑，CLAUDE.md 就是它的操作系统——定义了它怎么工作、懂什么规则、和谁配合。今天把它的底层逻辑讲透。</p>
+<h2>CLAUDE.md 是什么</h2>
+<p>它是一个放在项目根目录的纯文本文件，Claude 每次启动会话时自动读取。它不是可选的——是你在 Claude Code 上投入回报率最高的 10 分钟。</p>
+<pre><code>/init</code></pre>
+<p>运行这个命令，Claude 会分析你的项目并生成一个基础版 CLAUDE.md。但不要止步于此——自动生成的太泛，你需要自己精调。</p>
+<h2>一个生产级 CLAUDE.md 模板</h2>
+<pre><code># Project: MyApp
+
+## Stack
+- Frontend: Next.js 14 (App Router), TypeScript, Tailwind CSS, shadcn/ui
+- Backend: Next.js API routes, Prisma ORM, PostgreSQL 16
+- Auth: NextAuth.js v5 with GitHub + Google OAuth
+- Payments: Stripe
+- Email: Resend
+- Testing: Vitest (unit), Playwright (E2E)
+- Package manager: pnpm (不要用 npm 或 yarn)
+
+## Architecture
+- `src/app/` — Next.js App Router pages and API routes
+- `src/components/` — React components, 按功能分组
+- `src/lib/` — 纯工具函数，不能依赖 React 或数据库
+- `src/services/` — 业务逻辑层，可依赖数据库，但不能依赖 HTTP 请求对象
+- `src/db/` — Prisma schema 和数据库工具
+- `src/emails/` — react-email 模板
+
+## Code Conventions
+
+### TypeScript
+- 禁止使用 `any`，如果必须用，用 `unknown` 加类型守卫
+- 类型导入使用 `import type`
+- Props 使用 `type` 而不是 `interface`（除非需要 extends）
+- 导出函数必须显式标注返回类型
+
+### Naming
+- React 组件：PascalCase，文件名和组件名一致
+- 函数/变量：camelCase
+- 数据库字段：snake_case
+- API 路由：kebab-case
+- 常量：UPPER_SNAKE_CASE
+
+### Import Order（自动排序，不要手调）
+1. React/Next.js 相关
+2. 第三方库
+3. 内部模块（@/ 别名）
+4. 类型导入
+5. 样式/资源
+
+### Error Handling
+- API 路由永远有 try-catch，返回 { code, data, message } 格式
+- 不要在 catch 里吞掉错误——至少 console.error
+- 用户可见的错误消息用中文，开发者日志用英文
+
+## Git Workflow
+- Commit message: Conventional Commits (feat/fix/refactor/docs/chore)
+- 分支命名: feature/xxx, fix/xxx, chore/xxx
+- 不要在 commit 里包含 secrets
+
+## Testing
+- 写测试文件放在 `__tests__` 目录下，与被测文件同级
+- 使用 describe/it 结构，测试名用中文描述场景
+- 覆盖：正常路径、边界条件、错误路径、并发场景
+
+## Rules for Claude
+- 修改代码前先说计划（除非是很小的改动）
+- 只改我明确指定的文件，不要顺手优化其他文件
+- 新依赖要先问，不要直接 npm install
+- 不要生成多余的注释（代码自解释）, 但复杂逻辑要加为什么这样做的注释
+- 永远不要修改 .env 或 .env.local</code></pre>
+<h2>三层 CLAUDE.md 体系</h2>
+<p>Claude Code 支持多层 CLAUDE.md，优先级从高到低：</p>
+<table><tr><td>层级</td><td>位置</td><td>作用范围</td><td>示例内容</td></tr><tr><td>全局</td><td>`~/.claude/CLAUDE.md`</td><td>所有项目</td><td>你的编码风格偏好、Git 习惯</td></tr><tr><td>项目</td><td>`<project>/CLAUDE.md`</td><td>当前项目</td><td>技术栈、架构、项目专属规则</td></tr><tr><td>子目录</td><td>`<project>/src/api/CLAUDE.md`</td><td>子目录下的文件</td><td>API 专属规则、接口规范</td></tr></table>
+<p><strong>全局 CLAUDE.md 示例：</strong></p>
+<pre><code># Personal Preferences (applies to all projects)
+
+- 我喜欢写单元测试，每次写完代码主动问我要不要加测试
+- 用中文和我对话，但代码和注释用英文
+- 简短解释优于长篇大论，除非我追问
+- 如果发现项目里有反模式（比如 props drilling），温和提醒但不要强行重构
+- 我会用 /plan 来做大任务，所以平时不用主动列计划</code></pre>
+<p><strong>子目录 CLAUDE.md 示例（<code>src/api/CLAUDE.md</code>）：</strong></p>
+<pre><code># API Rules
+
+- 所有 API 路由必须用 zod 校验输入
+- 返回格式统一：{ code: number, data?: T, message: string }
+- 鉴权用 getServerSession，不要自己读 cookie
+- 分页接口统一用 { page, limit } 参数，返回含 total 的响应
+- 不要在这个目录里写业务逻辑——调用 src/services/ 里的函数</code></pre>
+<h2>上下文优先级：Claude 怎么决定听谁的</h2>
+<p>Claude 处理指令时有优先级：</p>
+<pre><code>当前对话的明确指令（最高优先级）
+  ↓
+CLAUDE.md（子目录 &gt; 项目 &gt; 全局）
+  ↓
+对话历史中的信息
+  ↓
+文件内容
+  ↓
+Claude 的默认行为（最低优先级）</code></pre>
+<p><strong>这意味着：</strong> 你在对话里的一句「这次不用 zod」，会覆盖 CLAUDE.md 里「所有 API 必须用 zod 校验」的规则。会话级指令 > 文件级指令。</p>
+<h2>动态更新 CLAUDE.md：让 Claude 从错误中学习</h2>
+<p>这是 CLAUDE.md 最实用的用法——Claude 犯了错，你纠正它，然后让它把这个教训写进 CLAUDE.md。</p>
+<pre><code>你刚才在 src/utils/format.ts 里用了 dayjs，
+但这个项目已经决定用 date-fns 了。
+
+帮我做两件事：
+1. 把刚才的改动改成用 date-fns 实现
+2. 把这个规则加到 CLAUDE.md 里：
+   「日期处理统一用 date-fns，不要用 dayjs 或 moment」</code></pre>
+<p><strong>这个模式的价值：</strong> 你不需要事先想到所有规则。遇到了，纠正了，记录为永久规则。CLAUDE.md 是一个活的文档，会随着项目一起成长。</p>
+<p><strong>实战示例集合：</strong></p>
+<pre><code># 你发现 Claude 在用 Tailwind 时写了内联 style
+把这条规则加到 CLAUDE.md：
+「样式统一用 Tailwind utility class，禁止 inline style 和 CSS module，
+除非 Tailwind 确实做不到（比如动态计算的颜色值）」
+
+# Claude 写的错误处理太啰嗦
+「API 路由的错误处理不要每个都写 console.error + 完整堆栈，
+封装一个 handleApiError 函数统一处理」
+
+# Claude 擅自升级了依赖版本
+「永远不要修改 package.json 里的版本号，除非我明确要求升级」</code></pre>
+<h2>条件规则：让 CLAUDE.md 更聪明</h2>
+<p>不是所有规则在所有场景都适用。你可以写条件规则：</p>
+<pre><code>## Conditional Rules
+
+### 当修改 API 路由文件时
+- 自动检查 zod schema 是否和 TypeScript 类型一致
+- 确保有 try-catch
+- 检查是否加了鉴权（除非路由名包含 public）
+
+### 当修改数据库相关代码时
+- 检查是否需要在 Prisma schema 里改模型
+- 如果新增了字段，提醒是否需要数据库迁移
+- 不要在查询里使用 select *，显式列出需要的字段
+
+### 当写 React 组件时
+- 检查是否可以用 Server Component（不涉及 state/effect 就用 RSC）
+- 如果有用户交互，把交互部分抽成 Client Component
+- 移动端适配不要用 hidden sm:block 这种模式，默认移动端优先
+
+### 当处理外部 API 调用时
+- 必须加超时控制（默认 10 秒）
+- 必须加重试逻辑（指数退避，最多 3 次）
+- 必须处理网络错误和超时错误，给出友好的用户提示</code></pre>
+<h2>CLAUDE.md vs /init</h2>
+<p><code>/init</code> 命令是个好起点，但它只生成项目级 CLAUDE.md，内容是静态快照。你的工作是：</p>
+<ol>
+<li><strong>删掉没用的。</strong> <code>/init</code> 可能生成了「这是一个 TypeScript 项目」这种废话。删。</li>
+<li><strong>补充隐式知识。</strong> 哪些库被弃用了但还没删？哪个函数有隐藏副作用？写进去。</li>
+<li><strong>加上你的偏好。</strong> 你喜欢怎么写代码、怎么组织文件——这只有你知道。</li>
+</ol>
+<h2>今日小练习</h2>
+<ol>
+<li>在项目里运行 <code>/init</code>，看自动生成的 CLAUDE.md，逐条审查</li>
+<li>补充至少 10 条自己的规则——从过去两周踩过的坑里提取</li>
+<li>创建一个全局 <code>~/.claude/CLAUDE.md</code>，写入跨项目偏好</li>
+<li>在某个子目录（如 <code>src/api/</code>）创建一个局部的 CLAUDE.md</li>
+<li>下次 Claude 犯错时，纠正后让它把规则加到 CLAUDE.md</li>
+</ol>
+<hr>
+<p><strong>今日小结：</strong> CLAUDE.md 是你在 Claude Code 上的「可复用的指导费」。写 10 分钟，省 100 小时。诀窍：不要试图一开始就写完美——每次纠正 Claude 后顺手加一条规则，让它从一个骨架长成你自己的编程规范书。</p>
+</article>
+<article id="day8">
+<h1>第 8 天 · 任务规划：用 /plan 把复杂需求变成可执行方案</h1>
+<div class="meta">5月18日 周一<span>Day 8/15</span></div>
+<p>程序员最怕的不是写代码，是面对一个模糊的需求不知道该从哪下手。<code>/plan</code> 模式就是为这个时刻设计的——它把 Claude 从「执行者」变成「架构师」，先给方案等你审批，然后再动手。</p>
+<h2>/plan 模式详解</h2>
+<p>输入 <code>/plan</code> 后，Claude 会进入规划模式。它不会再改代码，而是分析需求、阅读相关代码、输出一个结构化的执行计划。</p>
+<p><strong>基本用法：</strong></p>
+<pre><code>/plan 我需要给订单系统加一个「部分退款」功能。
+目前只支持全额退款。
+
+要考虑：
+- 一个订单可以多次部分退款
+- 退款总额不能超过订单总额
+- 退款需要经过审批（金额超过 500 元需要管理员审批）
+- 退款状态需要实时同步到前端</code></pre>
+<p>Claude 会输出类似这样的计划（大幅简化版）：</p>
+<pre><code>## Plan: 部分退款功能
+
+### 1. 数据模型变更
+- 修改 Order 表：新增 refundableAmount 字段
+- 新建 RefundRequest 表：amount, reason, status, approverId
+- 新建 RefundApproval 表：requestId, approverId, decision, comment
+
+### 2. API 变更
+- POST /api/orders/:id/refund — 创建退款申请
+- GET /api/orders/:id/refunds — 查询退款历史
+- POST /api/refunds/:id/approve — 审批退款
+- WebSocket 事件：refund:status_changed
+
+### 3. 前端变更
+- 修改 OrderDetail 页面：退款按钮改为「申请退款」
+- 新建 RefundDialog 组件：输入金额和原因
+- 新建 RefundHistory 组件：显示退款记录时间线
+- 新建 ApproveRefund 页面（管理员）
+
+### 4. 业务规则
+- 退款金额 ≤ 剩余可退金额
+- &gt;500 元触发审批流
+- 审批中不可重复申请
+- 退款成功后释放库存
+
+### 5. 测试
+- 单元测试：退款金额校验、审批流状态机
+- 集成测试：完整退款流程
+- E2E：用户申请退款 → 管理员审批 → 退款到账
+
+### 预估工作量
+- 数据模型：30 分钟
+- API：1 小时
+- 前端：1.5 小时
+- 测试：1 小时
+- 总计：约 4 小时</code></pre>
+<h2>手动任务分解：5 轮推进法</h2>
+<p><code>/plan</code> 给的是计划，真正干活是按轮次推进。这是经过验证的高效模式：</p>
+<p><strong>第 1 轮：定义边界</strong></p>
+<pre><code>我要给项目加一个「收藏夹」功能。帮我：
+1. 分析现有代码中与用户、内容相关的模块
+2. 列出所有需要创建和修改的文件
+3. 列出所有需要明确的决策点（比如：收藏的是文章还是商品？要不要分类？）
+
+先别写代码，只列清单。</code></pre>
+<p><strong>第 2 轮：数据建模</strong></p>
+<pre><code>基于第 1 轮的清单。帮我设计数据模型：
+- Prisma schema 改动
+- 字段类型、关系、索引
+- 迁移策略（是否影响现有数据）</code></pre>
+<p><strong>第 3 轮：API 设计</strong></p>
+<pre><code>基于第 2 轮的模型。设计 API：
+- 接口列表和路由
+- 请求/响应格式
+- 错误处理
+- 鉴权策略</code></pre>
+<p><strong>第 4 轮：逐步实现</strong></p>
+<pre><code>按顺序实现：
+1. 先改数据模型
+2. 再写 API
+3. 接着写前端
+4. 最后写测试
+
+每一步我确认后再继续。</code></pre>
+<p><strong>第 5 轮：审查与收尾</strong></p>
+<pre><code>全部实现完成。做一次全面审查：
+1. 代码质量：命名、结构、重复逻辑
+2. 安全性：鉴权、输入校验、注入风险
+3. 性能：N+1 查询、无索引查询
+4. 测试覆盖：关键路径都有测试吗</code></pre>
+<h2>任务分解原则</h2>
+<p>好分解和烂分解的区别：</p>
+<table><tr><td>原则</td><td>好例子</td><td>坏例子</td></tr><tr><td>可独立验证</td><td>「改 User 模型，加 favoriteIds 字段，然后运行 prisma migrate」</td><td>「改模型和 API」</td></tr><tr><td>有明确产出</td><td>「创建 POST /api/favorites 接口，返回 201」</td><td>「实现收藏接口」</td></tr><tr><td>顺序清楚</td><td>「先模型，再 API，再前端」</td><td>「全部一起做」</td></tr><tr><td>可估算</td><td>「5 个文件改动，预计 30 分钟」</td><td>「改代码」</td></tr><tr><td>有验收标准</td><td>「运行 npm test，3 个新测试通过」</td><td>「大概没问题」</td></tr></table>
+<h2>依赖排序：什么先做什么后做</h2>
+<p>让 Claude 帮你找出任务依赖：</p>
+<pre><code>这是我需要改的文件列表：
+- src/types/favorite.ts （新文件）
+- src/services/favoriteService.ts （新文件）
+- src/api/favorites/route.ts （新文件）
+- src/components/FavoriteButton.tsx （新文件）
+- src/pages/product/[id].tsx （修改）
+- src/pages/user/favorites.tsx （新文件）
+
+帮我分析它们的依赖关系，给出最优实现顺序。
+
+输出格式：
+Level 0（无依赖，可以最先做）：...
+Level 1（依赖 Level 0）：...
+Level 2（依赖 Level 1）：...</code></pre>
+<h2>估算复杂度</h2>
+<p>在开始写代码前，让 Claude 给出复杂度评估：</p>
+<pre><code>在实现收藏夹功能之前，帮我评估每个部分的复杂度：
+
+评级标准：
+- 🟢 简单（模式化，有现成例子可抄）
+- 🟡 中等（需要一些设计决策）
+- 🔴 复杂（涉及跨模块协调、状态管理、并发）
+
+对 🔴 的部分，详细说明为什么复杂，有什么风险。
+对 🟡 的部分，列出关键决策点。</code></pre>
+<h2>中途改计划：Plan 不是合同</h2>
+<p>需求变了怎么办？没关系——计划本身就是为变更设计的。</p>
+<pre><code>等一下。第 3 步的 API 设计里，我没提到但需要加上：
+- 收藏时需要记录收藏时的商品价格
+- 取消收藏时不要真删除，做软删除（保留数据用于推荐算法）
+
+帮我更新计划，重新评估影响范围。
+哪些已经实现的部分需要改？改动成本多大？</code></pre>
+<p><strong>关键心态：</strong> 用 <code>/plan</code> 不是为了写一份完美的计划然后严格执行——计划帮你看到全貌、找到坑、理清依赖。在实现过程中发现新信息？更新计划。这是探索式编程，不是瀑布模型。</p>
+<h2>实战：从一句话需求到完整计划</h2>
+<pre><code>需求：用户反馈「希望搜索能更准一些」。
+
+先别做任何事。帮我拆解这个需求：
+1. 「更准」是什么意思？列出可能的方向：
+   - 模糊搜索（拼音、同义词）
+   - 搜索结果排序优化
+   - 搜索建议/自动补全
+   - 按多字段搜索（标题+内容+标签）
+   
+2. 每个方向的技术方案和成本
+3. 根据我们现有的技术栈（PostgreSQL），推荐优先级
+4. 给出 MVP 方案（最小改动，最大效果）</code></pre>
+<p>Claude 会告诉你：PostgreSQL 自带 <code>pg_trgm</code> 扩展可以做模糊搜索和相似度排序，改动极小。比引入 Elasticsearch 划算得多。</p>
+<h2>今日小练习</h2>
+<ol>
+<li>从你 backlog 里挑一个需求，用 <code>/plan</code> 出完整计划</li>
+<li>实践 5 轮推进法：定义一个任务，逐轮执行</li>
+<li>给任务做复杂度评估，看看 🔴 的部分是不是真的需要那么复杂</li>
+<li>故意在计划执行到一半时「改需求」，看 Claude 怎么调整</li>
+</ol>
+<hr>
+<p><strong>今日小结：</strong> <code>/plan</code> 解决的是「不知道该做什么」的问题，5 轮推进法解决的是「知道做什么但不知道从哪开始」的问题。加起来，复杂需求的实现时间能缩短一半以上——不是因为 Claude 写得快，是因为你不再走弯路了。计划最重要的价值不是「执行」，是让你在写第一行代码之前就看到坑在哪。</p>
+</article>
+<article id="day9">
+<h1>第 9 天 · 测试与调试：让 Claude 做你的 QA 工程师</h1>
+<div class="meta">5月19日 周二<span>Day 9/15</span></div>
+<p>没人喜欢写测试，但人人都希望代码有测试。好消息：Claude 写测试比写业务代码还快——因为它擅长穷举边界条件，而测试本质上就是穷举。</p>
+<h2>自动生成测试</h2>
+<p><strong>基础：给一个函数写全套测试</strong></p>
+<pre><code>给 src/utils/pagination.ts 里的 paginate 函数写测试：
+
+函数签名：
+paginate&lt;T&gt;(items: T[], page: number, pageSize: number) =&gt; {
+  data: T[], total: number, page: number, totalPages: number
+}
+
+测试要求：
+- 正常情况：10 个元素，第 1 页，每页 3 个
+- 最后一页不满：10 个元素，第 4 页（只剩 1 个）
+- 空数组：返回空数据和 totalPages=0
+- 边界：page=0、page=负数、pageSize=0
+- 超范围：page 超过总页数
+- 大数据集：10000 个元素，性能验证</code></pre>
+<p>Claude 生成的测试通常比你手写的更全面——因为它不漏边界条件。</p>
+<p><strong>进阶：基于现有代码反推测试</strong></p>
+<pre><code>分析 src/services/orderService.ts 里 createOrder 函数的代码逻辑，
+帮我写一份测试计划，然后实现。
+
+测试计划要包含：
+1. 正常路径测试
+2. 异常路径测试（库存不足、用户余额不够、优惠券过期）
+3. 边界测试（最大数量、最小金额、极端并发）
+4. 集成测试（如果涉及第三方 API，mock 掉）
+
+用 vitest + @testing-library（如果需要渲染组件）</code></pre>
+<h2>TDD 工作流：Red-Green-Refactor</h2>
+<p>Claude Code 做 TDD 特别顺手，因为三个步骤都是它在做：</p>
+<p><strong>Red 阶段：先写失败测试</strong></p>
+<pre><code>我要实现一个 validatePassword 函数，规则是：
+- 至少 8 个字符
+- 包含至少一个大写字母
+- 包含至少一个数字
+- 包含至少一个特殊字符（!@#$%^&amp;*）
+
+先写测试（Red 阶段），不要写实现。</code></pre>
+<p><strong>Green 阶段：让测试通过</strong></p>
+<pre><code>测试写好了。现在实现 validatePassword，让所有测试通过。
+不要过度设计——只要让测试绿就行。</code></pre>
+<p><strong>Refactor 阶段：优化但不破坏测试</strong></p>
+<pre><code>测试全绿。现在重构 validatePassword：
+- 提高可读性（正则太长了，拆开）
+- 优化性能（预编译正则）
+- 加上详细的错误消息（告诉用户哪条规则没满足）
+
+重构后重新跑测试，确保全部通过。</code></pre>
+<p><strong>完整 TDD 对话示例：</strong></p>
+<pre><code># 一个 prompt 完成整个 TDD 循环
+用 TDD 方式实现 src/utils/slug.ts 的 generateSlug 函数：
+
+1. 先写测试（Red）：
+   - 英文标题 → 小写+连字符
+   - 中文标题 → 拼音或保留原样
+   - 特殊字符 → 移除
+   - 连续空格 → 单个连字符
+   - 首尾空格 → trim
+   - 空字符串 → 返回空
+   - 超长标题 → 截断到 80 字符
+
+2. 实现让测试通过（Green）
+3. 重构优化（Refactor）
+
+每步完成后告诉我状态。</code></pre>
+<h2>Debug 循环：Claude 的自我修复能力</h2>
+<p>这是 Claude Code 最魔幻的能力——它会自己 debug 自己写的 bug：</p>
+<pre><code>我刚运行了你写的测试，3 个没过。
+这是完整的报错输出：（粘贴终端输出）
+
+自己分析、修复、重新跑测试。循环直到全绿。</code></pre>
+<p>Claude 会：读报错 → 定位 → 修改 → 跑测试 → 看结果 → 如果还失败，再改。这个过程完全不需要你参与。</p>
+<p><strong>实战：修复一个复杂 Bug</strong></p>
+<pre><code>用户反馈：创建订单时偶尔报「库存不足」，但实际库存充足。
+
+帮我 debug：
+1. 读 createOrder 相关代码，理解库存检查逻辑
+2. 分析并发场景：是不是两个请求同时读到了旧库存？
+3. 检查数据库事务隔离级别
+4. 如果是竞态条件，用悲观锁还是乐观锁？
+5. 写出修复方案并实施
+6. 写一个测试模拟并发创建订单的场景</code></pre>
+<p>Claude 的分析路径通常：读代码 → 发现竞态 → 建议 <code>SELECT ... FOR UPDATE</code> → 你确认 → 实施 → 写并发测试验证。</p>
+<h2>让 Claude 做 Code Review</h2>
+<pre><code>审查当前分支上所有改动的代码。
+检查以下维度（每个维度打分 1-5）：
+
+1. 逻辑正确性：
+   - 有没有 off-by-one 错误？
+   - 条件判断有没有遗漏？
+   - 异步操作有没有正确处理？
+
+2. 安全性：
+   - 用户输入有没有校验？
+   - SQL 有没有参数化？
+   - 有没有信息泄漏到错误消息里？
+
+3. 性能：
+   - 循环里有没有不必要的操作？
+   - 有没有 N+1 查询？
+   - 大数据集有没有分页？
+
+4. 可维护性：
+   - 命名是否清晰？
+   - 函数是否过长（&gt;50 行）？
+   - 有没有重复逻辑？
+
+输出：每个维度的分数 + 问题列表（含文件名和行号） + 修复建议</code></pre>
+<p><strong>审查 PR 的实战 prompt：</strong></p>
+<pre><code>用 gh pr diff 拉取 PR #128 的改动。
+你是主审查者，用以下标准：
+- 🔴 必须改（安全漏洞、数据丢失风险、逻辑错误）
+- 🟡 建议改（性能问题、可读性差、缺少测试）
+- 🟢 可选项（命名建议、注释补充、代码风格）
+
+每个问题引用具体行号，给出修复建议。</code></pre>
+<h2>性能测试</h2>
+<pre><code>分析 src/services/searchService.ts 的 search 函数性能：
+
+1. 用 console.time 包裹关键路径，跑 100 次查询取平均值
+2. 分析哪些操作最耗时（数据库查询？数据处理？排序？）
+3. 检查数据库查询计划（PostgreSQL EXPLAIN ANALYZE）
+4. 给出优化方案：加索引？缓存？改写查询？
+5. 实施优化，对比优化前后的耗时
+
+输出对比表格：
+| 操作 | 优化前 | 优化后 | 提升 |
+| ...</code></pre>
+<h2>快照测试（Snapshot Testing）</h2>
+<pre><code>给 src/components/OrderCard.tsx 写快照测试：
+- 渲染不同状态的订单（待支付、已支付、已发货、已退款）
+- 每种状态渲染对应的快照
+- 如果组件修改后快照变了，提醒我审查变化是否预期</code></pre>
+<h2>E2E 测试提示</h2>
+<pre><code>用 Playwright 给用户注册流程写 E2E 测试：
+
+场景：
+1. 打开注册页 → 填写表单 → 提交 → 验证成功跳转到首页
+2. 必填字段为空 → 验证错误提示出现
+3. 邮箱已注册 → 验证后端错误消息显示
+4. 密码太短 → 验证前端校验提示
+
+要求：
+- 使用 data-testid 选择器（不要用 CSS class 或文本内容）
+- 每个测试独立，不依赖执行顺序
+- 用 test.beforeEach 清理测试数据</code></pre>
+<h2>今日小练习</h2>
+<ol>
+<li>找你项目里一个没有测试的工具函数，让 Claude 写全套测试</li>
+<li>实践一次 TDD 循环：先写测试，再实现，再重构</li>
+<li>故意在代码里引入一个 bug，然后让 Claude debug 并修复</li>
+<li>让 Claude 审查你今天写的所有代码改动</li>
+<li>对项目中一个慢函数做性能分析，让 Claude 给出优化方案</li>
+</ol>
+<hr>
+<p><strong>今日小结：</strong> 测试和调试可能是 Claude Code 最能替你省时间的领域。不是因为测试本身难写，而是因为它不偷懒——你不愿写的边界测试、你懒得查的 debug 日志、你总是跳过的性能分析，它都老老实实做。把测试和审查变成习惯性的「改完后让 Claude 看一眼」，代码质量会悄悄上一个台阶。</p>
+</article>
+<article id="day10">
+<h1>第 10 天 · Hooks 自动化：打造你的安全网和工作流</h1>
+<div class="meta">5月20日 周三<span>Day 10/15</span></div>
+<p>Hooks 是 Claude Code 的事件系统——在特定时刻自动触发脚本。你可以把它理解为 Claude Code 的「if this then that」：文件被修改了 → 自动格式化；要执行危险命令 → 弹窗确认。今天学会配置，你的工作流会自动运转。</p>
+<h2>四种 Hook 事件类型</h2>
+<table><tr><td>事件</td><td>触发时机</td><td>典型用途</td></tr><tr><td>`PreToolUse`</td><td>Claude 准备调用某个工具之前</td><td>拦截危险操作、注入检查逻辑</td></tr><tr><td>`PostToolUse`</td><td>Claude 调用某个工具之后</td><td>自动格式化、运行 lint、提交后通知</td></tr><tr><td>`Notification`</td><td>Claude 发送通知时</td><td>桌面通知、Slack 消息</td></tr><tr><td>`Stop`</td><td>Claude 响应完成时</td><td>自动运行测试、检查文件状态</td></tr></table>
+<h2>Hooks 配置格式</h2>
+<p>Hooks 配置在 <code>settings.json</code> 或项目的 <code>.claude/settings.json</code> 中：</p>
+<pre><code>{
+  &quot;hooks&quot;: {
+    &quot;PreToolUse&quot;: [
+      {
+        &quot;matcher&quot;: &quot;Bash&quot;,
+        &quot;hooks&quot;: [
+          {
+            &quot;type&quot;: &quot;command&quot;,
+            &quot;command&quot;: &quot;node .claude/hooks/confirm-dangerous.js&quot;
+          }
+        ]
+      }
+    ],
+    &quot;PostToolUse&quot;: [
+      {
+        &quot;matcher&quot;: &quot;Write|Edit&quot;,
+        &quot;hooks&quot;: [
+          {
+            &quot;type&quot;: &quot;command&quot;,
+            &quot;command&quot;: &quot;npx prettier --write ${CLAUDE_TOOL_INPUT_FILE}&quot;
+          }
+        ]
+      }
+    ],
+    &quot;Notification&quot;: [
+      {
+        &quot;matcher&quot;: &quot;&quot;,
+        &quot;hooks&quot;: [
+          {
+            &quot;type&quot;: &quot;command&quot;,
+            &quot;command&quot;: &quot;osascript -e &#x27;display notification \&quot;Claude 处理完成\&quot; with title \&quot;Claude Code\&quot;&#x27;&quot;
+          }
+        ]
+      }
+    ],
+    &quot;Stop&quot;: [
+      {
+        &quot;matcher&quot;: &quot;&quot;,
+        &quot;hooks&quot;: [
+          {
+            &quot;type&quot;: &quot;command&quot;,
+            &quot;command&quot;: &quot;npm run typecheck 2&gt;&amp;1 | head -20&quot;
+          }
+        ]
+      }
+    ]
+  }
+}</code></pre>
+<h2>实战 Hook 1：自动格式化（PostToolUse）</h2>
+<p>每次 Claude 写完代码后自动格式化——最基础也最必要的 hook：</p>
+<pre><code>{
+  &quot;PostToolUse&quot;: [
+    {
+      &quot;matcher&quot;: &quot;Write|Edit&quot;,
+      &quot;hooks&quot;: [
+        {
+          &quot;type&quot;: &quot;command&quot;,
+          &quot;command&quot;: &quot;npx prettier --write ${CLAUDE_TOOL_INPUT_FILE_PATH}&quot;
+        }
+      ]
+    }
+  ]
+}</code></pre>
+<p><strong>高级版：区分语言格式化</strong></p>
+<pre><code>#!/bin/bash
+# .claude/hooks/format.sh
+FILE=&quot;$CLAUDE_TOOL_INPUT_FILE_PATH&quot;
+
+if [[ &quot;$FILE&quot; == *.ts || &quot;$FILE&quot; == *.tsx ]]; then
+  npx prettier --write &quot;$FILE&quot;
+  npx eslint --fix &quot;$FILE&quot;
+  echo &quot;✔ Formatted + linted: $FILE&quot;
+elif [[ &quot;$FILE&quot; == *.json ]]; then
+  npx prettier --write &quot;$FILE&quot;
+  echo &quot;✔ Formatted: $FILE&quot;
+fi</code></pre>
+<h2>实战 Hook 2：安全守卫（PreToolUse）</h2>
+<p>在你最关心的操作上设置关卡：</p>
+<pre><code>// .claude/hooks/confirm-dangerous.js
+const command = process.env.CLAUDE_TOOL_INPUT_COMMAND || &#x27;&#x27;;
+
+const dangerous = [
+  { pattern: /rm\s+-rf/, reason: &#x27;递归强制删除&#x27; },
+  { pattern: /git\s+push\s+.*--force/, reason: &#x27;强制推送&#x27; },
+  { pattern: /DROP\s+(TABLE|DATABASE)/i, reason: &#x27;数据库删除操作&#x27; },
+  { pattern: /curl.*\|\s*bash/, reason: &#x27;管道执行远程脚本&#x27; },
+  { pattern: /chmod\s+777/, reason: &#x27;过度开放权限&#x27; },
+  { pattern: /npm\s+unpublish/, reason: &#x27;取消发布 npm 包&#x27; },
+];
+
+const match = dangerous.find(d =&gt; d.pattern.test(command));
+
+if (match) {
+  console.error(`⚠️  [安全守卫] 检测到危险操作: ${match.reason}`);
+  console.error(`   命令: ${command}`);
+  console.error(`   此操作已被阻止。如果确实需要执行，请手动在终端运行。`);
+  process.exit(2); // 退出码 2：阻止执行
+}
+
+process.exit(0);</code></pre>
+<p>对应的 hook 配置：</p>
+<pre><code>{
+  &quot;PreToolUse&quot;: [
+    {
+      &quot;matcher&quot;: &quot;Bash&quot;,
+      &quot;hooks&quot;: [
+        {
+          &quot;type&quot;: &quot;command&quot;,
+          &quot;command&quot;: &quot;node .claude/hooks/confirm-dangerous.js&quot;
+        }
+      ]
+    }
+  ]
+}</code></pre>
+<h2>实战 Hook 3：桌面通知（Notification + Stop）</h2>
+<p>让你不用一直盯着 Claude——它干完了会告诉你：</p>
+<pre><code>#!/bin/bash
+# .claude/hooks/notify.sh
+# macOS 桌面通知
+osascript -e &#x27;display notification &quot;Claude 已完成当前任务&quot; with title &quot;Claude Code&quot; sound name &quot;Glass&quot;&#x27;
+
+# 如果装了 terminal-notifier，效果更好
+# terminal-notifier -title &quot;Claude Code&quot; -message &quot;任务完成&quot; -sound default</code></pre>
+<h2>Exit Code 说明</h2>
+<p>Hook 脚本的退出码决定 Claude 的行为：</p>
+<table><tr><td>退出码</td><td>含义</td><td>Claude 的行为</td></tr><tr><td>0</td><td>成功</td><td>继续执行操作</td></tr><tr><td>1</td><td>一般错误</td><td>向用户报告错误，但继续</td></tr><tr><td>2</td><td>阻止</td><td>不执行该操作，并告知用户原因</td></tr></table>
+<p><strong>坑：exit code 2 只对 PreToolUse 有效。</strong> 在 PostToolUse 里 exit 2，操作已经执行了，阻止不了。</p>
+<h2>高级：条件 Hook</h2>
+<p>不是所有文件都需要格式化。你可以让 hook 有条件地运行：</p>
+<pre><code>#!/bin/bash
+# .claude/hooks/conditional-format.sh
+
+FILE=&quot;$CLAUDE_TOOL_INPUT_FILE_PATH&quot;
+
+# 跳过 node_modules 和 dist
+if [[ &quot;$FILE&quot; == *&quot;node_modules&quot;* ]] || [[ &quot;$FILE&quot; == *&quot;dist&quot;* ]]; then
+  exit 0
+fi
+
+# 只处理特定类型的文件
+if [[ &quot;$FILE&quot; == *.ts ]] || [[ &quot;$FILE&quot; == *.tsx ]] || [[ &quot;$FILE&quot; == *.json ]]; then
+  npx prettier --write &quot;$FILE&quot;
+  echo &quot;✔ Formatted: $FILE&quot;
+fi
+
+exit 0</code></pre>
+<h2>高级：Hook 链</h2>
+<p>一个 matcher 可以触发多个 hook，按注册顺序执行：</p>
+<pre><code>{
+  &quot;PostToolUse&quot;: [
+    {
+      &quot;matcher&quot;: &quot;Write|Edit&quot;,
+      &quot;hooks&quot;: [
+        {
+          &quot;type&quot;: &quot;command&quot;,
+          &quot;command&quot;: &quot;.claude/hooks/format.sh&quot;
+        },
+        {
+          &quot;type&quot;: &quot;command&quot;,
+          &quot;command&quot;: &quot;.claude/hooks/typecheck.sh&quot;
+        },
+        {
+          &quot;type&quot;: &quot;command&quot;,
+          &quot;command&quot;: &quot;.claude/hooks/git-add.sh&quot;
+        }
+      ]
+    }
+  ]
+}</code></pre>
+<p>每次 Claude 写文件后：先格式化 → 再类型检查 → 再自动 git add。一条龙。</p>
+<h2>Hook 调试</h2>
+<pre><code># 检查 hook 是否生效
+claude --debug 2&gt;&amp;1 | grep -i hook
+
+# 在 hook 脚本里加日志
+#!/bin/bash
+echo &quot;[HOOK DEBUG] File: $CLAUDE_TOOL_INPUT_FILE_PATH&quot; &gt;&gt; /tmp/claude-hooks.log
+echo &quot;[HOOK DEBUG] Tool: $CLAUDE_TOOL_NAME&quot; &gt;&gt; /tmp/claude-hooks.log</code></pre>
+<h2>社区 Hook 示例</h2>
+<p><strong>每次提交后自动推送到远程（慎用）：</strong></p>
+<pre><code>{
+  &quot;PostToolUse&quot;: [
+    {
+      &quot;matcher&quot;: &quot;Bash(git commit:*)&quot;,
+      &quot;hooks&quot;: [
+        {
+          &quot;type&quot;: &quot;command&quot;,
+          &quot;command&quot;: &quot;git push 2&gt;&amp;1&quot;
+        }
+      ]
+    }
+  ]
+}</code></pre>
+<p><strong>阻止在 main 分支上直接编辑：</strong></p>
+<pre><code>// .claude/hooks/protect-main.js
+const { execSync } = require(&#x27;child_process&#x27;);
+const branch = execSync(&#x27;git branch --show-current&#x27;).toString().trim();
+
+if (branch === &#x27;main&#x27; || branch === &#x27;master&#x27;) {
+  console.error(&#x27;❌ 禁止在 main 分支上直接编辑。请切换到 feature 分支。&#x27;);
+  process.exit(2);
+}</code></pre>
+<h2>今日小练习</h2>
+<ol>
+<li>配置一个 Prettier 自动格式化的 PostToolUse hook</li>
+<li>写一个安全守卫 hook，阻止 <code>rm -rf</code> 和 <code>git push --force</code></li>
+<li>配置桌面通知 hook，Claude 完成时提醒你</li>
+<li>试写一个条件 hook：仅当改动的文件在 <code>src/</code> 下时才运行 lint</li>
+<li>用 <code>claude --debug</code> 验证所有 hook 正确触发</li>
+</ol>
+<hr>
+<p><strong>今日小结：</strong> Hooks 让 Claude Code 从「你盯着它干活」变成「它自己按规则运转」。自动格式化省手工，安全守卫省心跳，桌面通知省盯着屏幕的时间。配置一次，受益整个项目周期。关键是不要只配不测——每个 hook 加上去后，触发一次看看效果。</p>
+</article>
+<article id="day11">
+<h1>第 11 天 · MCP 工具：打开 Claude Code 的外部世界</h1>
+<div class="meta">5月21日 周四<span>Day 11/15</span></div>
+<p>Claude Code 内置能力有限——读文件、写代码、跑命令。MCP（Model Context Protocol）让它能连接数据库、浏览器、API、聊天工具……等于给 Claude Code 装了无数个插件。</p>
+<h2>MCP 是什么</h2>
+<p>MCP 是一个开放协议，让 AI 助手能通过标准接口调用外部工具。架构很简单：</p>
+<pre><code>┌──────────────┐     ┌──────────────┐     ┌──────────────┐
+│  Claude Code │ ←→  │  MCP Server  │ ←→  │  外部服务     │
+│  (Client)    │     │  (中间层)     │     │  (DB/API/...) │
+└──────────────┘     └──────────────┘     └──────────────┘</code></pre>
+<p>你配好 MCP Server 后，Claude 就能像调用自己的工具一样调用它们。比如：</p>
+<pre><code># 有了 PostgreSQL MCP Server 后
+帮我查一下最近 24 小时内注册的用户数
+
+# 有了 Browser MCP Server 后  
+打开 https://myapp.com/login，用测试账号登录，检查首页是否正常
+
+# 有了 GitHub MCP Server 后
+帮我看看我们团队的 open PR，按紧急程度排序</code></pre>
+<h2>热门 MCP Server 目录</h2>
+<table><tr><td>Server</td><td>能力</td><td>安装量</td></tr><tr><td>`@anthropic/postgres-mcp`</td><td>PostgreSQL 数据库查询、schema 管理</td><td>⭐⭐⭐⭐⭐</td></tr><tr><td>`@anthropic/filesystem-mcp`</td><td>增强文件系统操作，支持搜索和批量处理</td><td>⭐⭐⭐⭐</td></tr><tr><td>`@anthropic/browser-mcp`</td><td>控制浏览器：导航、点击、截图、表单填写</td><td>⭐⭐⭐⭐</td></tr><tr><td>`@anthropic/github-mcp`</td><td>GitHub API：issues、PRs、repos、actions</td><td>⭐⭐⭐⭐⭐</td></tr><tr><td>`@anthropic/slack-mcp`</td><td>Slack 消息收发、频道管理</td><td>⭐⭐⭐</td></tr><tr><td>`@anthropic/notion-mcp`</td><td>Notion 页面和数据库操作</td><td>⭐⭐⭐</td></tr><tr><td>`@anthropic/google-drive-mcp`</td><td>Google Drive 文件操作</td><td>⭐⭐</td></tr><tr><td>`@anthropic/jira-mcp`</td><td>Jira issue 管理</td><td>⭐⭐⭐</td></tr></table>
+<h2>MCP 配置格式</h2>
+<p>MCP Server 在 <code>~/.claude/mcp.json</code> 或 <code>.claude/mcp.json</code> 中配置：</p>
+<pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;postgres&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [&quot;-y&quot;, &quot;@anthropic/postgres-mcp&quot;],
+      &quot;env&quot;: {
+        &quot;DATABASE_URL&quot;: &quot;postgresql://localhost:5432/myapp&quot;
+      }
+    },
+    &quot;github&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [&quot;-y&quot;, &quot;@anthropic/github-mcp&quot;],
+      &quot;env&quot;: {
+        &quot;GITHUB_TOKEN&quot;: &quot;${GITHUB_TOKEN}&quot;
+      }
+    },
+    &quot;browser&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [&quot;-y&quot;, &quot;@anthropic/browser-mcp&quot;],
+      &quot;env&quot;: {
+        &quot;BROWSER_HEADLESS&quot;: &quot;true&quot;
+      }
+    },
+    &quot;filesystem&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [&quot;-y&quot;, &quot;@anthropic/filesystem-mcp&quot;],
+      &quot;args&quot;: [&quot;--root&quot;, &quot;/home/user/projects&quot;]
+    },
+    &quot;slack&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [&quot;-y&quot;, &quot;@anthropic/slack-mcp&quot;],
+      &quot;env&quot;: {
+        &quot;SLACK_BOT_TOKEN&quot;: &quot;${SLACK_BOT_TOKEN}&quot;
+      }
+    }
+  }
+}</code></pre>
+<h2>实战场景 1：数据库查询</h2>
+<p>配置好 PostgreSQL MCP Server 后：</p>
+<pre><code># 自然语言查询数据库
+帮我查一下 users 表里 role=&quot;admin&quot; 的用户，
+按 created_at 倒序，显示他们的 email 和最后登录时间。
+
+# 分析数据
+分析 orders 表最近一个月的趋势：
+1. 按天统计订单量和金额
+2. 找出订单量异常的日期（超过均值 2 倍标准差）
+3. 分析异常日期是否和某个促销活动相关
+
+# Schema 审查
+检查数据库里有没有没用索引的慢查询。
+帮我列出所有表、它们的索引，分析缺失的索引。</code></pre>
+<p><strong>注意事项：</strong></p>
+<ul>
+<li>始终用只读账号配置数据库 MCP，除非你真的需要写入</li>
+<li>产线数据库的操作必须加确认步骤</li>
+<li>敏感列（password、token）要在查询里排除</li>
+</ol>
+<h2>实战场景 2：浏览器测试</h2>
+<p>Browser MCP 让 Claude 能操作真实浏览器——做 E2E 测试的好帮手：</p>
+<pre><code>打开 localhost:3000/products 页面，帮我：
+1. 截图首页
+2. 点击第一个商品的「加入购物车」按钮
+3. 检查购物车数量是否变成 1
+4. 点击购物车图标，确认商品在购物车中
+5. 模拟删除操作
+6. 每一步截图保存</code></pre>
+<p><strong>Browser MCP 的高效模式：</strong></p>
+<pre><code>帮我做一次冒烟测试：
+- 首页加载正常
+- 登录流程走通
+- 核心页面（商品列表、购物车、个人中心）无 500 错误
+- 生成一份 HTML 报告，包含每步的截图和状态</code></pre>
+<h2>实战场景 3：文档同步</h2>
+<pre><code># Slack + Notion 联动
+把今天最重要的 Slack 消息总结成一条 Notion 记录，
+按项目分类，标记发信人和紧急程度。
+
+# GitHub + Notion 联动  
+把我们团队本周合并的 PR 总结成一份周报，
+发布到 Notion 的「团队周报」页面。</code></pre>
+<h2>安全考虑</h2>
+<p>MCP 给了 Claude 很大的外部能力，安全必须认真对待：</p>
+<pre><code>### MCP 安全原则（写入你的 CLAUDE.md）
+
+1. **数据库只读原则**：生产环境数据库 MCP 连接必须用只读账号
+2. **Token 最小权限**：GitHub token 只给需要的 scope，不给 write:all
+3. **敏感操作确认**：涉及数据库写、API 调用、发送消息的操作，必须我确认
+4. **不要提交 mcp.json**：包含 token 的话，加入 .gitignore
+5. **网络隔离**：MCP Server 尽量本地运行，不要暴露端口到公网</code></pre>
+<h2>自建 MCP Server（概念概述）</h2>
+<p>MCP Server 本质是一个实现了标准接口的本地进程。最小的 MCP Server 就几十行代码：</p>
+<pre><code>// 概念示意：一个简单的天气 MCP Server
+import { Server } from &quot;@anthropic/mcp-sdk&quot;;
+
+const server = new Server({
+  name: &quot;weather-mcp&quot;,
+  version: &quot;1.0.0&quot;
+});
+
+server.addTool({
+  name: &quot;get_weather&quot;,
+  description: &quot;获取指定城市的当前天气&quot;,
+  parameters: {
+    type: &quot;object&quot;,
+    properties: {
+      city: { type: &quot;string&quot;, description: &quot;城市名，如 Beijing&quot; }
+    },
+    required: [&quot;city&quot;]
+  },
+  handler: async ({ city }) =&gt; {
+    // 调天气 API
+    const weather = await fetchWeather(city);
+    return {
+      temperature: weather.temp,
+      condition: weather.description,
+      humidity: weather.humidity
+    };
+  }
+});
+
+server.start();</code></pre>
+<p>什么时候值得自己写？当你有内部工具、私有 API、特殊数据源——MCP 把它们变成 Claude 可以调用的原语。</p>
+<h2>今日小练习</h2>
+<ol>
+<li>配置一个 Filesystem MCP Server，让 Claude 搜索范围更广</li>
+<li>如果项目用了 PostgreSQL，配置 Postgres MCP Server 并做几次自然语言查询</li>
+<li>配置 GitHub MCP Server，让 Claude 帮你查 issues 和 PRs</li>
+<li>试写一个概念性的自建 MCP Server（比如查公司内部 API）</li>
+<li>在 CLAUDE.md 里加上 MCP 安全规则</li>
+</ol>
+<hr>
+<p><strong>今日小结：</strong> MCP 把 Claude Code 从一个「代码编辑器里的助手」变成「能连接整个工具生态的指挥官」。数据库、浏览器、GitHub、Slack——都是 Claude 可以调用的能力。关键不在于配置多，而在于想清楚：哪些信息源接入后真正提高效率？安全边界在哪里？只接你需要的，给最小权限。</p>
+</article>
+<article id="day12">
+<h1>第 12 天 · CLAUDE.md 进阶：团队协作与工作流设计</h1>
+<div class="meta">5月25日 周一<span>Day 12/15</span></div>
+<p>第七天讲了 CLAUDE.md 的基础。现在深入：多人团队怎么共用一套规则？怎么让规则在特定场景自动生效？怎么把 CLAUDE.md 从一个文件变成一个活的系统？</p>
+<h2>分层规则体系回顾与深化</h2>
+<pre><code>~/.claude/CLAUDE.md          ← 你的个人偏好（所有项目共享）
+  ↓ 被覆盖
+project/CLAUDE.md            ← 项目级规则（团队共享，纳入 Git）
+  ↓ 被覆盖
+project/src/api/CLAUDE.md    ← 子目录级规则（特定模块）
+  ↓ 被覆盖
+对话中的明确指令              ← 临时覆盖（仅当前会话）</code></pre>
+<p><strong>实际例子：规则如何层层生效</strong></p>
+<p>全局 CLAUDE.md：</p>
+<pre><code>- 代码注释用英文
+- 优先用函数式风格</code></pre>
+<p>项目 CLAUDE.md：</p>
+<pre><code>- 本项目注释用中文（因为团队都在国内）
+- 本项目是 OOP 风格，用 class 组织业务逻辑</code></pre>
+<p><code>src/api/CLAUDE.md</code>：</p>
+<pre><code>- API 层特别要求：所有接口返回 { code, data, message } 格式</code></pre>
+<p>结果：Claude 在写 API 代码时会用中文注释 + class 风格 + 统一返回格式。全局的英文注释和函数式偏好被下级覆盖了。</p>
+<h2>精细化规则：DO/DON'T 模式</h2>
+<p>模糊的规则没用，精确的规则才是好规则：</p>
+<pre><code>## 规则（按精确度排序）
+
+### ❌ 模糊（几乎没用）
+- 写干净的代码
+
+### ⚠️ 半模糊（有一点用）
+- 变量名要有意义
+
+### ✅ 精确（真正有用）
+
+#### DO
+- 数据库模型用 snake_case 字段名
+- API 响应用 camelCase（通过 Prisma 序列化转换）
+- 异步函数命名以动词开头：fetchXxx, createXxx, updateXxx, deleteXxx
+- 超过 3 个参数的函数用对象参数
+- 涉及金额的计算用整数（分）而不是浮点数
+
+#### DON&#x27;T
+- 不要在组件里直接调 fetch——封装到 service 层
+- 不要在循环里执行数据库查询
+- 不要用 `as` 做类型断言（除非有类型守卫在前）
+- 不要在 catch 里吞掉错误不处理
+- 不要引入超过 50KB 的新依赖（除非必需）</code></pre>
+<p><strong>验证规则是否有效的方法：</strong> 如果规则写成「Claude 应该……」，这是愿望。写成「用 X」「不要用 Y」，这是规则。</p>
+<h2>工作流定义</h2>
+<p>CLAUDE.md 不只是规则列表——你可以定义完整的工作流：</p>
+<pre><code>## 工作流：新增 API 接口
+
+当我要求新增一个 API 接口时，按以下步骤执行：
+
+1. **类型定义**
+   - 在 src/types/api.ts 里定义请求和响应的 TypeScript 类型
+   - 导出类型供前端使用
+
+2. **Zod Schema**
+   - 在 src/schemas/ 下创建对应的 zod schema
+   - Schema 名和类型名对应：CreateUserRequest → createUserSchema
+
+3. **Service 层**
+   - 在 src/services/ 下实现业务逻辑
+   - 不依赖 HTTP 请求对象（纯函数或依赖注入数据库客户端）
+
+4. **API 路由**
+   - 在 src/app/api/ 下创建路由文件
+   - 使用 zod schema 校验输入
+   - 调用 service 层
+   - 返回统一格式 { code, data, message }
+
+5. **测试**
+   - Service 层单元测试：正常 + 异常 + 边界
+   - API 层集成测试：HTTP 请求模拟
+
+6. **文档**
+   - 如果接口是给前端用的，更新 API 文档（OpenAPI 注释）</code></pre>
+<p>有了这个工作流定义后，你只需要说：「加一个创建评论的 API 接口」——Claude 会自动按 6 步执行。</p>
+<h2>条件规则</h2>
+<pre><code>## 条件规则
+
+### [文件类型: *.test.ts, *.spec.ts]
+- 使用 describe/it 结构
+- 测试名用中文，描述被测场景
+- 每个测试独立，不依赖其他测试的状态
+- 使用 beforeEach 重置 mock
+
+### [目录: src/db/migrations/]
+- 迁移文件只能用 Prisma Migrate 生成，不要手写
+- 迁移文件只读，不要修改
+- 如果迁移有问题，回滚或新建迁移，不要改旧迁移
+
+### [关键词: security, auth, payment]
+- 涉及这些关键词的改动，先讨论方案再写代码
+- 必须有至少 2 个测试覆盖异常路径
+- 改动后运行安全相关的测试套件
+
+### [Git 分支: hotfix/*]
+- 改动最小化，只修 bug 不重构
+- 不要引入新依赖
+- commit message 以 fix: 开头
+
+### [文件大小 &gt; 400 行]
+- 提醒我考虑拆分
+- 如果确实要在这个文件里改，只改必要的部分</code></pre>
+<h2>团队共享 CLAUDE.md</h2>
+<p>多人团队用 Claude Code，需要分层管理：</p>
+<p><strong>方案：拆成两个文件</strong></p>
+<pre><code>project/
+├── CLAUDE.md              ← 个人私有的（在 .gitignore 里）
+├── CLAUDE.team.md         ← 团队共享的（纳入 Git）</code></pre>
+<p>项目 CLAUDE.md 里引入团队配置：</p>
+<pre><code># 团队共享规则（不要改，改 CLAUDE.team.md 然后 PR）
+@CLAUDE.team.md
+
+# 我的个人偏好（下面写你自己的）
+- 我喜欢在看代码前先看测试文件
+- 提醒我写 commit message 时用中文 body</code></pre>
+<p><strong>CLAUDE.team.md 示例内容：</strong></p>
+<pre><code># 团队编码规范 v2.1（最后更新：2024-05-20）
+
+## 技术决策记录
+- 状态管理：Zustand（不用 Redux）
+- 日期处理：date-fns（不用 dayjs）
+- 表单：React Hook Form + zod
+- HTTP 客户端：原生 fetch + 封装（不用 axios）
+
+## 禁止项（DON&#x27;T）
+1. 不要引入新的状态管理库
+2. 不要用 CSS-in-JS（项目统一用 Tailwind）
+3. 不要手写 Prisma raw query（除非 ORM 真的做不到）
+4. 不要在客户端暴露 API key 或 secret
+
+## 代码审查检查清单
+- [ ] 新增文件有对应的测试吗？
+- [ ] API 接口有错误处理吗？
+- [ ] 数据库查询有索引支持吗？
+- [ ] 导入语句干净吗？（无未使用的 import）
+- [ ] 类型安全吗？（无 any、无 as）</code></pre>
+<h2>CLAUDE.md 作为活文档</h2>
+<pre><code>## 变更记录
+
+### 2024-05-20
+- 新增：禁止在循环里做数据库查询（踩坑后加的）
+- 修改：API 返回格式从 { success, data } 统一为 { code, data, message }
+
+### 2024-05-15
+- 新增：条件规则——hotfix 分支的改动规范
+- 删除：不再要求每个组件写 Storybook（时间不够）
+
+### 2024-05-10
+- 新增：工作流——新增 API 接口的 6 步流程</code></pre>
+<h2>今日小练习</h2>
+<ol>
+<li>审查你现有的 CLAUDE.md，把模糊的规则改成精确的 DO/DON'T</li>
+<li>为你最常见的开发场景定义一个工作流</li>
+<li>添加 3 个条件规则（基于文件类型、目录、Git 分支）</li>
+<li>如果团队共享 CLAUDE.md，拆成 team 版本和个人版本</li>
+<li>在 CLAUDE.md 里加个「变更记录」段，开始追踪规则的演变</li>
+</ol>
+<hr>
+<p><strong>今日小结：</strong> CLAUDE.md 写了一周，规则攒了 30 条。区分什么是「愿望」（写干净代码）和「规则」（用 camelCase 命名变量），把高频操作定义成工作流，确保团队用同一套规范。最好的 CLAUDE.md 是那种新人入职第一天就能靠着它开始写合规代码的那种——不解释、不废话、可执行。</p>
+</article>
+<article id="day13">
+<h1>第 13 天 · 会话管理与成本控制</h1>
+<div class="meta">5月26日 周二<span>Day 13/15</span></div>
+<p>Claude Code 按 token 计费。不管理会话，你就不知道钱花哪了；不控制成本，月底账单会让你想把电脑合上。今天把会话的生命周期和成本优化全部讲清楚。</p>
+<h2>会话生命周期</h2>
+<p>一个 Claude Code 会话从启动到关闭经历了什么：</p>
+<pre><code>启动 claude
+  ↓ 读取 CLAUDE.md、项目结构（一次性 token 开销）
+  ↓
+第 1 轮对话
+  ↓ Claude 处理：读文件 + 思考 + 写回复
+  ↓
+第 2 轮对话
+  ↓ 上下文 = CLAUDE.md + 第 1 轮完整内容 + 第 2 轮你的输入
+  ↓
+第 N 轮对话
+  ↓ 上下文越来越长，token 消耗越来越大
+  ↓
+关闭会话 / 执行 /compact 或 /clear</code></pre>
+<p>关键洞察：<strong>第 10 轮的 token 消耗通常比第 1 轮高 3-5 倍</strong>，因为历史对话全部在上下文里。</p>
+<h2>/compact vs /clear：选对策略</h2>
+<table><tr><td>操作</td><td>效果</td><td>什么时候用</td></tr><tr><td>`/compact`</td><td>Claude 把对话历史压缩成摘要，释放空间</td><td>对话很长但后续任务还需要之前的背景</td></tr><tr><td>`/clear`</td><td>清空全部对话历史</td><td>新任务完全不相关，旧上下文会干扰</td></tr><tr><td>新会话</td><td>重新启动 claude</td><td>`/clear` 还不够——想要全新的 CLAUDE.md 加载</td></tr></table>
+<p><strong>最佳实践：</strong></p>
+<pre><code># 你的 Claude Code 会话管理策略
+
+1. 每个功能/任务一个会话（不要一个会话做所有事）
+2. 超过 30 轮对话 → /compact
+3. 换新任务 → /clear
+4. 一天开始 → 新会话（确保读取最新的 CLAUDE.md）
+5. 用 /cost 定期检查，单次会话超过 $2 时警惕</code></pre>
+<h2>成本构成分析</h2>
+<p>Claude Code 的成本来自几个部分：</p>
+<table><tr><td>成本来源</td><td>占比（典型）</td><td>说明</td></tr><tr><td>上下文加载</td><td>~10-15%</td><td>CLAUDE.md、文件读取、对话历史</td></tr><tr><td>你的输入</td><td>~5%</td><td>你的 prompt</td></tr><tr><td>Claude 的输出</td><td>~20-25%</td><td>生成的代码、解释、回复</td></tr><tr><td>工具调用结果</td><td>~50-60%</td><td>文件内容、命令输出、搜索结果</td></tr></table>
+<p><strong>最大的隐性成本：工具调用返回的内容。</strong> 你让 Claude 读了一个 2000 行的文件，这 2000 行全部作为 token 计费——不管 Claude 只看了其中 50 行。</p>
+<h2>如何查看花费</h2>
+<pre><code># 在当前会话中
+/cost
+
+# 输出示例
+Total tokens: 45,230
+  Input:  38,120 tokens  ($0.11)
+  Output:  7,110 tokens  ($0.10)
+  Total:                 ($0.21)</code></pre>
+<pre><code># 查看历史花费（如果 Claude Code 有记录的话）
+cat ~/.claude/usage.json | jq &#x27;.total_cost&#x27;</code></pre>
+<h2>省钱技巧（5+ 条实战经验）</h2>
+<h3>技巧 1：精确引用，不要「读整个目录」</h3>
+<pre><code># ❌ 浪费钱
+帮我看看 src/ 下所有文件
+# → Claude 读了 50 个文件，40000 token
+
+# ✅ 精确
+帮我分析 src/services/orderService.ts 的 createOrder 函数
+# → Claude 只读 1 个文件，800 token</code></pre>
+<h3>技巧 2：拆分大任务</h3>
+<pre><code># ❌ 一个超长会话
+做用户系统（注册、登录、权限、团队、邀请、审计）
+# → 300 轮对话，上下文爆炸
+
+# ✅ 拆成多个会话
+会话 1：注册 + 登录
+会话 2：权限系统
+会话 3：团队 + 邀请
+# → 每个会话 30-50 轮，上下文干净，token 线性增长</code></pre>
+<h3>技巧 3：用 CLAUDE.md 减少重复解释</h3>
+<p>你每次在新会话里说「这个项目用 PostgreSQL + Prisma，API 格式是 { code, data, message }」都是钱。放进 CLAUDE.md 里，说一次就够。</p>
+<h3>技巧 4：让 Claude 「看完总结」而不是「逐字记忆」</h3>
+<pre><code># ❌ 浪费
+读这个 800 行的文件，记住每一个细节
+
+# ✅ 高效
+分析这个文件的核心逻辑和关键函数，给我一个 10 行的总结</code></pre>
+<h3>技巧 5：避免「试错式」对话</h3>
+<pre><code># ❌ 浪费
+「不对，再改一下」「还是不对，换种方式」「算了回到第一版」
+→ 每次重来都在消耗 token
+
+# ✅ 高效
+「先分析为什么不对，确认根因后再改」
+→ 一次改到位</code></pre>
+<h3>技巧 6：模型降级策略</h3>
+<pre><code># 简单任务用 Sonnet（便宜）
+- 生成 commit message → sonnet
+- 格式化代码 → sonnet
+- 写文档注释 → sonnet
+
+# 复杂任务用 Opus（贵但强）
+- 架构设计 → opus
+- 复杂重构 → opus
+- 安全审查 → opus
+- Debug 难解 bug → opus</code></pre>
+<h3>技巧 7：-p 模式比 TUI 模式便宜</h3>
+<p><code>-p</code> 模式不保留历史，每次执行后退出。对于一次性的分析、审查、生成任务，比在 TUI 里开一个长会话便宜得多。</p>
+<h2>预算设置</h2>
+<pre><code>// settings.json
+{
+  &quot;budget&quot;: {
+    &quot;maxPerSession&quot;: 5.0,
+    &quot;maxPerDay&quot;: 20.0,
+    &quot;warnAt&quot;: 3.0
+  }
+}</code></pre>
+<p>超过 <code>warnAt</code> 时 Claude 会提醒，超过 <code>maxPerSession</code> 时暂停。不是严格限制（取决于实现），但心理上有个锚点。</p>
+<h2>模型选择策略</h2>
+<table><tr><td>场景</td><td>推荐模型</td><td>原因</td></tr><tr><td>日常编码</td><td>Sonnet</td><td>性价比高，速度快</td></tr><tr><td>代码审查</td><td>Sonnet</td><td>准确度够，没必要用 Opus</td></tr><tr><td>架构设计</td><td>Opus</td><td>需要更深的理解和推理</td></tr><tr><td>复杂 Debug</td><td>Opus</td><td>需要多步推理和精确分析</td></tr><tr><td>批量生成</td><td>Sonnet</td><td>模式化操作，量大优先便宜</td></tr><tr><td>学习/探索</td><td>Sonnet</td><td>对话量大，用便宜的</td></tr><tr><td>安全审计</td><td>Opus</td><td>遗漏一个漏洞代价远大于模型差价</td></tr></table>
+<h2>Token 估算</h2>
+<pre><code>粗略估算方法：
+- 1 个中文字 ≈ 2-3 token
+- 1 个英文单词 ≈ 1-2 token
+- 100 行代码 ≈ 500-800 token
+- 一个标准 JSON 响应 ≈ 200-500 token
+
+一个典型会话（10 轮代码相关对话）：
+- 输入 token: ~15,000-30,000
+- 输出 token: ~5,000-10,000
+- 总花费 (Sonnet): ~$0.15-$0.40
+- 总花费 (Opus): ~$0.70-$1.80</code></pre>
+<h2>今日小练习</h2>
+<ol>
+<li>用 <code>/cost</code> 检查当前会话的花费</li>
+<li>回顾一个长会话，分析哪些轮次 token 消耗最大</li>
+<li>在 CLAUDE.md 里加入你的模型选择策略</li>
+<li>设置 <code>settings.json</code> 的预算上限</li>
+<li>尝试一个简单任务用 <code>-p</code> 模式 vs TUI 模式，对比体验</li>
+</ol>
+<hr>
+<p><strong>今日小结：</strong> Claude Code 不贵——滥用才贵。核心原则：上下文只放相关信息、长任务拆短会话、简单任务别用 Opus。把 <code>/cost</code> 养成肌肉记忆，就像看 IDE 右下角的内存占用一样——习惯性地瞟一眼，你就自然学会省钱了。</p>
+</article>
+<article id="day14">
+<h1>第 14 天 · 高级提示技巧：让 Claude 准确理解你的意图</h1>
+<div class="meta">5月27日 周三<span>Day 14/15</span></div>
+<p>同样的工具，不同的人用产出差距巨大。差距不在 Claude 的能力，在提示词的质量。今天把这些「藏在经验里」的技巧整理成可复用的模式。</p>
+<h2>角色指派：定义 Claude 的身份</h2>
+<p>Claude 的默认身份是「通用编程助手」。指定角色后，它会调整回答的深度、语气和关注点：</p>
+<pre><code># 默认模式
+这段代码有什么问题？
+
+# 角色模式（输出质量大幅提升）
+你是一个安全审计专家，专攻 Web 应用安全。
+审查这段代码的安全性问题，按 OWASP Top 10 分类。
+
+# 另一个角色
+你是一个刚接手这个项目的开发者，
+原开发已经离职，没有交接文档。
+帮我理解 src/services/auth.ts 的设计思路。
+
+# 角色 + 场景
+你是一个 Tech Lead，正在审查我的 PR。
+标准：可维护性、性能、安全性、测试覆盖。
+不要客气——直接告诉我哪里有问题。</code></pre>
+<p><strong>有效角色指派的三要素：</strong></p>
+<ol>
+<li>角色名称（安全审计专家 / Tech Lead / 新人开发者）</li>
+<li>关注领域（安全性 / 性能 / 可维护性）</li>
+<li>输出标准（按 OWASP 分类 / 不要客气 / 用 PM 语言）</li>
+</ol>
+<h2>输出格式控制</h2>
+<pre><code># ❌ 模糊
+总结一下这个模块
+
+# ✅ 精确控制格式
+分析 src/services/ 模块，按以下格式输出：
+
+## 模块概述
+（一句话）
+
+## 依赖关系
+| 文件 | 依赖（外部） | 被依赖（内部） |
+
+## 改进建议
+### 🔴 紧急
+- （安全漏洞、数据丢失风险）
+### 🟡 建议
+- （性能、可维护性）
+### 🟢 可选
+- （命名优化、注释补充）</code></pre>
+<p><strong>格式控制进阶——结构化数据：</strong></p>
+<pre><code>把以下分析结果输出为 JSON 格式，方便我写脚本处理：
+
+{
+  &quot;files&quot;: [
+    {
+      &quot;path&quot;: &quot;string&quot;,
+      &quot;lines&quot;: &quot;number&quot;,
+      &quot;complexity&quot;: &quot;low|medium|high&quot;,
+      &quot;issues&quot;: [
+        { &quot;severity&quot;: &quot;error|warning|info&quot;, &quot;line&quot;: &quot;number&quot;, &quot;message&quot;: &quot;string&quot; }
+      ]
+    }
+  ]
+}</code></pre>
+<h2>正向指令 vs 反向指令</h2>
+<p>Claude 对正面引导的反应比禁止好得多：</p>
+<table><tr><td>反向（禁止）</td><td>正向（引导）</td><td>效果差异</td></tr><tr><td>「不要用 any」</td><td>「用 unknown + 类型守卫代替 any」</td><td>正向给出替代方案</td></tr><tr><td>「代码不要太长」</td><td>「每个函数不超过 30 行」</td><td>正向给出量化标准</td></tr><tr><td>「不要写得复杂」</td><td>「用早期返回代替深层嵌套」</td><td>正向给出具体模式</td></tr><tr><td>「注释别太啰嗦」</td><td>「注释只写 '为什么'，不写 '是什么'」</td><td>正向给出注释原则</td></tr></table>
+<p><strong>实战对比：</strong></p>
+<pre><code># ❌ 纯禁止（Claude 会困惑：那用什么？）
+重构这个函数，不要用 class，不要太复杂，注释别太多。
+
+# ✅ 正向引导（Claude 知道怎么做了）
+重构这个函数：
+- 用纯函数代替 class，每个函数只做一件事
+- 用 pipe/compose 组合函数而不是嵌套调用
+- 只保留解释「为什么这样做」的注释
+- 最终每个函数不超过 20 行</code></pre>
+<h2>锚定技巧：用例子校准 Claude 的预期</h2>
+<p>Claude 对「好代码」的理解可能和你不一样。用例子校准：</p>
+<pre><code>我要你写一个 React 自定义 hook useDebounce。
+
+先看这个已有的 hook（useThrottle）的风格：
+
+@src/hooks/useThrottle.ts
+
+请用同样的代码风格写 useDebounce：
+- 相同的 JSDoc 格式
+- 相同的函数签名风格（泛型约束、可选参数模式）
+- 相同的测试文件结构</code></pre>
+<p><strong>锚定的另一个用法——告诉 Claude 「什么是不好的」：</strong></p>
+<pre><code>这是之前一个同事写的 usePagination hook（@src/hooks/usePagination.old.ts），
+我们觉得它有几个问题：
+1. 过度抽象——把简单的事搞复杂了
+2. 依赖过多——耦合了路由和 API 层
+3. 测试写得太啰嗦
+
+帮我重写一版，注意避免这三个问题。</code></pre>
+<h2>渐进式优化：从草稿到精品</h2>
+<p>不要期望一次写出完美代码。用多轮对话逐步优化：</p>
+<pre><code># 第 1 轮：粗稿
+先写一个能跑的 useInfiniteScroll hook。功能优先，不用太在意代码质量。
+
+# 第 2 轮：类型安全
+刚才的 hook 用了几个 any。全部改成严格的 TypeScript 类型。
+
+# 第 3 轮：性能
+审查 IntersectionObserver 的使用：有没有内存泄漏？cleanup 处理好了吗？
+
+# 第 4 轮：边界情况
+考虑这些边界：
+- 快速滚动时多次触发怎么办（防抖）
+- 数据加载失败怎么办（错误状态 + 重试）
+- 没有更多数据时怎么通知调用方
+
+# 第 5 轮：文档和测试
+写 JSDoc、使用示例、完整的测试套件。</code></pre>
+<h2>自我反思技巧</h2>
+<p>这个技巧非常强——让 Claude 反思自己的输出：</p>
+<pre><code>你刚才写的这个函数：
+1. 它能处理所有可能的输入吗？列出你没覆盖的情况。
+2. 如果你是一个恶意的用户，你会怎么攻击这个函数？
+3. 如果 6 个月后你回来看这个函数，哪部分最难理解？
+4. 给出 3 个具体的改进点，并实施。</code></pre>
+<p><strong>自我反思的变体——「扮演反对者」：</strong></p>
+<pre><code>你刚才建议用 Redis 做缓存层。
+现在扮演一个反对这个方案的人，列出所有不用的理由：
+- 运维成本
+- 数据一致性风险
+- 开发复杂度
+- 有没有更简单的方案？
+
+对比双方论据后，重新给出你的最终建议。</code></pre>
+<h2>提示模板库</h2>
+<p>把常用的提示模式存下来，随时复用：</p>
+<pre><code>## 我的提示模板（放在 CLAUDE.md 末尾）
+
+### 模板 1：代码审查
+审查改动：
+1. 逻辑是否正确
+2. 异常路径是否处理
+3. 性能是否有隐患
+4. 类型是否安全
+5. 测试是否充分
+输出：🔴/🟡/🟢 分级问题列表
+
+### 模板 2：技术方案
+问题：[描述]
+约束：[现有技术栈、性能要求、时间限制]
+给出 3 个方案：最简单 / 最完整 / 最推荐
+每个方案：技术选型、改动文件、优缺点、风险
+
+### 模板 3：Debug
+错误：[粘贴错误信息]
+环境：[Node 版本、OS、相关依赖版本]
+尝试过的：[我已经试过的方法]
+帮我：定位根因 → 给出修复方案 → 解释为什么出错
+
+### 模板 4：学习新技术
+我要在 [项目名] 里引入 [新技术]。
+- 核心概念（用简单语言解释）
+- 在本项目的具体集成方式
+- 常见坑和前 3 个该做的配置
+- 小练习：给我一个 10 分钟能跑通的 demo</code></pre>
+<h2>今日小练习</h2>
+<ol>
+<li>用「角色指派」方式问同一个问题 3 次（默认 / 安全专家 / Tech Lead），对比答案</li>
+<li>把一条反向指令改写成正向引导，贴到你的 CLAUDE.md 里</li>
+<li>找一个现存函数，用「锚定」技巧让 Claude 写一个风格一致的新函数</li>
+<li>用「自我反思」技巧审查 Claude 刚写的代码</li>
+<li>建立你的个人提示模板库，存到 CLAUDE.md</li>
+</ol>
+<hr>
+<p><strong>今日小结：</strong> 提示技巧不是玄学——是结构。角色定义告诉我们「以什么身份回答」，格式控制告诉我们「用什么结构输出」，正向引导告诉我们「怎么做而不是不做什么」，锚定告诉我们「什么是好的标准」。把这四个维度用在每个 prompt 上，Claude 的输出质量会从「还行」变成「就是这个」。</p>
+</article>
+<article id="day15">
+<h1>第 15 天 · 完整实战：用 Claude Code 从零构建一个功能</h1>
+<div class="meta">5月28日 周四<span>Day 15/15</span></div>
+<p>学了 14 天，今天是毕业设计——用 Claude Code 完整走一遍从需求到上线的全流程。不跳过任何一步，不取巧。目标：把「收藏夹」功能从零做出来，含数据模型、API、测试、前端组件、Git 工作流、代码审查。</p>
+<h2>实战设定</h2>
+<ul>
+<li>项目：Next.js 14 + TypeScript + Prisma + PostgreSQL + Tailwind CSS</li>
+<li>已有模块：用户系统（NextAuth）、商品模块（列表 + 详情）</li>
+<li>新功能：用户可以把商品加入收藏，查看收藏列表，取消收藏</li>
+<li>约束：收藏数据需要记录收藏时的价格（用于后续价格波动分析）</li>
+</ol>
+<h2>第 1 轮：需求分析与方案设计</h2>
+<p><strong>你的 prompt：</strong></p>
+<pre><code>/plan 我要给项目加一个「商品收藏」功能。
+
+需求：
+- 用户在商品详情页可以点击收藏/取消收藏
+- 个人中心有收藏列表页，显示收藏的商品
+- 收藏时记录当时的商品价格
+- 一个用户可以收藏多个商品，一个商品可以被多个用户收藏
+- 取消收藏用软删除（数据保留，用于推荐算法）
+
+现有代码：
+- 用户模型：User (id, name, email)
+- 商品模型：Product (id, name, price, description, imageUrl)
+- 已有 GET /api/products 和 GET /api/products/:id
+
+先分析需要改动哪些文件，确认后再动手。</code></pre>
+<p><strong>Claude 输出（预期）：</strong></p>
+<pre><code>## Plan：商品收藏功能
+
+### 1. 数据模型
+- 新建 Favorite 模型：
+  - userId (FK → User)
+  - productId (FK → Product)
+  - savedPrice (收藏时的价格)
+  - isActive (软删除标记)
+  - createdAt
+  - 唯一约束：(userId, productId)
+
+### 2. 文件清单
+新建：
+- prisma/schema.prisma（修改：加 Favorite 模型）
+- src/services/favoriteService.ts
+- src/app/api/favorites/route.ts（GET 列表, POST 收藏）
+- src/app/api/favorites/[id]/route.ts（DELETE 取消收藏）
+- src/components/FavoriteButton.tsx
+- src/app/user/favorites/page.tsx
+
+修改：
+- src/app/products/[id]/page.tsx（加收藏按钮）
+- src/types/index.ts（加 Favorite 类型）
+
+### 3. 实现顺序
+1. 数据模型 + 迁移
+2. TypeScript 类型
+3. Service 层
+4. API 路由
+5. 前端组件
+6. 集成到商品详情页
+7. 收藏列表页</code></pre>
+<p><strong>关键决策点（你需要确认的）：</strong></p>
+<ul>
+<li>✅ 软删除方案：用 isActive 字段</li>
+<li>✅ 唯一约束：一个用户对同一个商品只能有一条收藏记录</li>
+<li>✅ 记录收藏价格：savedPrice 字段</li>
+</ol>
+<h2>第 2 轮：数据模型</h2>
+<p><strong>你的 prompt：</strong></p>
+<pre><code>确认计划。先做第 1 步：数据模型。
+
+在 Prisma schema 里加 Favorite 模型，然后运行迁移。
+注意：
+- 不要改已有的 User 和 Product 模型
+- 加 @@unique([userId, productId]) 确保不重复收藏
+- 迁移名用描述性的：add_favorites</code></pre>
+<p><strong>Claude 操作：</strong></p>
+<ol>
+<li>修改 <code>prisma/schema.prisma</code>，添加 Favorite 模型</li>
+<li>运行 <code>npx prisma migrate dev --name add_favorites</code></li>
+<li>验证迁移成功</li>
+</ol>
+<h2>第 3 轮：Service 层 + 类型</h2>
+<p><strong>你的 prompt：</strong></p>
+<pre><code>数据模型好了。现在做 Service 层和类型定义。
+
+创建 src/services/favoriteService.ts，实现：
+- addFavorite(userId, productId, savedPrice): Promise&lt;Favorite&gt;
+  - 如果已收藏且 isActive=true → 返回现有记录
+  - 如果已收藏且 isActive=false → 重新激活
+  - 检查 productId 是否存在
+- removeFavorite(userId, productId): Promise&lt;void&gt;
+  - 软删除：设置 isActive=false
+- getFavorites(userId, options?): Promise&lt;Favorite[]&gt;
+  - 只返回 isActive=true 的
+  - 支持分页 { page, limit }
+  - 返回时 include 商品的 name、currentPrice、imageUrl
+  - 按收藏时间倒序
+- isFavorited(userId, productId): Promise&lt;boolean&gt;
+
+类型定义：
+- Favorite 类型、CreateFavoriteInput、FavoriteWithProduct
+- 所有类型导出到 src/types/index.ts</code></pre>
+<h2>第 4 轮：API 路由</h2>
+<p><strong>你的 prompt：</strong></p>
+<pre><code>Service 层写好了。现在写 API 路由。
+
+创建 src/app/api/favorites/route.ts：
+- GET: 获取当前用户的收藏列表，支持 ?page=1&amp;limit=20
+- POST: 收藏商品，body: { productId: number }
+  - 从数据库读当前 product.price 作为 savedPrice
+  - 返回 { code: 0, data: favorite }
+
+创建 src/app/api/favorites/[id]/route.ts：
+- DELETE: 取消收藏，[id] 是 productId
+
+要求：
+- 所有接口需登录（用 getServerSession 鉴权）
+- 用 zod 校验输入
+- 统一返回格式 { code, data, message }
+- 统一错误处理</code></pre>
+<h2>第 5 轮：测试</h2>
+<p><strong>你的 prompt：</strong></p>
+<pre><code>API 写完。现在写测试——这是最容易跳过的步骤，别跳。
+
+测试文件：src/services/__tests__/favoriteService.test.ts
+
+测试用例清单：
+1. addFavorite: 正常收藏成功
+2. addFavorite: 收藏不存在的商品 → 抛错
+3. addFavorite: 重复收藏同一商品 → 返回已有记录
+4. addFavorite: 之前取消过，再次收藏 → 重新激活
+5. removeFavorite: 正常取消
+6. removeFavorite: 取消未收藏的商品 → 不抛错（幂等）
+7. getFavorites: 正常分页
+8. getFavorites: 不返回已取消的
+9. getFavorites: 空列表返回空数组
+10. isFavorited: 已收藏返回 true，未收藏返回 false
+
+用 vitest，mock Prisma 客户端。</code></pre>
+<p><strong>Claude 跑测试：</strong></p>
+<pre><code>测试写完了，运行 npm run test。
+所有测试通过！
+
+✅ addFavorite - 正常收藏 (2ms)
+✅ addFavorite - 商品不存在 (1ms)
+✅ addFavorite - 重复收藏返回已有 (1ms)
+✅ addFavorite - 重新激活已取消的收藏 (2ms)
+✅ removeFavorite - 正常取消 (1ms)
+✅ removeFavorite - 幂等取消 (1ms)
+✅ getFavorites - 分页查询 (3ms)
+✅ getFavorites - 过滤已取消 (2ms)
+✅ getFavorites - 空列表 (1ms)
+✅ isFavorited - 状态检查 (1ms)
+
+10/10 passed</code></pre>
+<h2>第 6 轮：前端组件</h2>
+<p><strong>你的 prompt：</strong></p>
+<pre><code>测试过了。现在写前端。
+
+第 1 步：FavoriteButton 组件
+创建 src/components/FavoriteButton.tsx：
+- Props: productId: number
+- 显示心形图标（实心=已收藏，空心=未收藏）
+- 点击切换收藏状态
+- 用乐观更新（先切换 UI，再请求 API，失败则回滚）
+- 未登录时点击跳转登录页
+- Loading 状态时按钮禁用
+
+第 2 步：集成到商品详情页
+修改 src/app/products/[id]/page.tsx：
+- 在价格下方加 FavoriteButton
+- 传入 product.id
+
+第 3 步：收藏列表页
+创建 src/app/user/favorites/page.tsx：
+- 服务端组件（RSC），直接查数据库
+- 网格布局展示收藏的商品卡片
+- 每个卡片：图片、名称、收藏时价格、当前价格、价格变动
+- 空状态：显示「还没有收藏任何商品」+ 引导去逛商品</code></pre>
+<h2>第 7 轮：Git 工作流 + 代码审查</h2>
+<p><strong>你的 prompt：</strong></p>
+<pre><code>功能写完了，做 Git 操作和最后的代码审查。
+
+第 1 步：提交
+帮我：
+1. git status 查看所有改动
+2. 建议如何拆分 commit（逻辑分组）
+3. 逐个提交，每个 commit 写 conventional commit message
+
+第 2 步：代码审查
+用第 14 天的审查模板，自己做一次完整审查：
+- 🔴 必须改的
+- 🟡 建议改的
+- 🟢 可选的
+
+第 3 步：修复审查出的问题
+针对 🔴 和 🟡 的问题，逐一修复并提交。</code></pre>
+<h2>实战中遇到的常见坑</h2>
+<table><tr><td>坑</td><td>为什么</td><td>怎么避免</td></tr><tr><td>Claude 在前端代码里 import 了 server-only 的模块</td><td>没区分服务端/客户端</td><td>明确说「这是 Client Component，不要 import 服务端模块」</td></tr><tr><td>乐观更新的回滚逻辑漏了</td><td>Claude 只写了乐观更新，没写 error 回滚</td><td>在 prompt 里明确「失败时回滚到原状态」</td></tr><tr><td>测试 mock 太深，测的不是真实逻辑</td><td>Claude 可能用 deep mock 让测试无意义</td><td>要求「mock 只用于外部依赖（数据库、API），不要 mock 内部函数」</td></tr><tr><td>收藏列表页的 N+1 查询</td><td>默认查询没 include 关联数据</td><td>在 Service 层 prompt 里明确「include product 信息，一次查询完成」</td></tr><tr><td>移动端适配被忽略</td><td>Claude 默认桌面端优先</td><td>在 CLAUDE.md 里加「默认移动端优先，用 Tailwind responsive class」</td></tr></table>
+<h2>十五天课程总回顾</h2>
+<pre><code>Day 1-3:   基础 —— 启动、读代码、写代码
+Day 4-5:   效率 —— 多文件编辑、终端命令
+Day 6-7:   协作 —— Git 工作流、CLAUDE.md
+Day 8-9:   质量 —— 任务规划、测试调试
+Day 10-11: 扩展 —— Hooks 自动化、MCP 工具
+Day 12-14: 精进 —— CLAUDE.md 进阶、成本管理、提示技巧
+Day 15:    实战 —— 完整功能开发全流程</code></pre>
+<p><strong>三条带走的原则：</strong></p>
+<ol>
+<li><strong>上下文决定质量。</strong> 给它足够的信息（代码、规则、偏好），它就能产出匹配你预期的结果。信息不足时它猜，猜错了你的代价高。</li>
+<li><strong>小步快跑，持续验证。</strong> 不要让它一口气写 500 行代码。分步骤、每步验证、错了立即刹车。这不是不信任——是聪明的工作方式。</li>
+<li><strong>它学得会，只要你教。</strong> CLAUDE.md 是它的记忆，Hooks 是它的习惯，你的纠正就是它的训练数据。每个项目下来，它越来越懂你。</li>
+</ol>
+<h2>今日小练习</h2>
+<ol>
+<li>在你自己的项目里选一个待做功能，用今天学到的 7 轮流程完整走一遍</li>
+<li>记录实际花费的时间，和不用 Claude Code 的预估时间对比</li>
+<li>把过程中的坑和 Fix 记录下来，更新你的 CLAUDE.md</li>
+<li>写一份你自己的「Claude Code 工作流 Cheatsheet」——属于你的最佳实践</li>
+</ol>
+<hr>
+<p><strong>今日小结：</strong> 15 天只是一个开始。Claude Code 就像一把好工具——头几次用可能不顺手，甚至切到自己。但等你学会了拿捏力道、掌握了使用节奏，它会成为你最顺手的生产力伙伴。你不需要成为 AI 专家，你只需要在自己的项目里用起来，反复用，犯过错再纠正，慢慢就长成了你的肌肉记忆。祝你写代码愉快。</p>
+</article>
+</main>
+
+<script>
+function showDay(n) {
+  document.querySelectorAll('article').forEach(function(a) { a.classList.remove('active'); });
+  var day = document.getElementById('day' + n);
+  if (day) day.classList.add('active');
+  document.querySelectorAll('nav a').forEach(function(a, i) { a.classList.toggle('active', i === n-1); });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 showDay(1);
 </script>
 </body>
