@@ -3,14 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Claude Code 15天实战指南 v3</title>
+<title>Claude Code 15天实战指南 v4</title>
 <style>
   :root {
     --bg: #0d1117; --bg-card: #161b22; --border: #30363d;
     --text: #c9d1d9; --text-secondary: #8b949e; --accent: #58a6ff;
     --accent-glow: rgba(88,166,255,0.12); --code-bg: #1c2128;
-    --tag-bg: #1a2332; --tag-text: #58a6ff; --heading: #f0f6fc;
-    --success: #3fb950; --warning: #d29922;
+    --heading: #f0f6fc;
   }
   * { margin:0; padding:0; box-sizing:border-box; }
   body {
@@ -73,7 +72,7 @@
 </head>
 <body>
 <nav>
-  <div class="logo"><h2>Claude Code 实战指南</h2><p>15天 · 从入门到精通</p></div>
+  <div class="logo"><h2>Claude Code 实战指南</h2><p>15天 · 融合飞书原文 · v4</p></div>
 <a onclick="showDay(1)"><span class="num">01</span>快速上手</a>
 <a onclick="showDay(2)"><span class="num">02</span>接入国内大模型</a>
 <a onclick="showDay(3)"><span class="num">03</span>入门基础操作</a>
@@ -88,767 +87,615 @@
 <a onclick="showDay(12)"><span class="num">12</span>高级功能</a>
 <a onclick="showDay(13)"><span class="num">13</span>让 Claude 自动解决问题（上）</a>
 <a onclick="showDay(14)"><span class="num">14</span>让 Claude 自动解决问题（下）</a>
-<a onclick="showDay(15)"><span class="num">15</span>复用文档解决同类问题</a>
+<a onclick="showDay(15)"><span class="num">15</span>知识沉淀</a>
 </nav>
 <main id="content">
-<article id="day1"><div class="day-header"><span class="day-badge">Day 1</span><h1>快速上手：十分钟跑起来</h1><div class="meta">5月12日 周二</div></div><div class="day-body"><h2>安装 Claude Code</h2>
-<p>打开终端，一行命令搞定：</p>
-<pre><code>npm install -g @anthropic-ai/claude-code</code></pre>
-<p>装完验证：</p>
-<pre><code>claude --version</code></pre>
-<p>如果没有 Node.js，先去 nodejs.org 下载安装。建议用 nvm 管理版本。</p>
-<h2>第一次启动</h2>
-<p>进入你的项目目录：</p>
-<pre><code>cd ~/my-project
-claude</code></pre>
-<p>蓝色的终端界面出现——这就是 Claude Code。没有侧边栏、没有设置面板，就是一个对话窗口。</p>
-<h2>界面速览</h2>
+<article id="day1"><div class="day-header"><span class="day-badge">Day 1</span><h1>快速上手：安装到第一句对话</h1><div class="meta">5月12日 周二</div></div><div class="day-body"><h2>什么是 Claude Code</h2>
+<p>Claude Code 是一个 AI 助手工具，就像一个随时待命的智能同事。你不需要懂编程——用中文直接跟它聊天就行。</p>
+<p>它的三个特点：</p>
 <ul>
-<li>上方：对话历史区域，你和 Claude 的每句话都在这里</li>
-<li>下方：输入区，你打字的地方</li>
-<li>左上角：显示当前模型和会话 ID</li>
-<li>Esc 键退出输入模式，用方向键浏览历史</li>
+<li>自然语言交互：像和朋友聊天一样简单</li>
+<li>智能理解：即使表达不够精确也能给出有用帮助</li>
+<li>所见即所得：直接看到处理结果</li>
 </ol>
-<h2>第一个命令</h2>
-<p>试试这些简单的开场：</p>
-<pre><code>这个项目是做什么的？</code></pre>
-<pre><code>帮我看看项目结构</code></pre>
-<pre><code>有没有 README？总结一下</code></pre>
-<p>Claude 会自动探索你的项目文件，给你回答。</p>
+<h2>安装 Trae 国内版 + Claude Code 插件</h2>
+<p>Trae 是国内可用的编辑器，完全兼容 VS Code 插件。用它来装 Claude Code 插件最方便。</p>
+<h3>步骤 1：下载 Trae</h3>
+<p>访问 Trae 官网下载安装包（约 613MB）：</p>
+<ul>
+<li>Windows：选 Windows 10/11 版</li>
+<li>macOS：选 Intel 芯片版或 M 系列芯片版</li>
+</ol>
+<p>安装时建议选 SSD 路径，预留 1GB 以上空间。</p>
+<h3>步骤 2：安装 Claude Code 插件</h3>
+<p>Trae 完全兼容 VS Code 插件市场。在 Trae 的插件面板搜索「Claude Code」，安装即可。</p>
+<h3>步骤 3：给 Claude Code 热身</h3>
+<p>打开 Claude Code 后，试试这些开场：</p>
+<pre><code>介绍一下你自己</code></pre>
+<pre><code>帮我写一段产品介绍</code></pre>
+<pre><code>如何提高工作效率</code></pre>
 <h2>两种使用模式</h2>
-<table><tr><td>模式</td><td>命令</td><td>适用场景</td></tr><tr><td>交互模式</td><td>`claude`</td><td>日常对话、多轮追问</td></tr><tr><td>一次性模式</td><td>`claude -p "问题"`</td><td>脚本集成、单次查询</td></tr></table>
-<h3>一次性模式的高级用法</h3>
-<pre><code># 管道输入
-cat error.log | claude -p &quot;分析这些错误日志，找出根本原因&quot;
-
-# 结合 shell 操作
-git diff HEAD~5 | claude -p &quot;总结这 5 个 commit 的改动，写 release notes&quot;
-
-# 指定模型
-claude -p &quot;解释这个函数&quot; --model claude-sonnet-4-20250514</code></pre>
-<h2>KEY 配置</h2>
-<p>如果还没配 API Key：</p>
-<pre><code>export ANTHROPIC_API_KEY=sk-ant-xxxxx</code></pre>
-<p>写进 ~/.zshrc 一劳永逸。</p>
-<h2>常见踩坑</h2>
-<ol>
-<li>Node 版本太低：Claude Code 需要 Node 18+，<code>node -v</code> 检查</li>
-<li>Key 没生效：<code>echo $ANTHROPIC_API_KEY</code> 确认是否输出</li>
-<li>代理问题：国内可能需要设 HTTP_PROXY 环境变量</li>
-</ol>
+<table><tr><td>模式</td><td>适用场景</td></tr><tr><td>聊天窗口</td><td>日常对话、多轮追问</td></tr><tr><td>输入框 + 回车</td><td>单次快速提问</td></tr></table>
+<p><strong>小技巧</strong>：Shift+Enter 可以换行输入多行内容；也可以直接粘贴大段文字。</p>
+<h2>给 Claude 提供上下文</h2>
+<p>模糊表达（不推荐）：<code>帮我写个文案</code></p>
+<p>具体表达（推荐）：</p>
+<pre><code>请帮我写一段产品描述文案，产品是智能手表，
+主要特点包括健康监测、运动追踪、消息提醒，
+目标用户是年轻白领，字数在 200 字左右，风格要时尚现代。</code></pre>
+<p>提供的信息越完整，Claude 给出的结果越精准。</p>
 <h2>今日任务</h2>
-<p>装好 Claude Code，进你的项目，问一句「这个项目是做什么的」。你会惊讶它居然真的看懂了。</p></div></article>
-<article id="day2"><div class="day-header"><span class="day-badge">Day 2</span><h1>接入国内大模型：省钱又稳定</h1><div class="meta">5月13日 周三</div></div><div class="day-body"><h2>为什么要用国内模型</h2>
-<p>Anthropic 的 API 直连在国内可能不稳定，而且按 token 收费累积起来不少。国内有不少兼容 OpenAI/Anthropic 格式的模型服务，可以大幅降低成本。</p>
-<h2>方案一：DeepSeek（推荐首选）</h2>
-<p>DeepSeek 支持 OpenAI 兼容接口，通过中转或直接配置：</p>
-<pre><code># 方式1：用 opencode 等支持的国内 fork
-# opencode 原生支持配置任意 OpenAI-compatible endpoint
-
-# 方式2：环境变量
-export ANTHROPIC_BASE_URL=https://your-proxy.com/v1</code></pre>
-<h2>方案二：LiteLLM 中转</h2>
-<p>最灵活的方案——用 LiteLLM 在本地搭一个代理，统一管理所有模型：</p>
+<p>装好 Trae + Claude Code 插件，用上面「具体表达」的模板试试——把智能手表换成你实际在做的产品或项目，看看它给出的文案。</p></div></article>
+<article id="day2"><div class="day-header"><span class="day-badge">Day 2</span><h1>接入国内大模型：快、省、稳</h1><div class="meta">5月13日 周三</div></div><div class="day-body"><h2>为什么选国内模型</h2>
+<ul>
+<li>响应更快：服务器在国内，1-2 秒内回复</li>
+<li>成本更低：比海外模型低 30%-50%</li>
+<li>中文更好：成语、俗语、文化语境理解更精准</li>
+<li>支付方便：支持支付宝、微信支付</li>
+</ol>
+<h2>主要厂商</h2>
+<h3>智谱 AI（GLM）</h3>
+<p>代表模型：GLM-4、GLM-3</p>
+<ul>
+<li>优势：中文理解能力强，代码生成质量高</li>
+<li>适用：代码开发、文档生成、智能问答</li>
+</ol>
+<h3>通义千问（Qwen）</h3>
+<p>代表模型：Qwen Plus、Qwen Max</p>
+<ul>
+<li>优势：多模态能力强，支持图像和代码</li>
+<li>适用：代码补全、代码解释、系统设计</li>
+</ol>
+<h2>配置方式</h2>
+<h3>方案一：Trae 插件直接配置</h3>
+<p>在 Trae 的 Claude Code 插件设置中，找到「模型配置」，填入对应的 API 地址和 Key。</p>
+<h3>方案二：LiteLLM 中转</h3>
 <pre><code>pip install litellm
-
-# 配置 DeepSeek
 litellm --model deepseek/deepseek-chat \
   --api_base https://api.deepseek.com/v1</code></pre>
-<p>然后在 Claude Code 里指向本地代理：</p>
-<pre><code>export ANTHROPIC_BASE_URL=http://localhost:8000</code></pre>
-<h2>方案三：One API（国产开源中转）</h2>
-<p>One API 是国内流行的一站式模型管理工具，支持几乎所有国内模型：</p>
-<pre><code>docker run -d -p 3000:3000 \
-  -e SQL_DSN=&quot;root:123456@tcp(localhost:3306)/oneapi&quot; \
-  justsong/one-api</code></pre>
-<p>它的优势：</p>
-<ul>
-<li>可视化界面管理多个模型 Key</li>
-<li>支出统计、用量限制</li>
-<li>支持的渠道极多（DeepSeek、通义千问、智谱、Moonshot……）</li>
-</ol>
+<h3>方案三：One API</h3>
+<p>一站式管理多个模型 Key，可视化界面，支持 DeepSeek、通义千问、智谱、Moonshot 等几乎所有国内模型。</p>
 <h2>模型选择策略</h2>
-<table><tr><td>任务类型</td><td>推荐模型</td><td>原因</td></tr><tr><td>简单问答、代码解释</td><td>DeepSeek V3</td><td>便宜、快</td></tr><tr><td>复杂重构、架构设计</td><td>Claude Sonnet 4</td><td>质量最好</td></tr><tr><td>大量文件批量处理</td><td>DeepSeek V3</td><td>省成本</td></tr><tr><td>安全审计、代码审查</td><td>Claude Opus 4</td><td>最仔细</td></tr></table>
-<p>黄金法则：80% 的日常任务用便宜模型，关键决策用贵的。</p>
-<h2>省钱实操</h2>
-<pre><code># 限制每次对话的 token 预算
-claude --max-tokens 8000
-
-# 定期压缩对话上下文（/compact 命令）
-# 在对话中输入 /compact，会把历史压缩成摘要
-
-# 避免把整个仓库都丢给它
-# 用 @ 只引用需要的文件</code></pre>
+<table><tr><td>任务</td><td>推荐</td></tr><tr><td>文案生成、日常问答</td><td>GLM-4 / Qwen Plus</td></tr><tr><td>代码开发、复杂分析</td><td>Claude Sonnet / Qwen Max</td></tr><tr><td>大量批量处理</td><td>DeepSeek V3（最省成本）</td></tr></table>
+<p><strong>黄金法则</strong>：80% 日常任务用国内模型，关键决策用最好的模型。</p>
 <h2>今日任务</h2>
-<p>把你的 Claude Code 接到你手头能用的大模型上（DeepSeek 或其他国内模型），跑一个简单问题对比输出质量。</p></div></article>
-<article id="day3"><div class="day-header"><span class="day-badge">Day 3</span><h1>入门基础操作：那些你每天会用到的东西</h1><div class="meta">5月14日 周四</div></div><div class="day-body"><h2>项目管理</h2>
-<h3>初始化项目感知</h3>
-<p>Claude Code 会自动读取以下文件来理解你的项目：</p>
+<p>至少配通一个国内模型。推荐从智谱 GLM-4 或通义千问入手——它们都有免费额度，注册即用。</p></div></article>
+<article id="day3"><div class="day-header"><span class="day-badge">Day 3</span><h1>入门基础操作：对话、查看、管理</h1><div class="meta">5月14日 周四</div></div><div class="day-body"><h2>输入框操作</h2>
+<p>基本操作：</p>
 <ul>
-<li>CLAUDE.md：项目级别的指令（第7天细讲）</li>
-<li>.gitignore：知道哪些文件不用看</li>
-<li>package.json / requirements.txt：了解技术栈</li>
+<li>输入问题 → Enter 发送</li>
+<li>Shift+Enter → 多行输入</li>
+<li>Ctrl+A / Cmd+A → 全选</li>
+<li>直接粘贴剪贴板内容</li>
 </ol>
-<p>第一次进项目时，先让它熟悉环境：</p>
-<pre><code>帮我梳理一下这个项目的技术栈、目录结构和核心模块</code></pre>
-<h3>@ 引用系统</h3>
-<p>这是每天用得最多的操作：</p>
-<pre><code># 引用单个文件
-@src/auth.ts 这段代码有什么问题？
-
-# 引用整个目录
-@src/api/ 这个目录下的接口有没有重复逻辑？
-
-# 多文件交叉分析
-@src/models/User.ts @src/services/userService.ts 这两个文件的职责边界清楚吗？
-
-# 引用 Git 提交记录
-@HEAD~3..HEAD 总结最近的改动</code></pre>
-<h2>对话管理</h2>
-<h3>多会话工作</h3>
-<pre><code># 创建新会话
-/clear
-
-# 恢复之前的会话
-claude --resume
-
-# 列出最近会话
-claude --resume</code></pre>
-<h3>会话压缩</h3>
-<p>Claude 记住的上下文有限。当对话变长时：</p>
-<pre><code>/compact</code></pre>
-<p>这会把之前的对话压缩成摘要，释放空间。不是删除，是精简。</p>
-<p>策略：</p>
+<p>发送后，Claude Code 会显示「正在思考」，然后逐字显示回复。</p>
+<h2>查看回复</h2>
+<p>Claude 的回复可能包含：</p>
 <ul>
-<li>一个功能一个会话，完成就 /clear</li>
-<li>不要在一个会话里切来切去干不同的事</li>
-<li>每隔 15-20 轮主动 /compact</li>
+<li>纯文本说明</li>
+<li>列表（项目符号或编号）</li>
+<li>代码块（特殊格式显示）</li>
+<li>表格（结构化数据）</li>
 </ol>
-<h2>权限控制</h2>
-<p>Claude Code 执行文件操作时，可能会问你确认：</p>
-<pre><code># 查看当前权限设置
-/status
-
-# 信任某个目录（跳过部分确认）
-# 在项目根目录创建 .claude 配置</code></pre>
-<p>可以设置 CLAUDE.md 来定制行为——第7天细讲。</p>
+<p>回复较长时直接滚动查看。</p>
+<h2>对话历史</h2>
+<ul>
+<li>最新消息在最下方</li>
+<li>向上滚动看之前的对话</li>
+<li>Claude 会记住上下文，可以引用之前的内容追问</li>
+</ol>
 <h2>输出格式控制</h2>
 <pre><code>用表格对比这两种方案</code></pre>
 <pre><code>只给我改动的代码，不要解释</code></pre>
-<pre><code>用 Mermaid 画出架构图</code></pre>
-<p>控制输出格式能让协作效率翻倍。</p>
+<pre><code>用编号列表列出步骤</code></pre>
+<p>格式说清楚，Claude 就不会给你不需要的形式。</p>
 <h2>三个核心习惯</h2>
 <ol>
-<li>先读后改。每次说「帮我修复这个 bug」之前，先让 Claude 分析原因</li>
-<li>一次一个任务。不要在一句话里塞三个需求</li>
-<li>让它解释做了什么。改完代码后追问「你做了哪些改动，为什么？」</li>
+<li><strong>具体再具体</strong>：不要说「帮我写个文案」，说「帮我写一段 200 字的智能手表产品描述，目标用户年轻白领，风格时尚」</li>
+<li><strong>一次一个任务</strong>：一个问句塞三个需求，Claude 容易顾此失彼</li>
+<li><strong>追问确认</strong>：收到结果后追问「为什么这么写？」或「能换个风格吗？」，质量翻倍</li>
+</ol>
+<h2>常用命令</h2>
+<ul>
+<li><code>/clear</code>：清空当前对话，重新开始</li>
+<li><code>/compact</code>：压缩对话历史（上下文快满时用）</li>
+<li><code>/status</code>：查看当前模型和用量</li>
 </ol>
 <h2>今日任务</h2>
-<p>在你的项目里试一试 @ 引用——引用两个文件，让 Claude 分析它们之间的耦合度。</p></div></article>
-<article id="day4"><div class="day-header"><span class="day-badge">Day 4</span><h1>文本处理与创作：不只是写代码</h1><div class="meta">5月15日 周五</div></div><div class="day-body"><h2>Claude 是写手，不只是程序员</h2>
-<p>很多人以为 Claude Code 只会写代码。它的文本能力同样顶级：</p>
-<h3>文档生成</h3>
-<pre><code>@src/api/ 给这个目录下的所有接口写一份 API 文档，
-包含请求参数、返回值、错误码</code></pre>
-<pre><code>根据 @src/ 的代码，生成一份架构设计文档，
-用 Mermaid 画流程图</code></pre>
-<h3>代码 Review</h3>
-<pre><code>@src/services/payment.ts 做一次代码审查，
-关注：安全性、性能、错误处理、可维护性
-按严重程度排列</code></pre>
-<p>让它用中文输出，可以发给非技术同事看。</p>
-<h3>翻译与国际化</h3>
-<pre><code>@src/locales/zh-CN.json 把这些中文翻译成英文，
-保持 JSON 结构不变</code></pre>
-<pre><code>检查 @src/ 下所有代码里的中文硬编码文本，
-列出来，建议放到 i18n 文件里</code></pre>
-<h2>写周报和日报</h2>
-<pre><code>git log --since=&quot;last monday&quot; --author=&quot;你的名字&quot; \
-  --oneline | claude -p &quot;根据这些 git 提交记录，
-写一份本周工作总结，分项目、进度、问题三类&quot;</code></pre>
-<h2>生成 Release Notes</h2>
-<pre><code>git diff v1.0.0..v1.1.0 | claude -p &quot;
-生成 release notes：
-1. 用中文
-2. 按 Breaking Changes / Features / Bug Fixes 分类
-3. 每条附上对应的 commit 摘要
-&quot;</code></pre>
-<h2>技术方案评审</h2>
-<p>把方案文档丢给 Claude：</p>
-<pre><code>@design.md 评审这个技术方案，
-从架构、扩展性、安全性、运维成本四个维度分析，
-给出改进建议</code></pre>
-<h2>从代码生成 PPT 大纲</h2>
-<pre><code>根据 @src/ 的项目结构，生成一份技术分享 PPT 大纲，
-5 页，每页 3 个要点</code></pre>
-<h2>写作技巧</h2>
-<p>想让 Claude 写出特定风格的内容：</p>
-<pre><code>用「没有任何编程经验的 PM 能看懂的语言」解释这个函数</code></pre>
-<pre><code>用「资深后端工程师的口吻」写这份技术方案</code></pre>
-<pre><code>模仿 Notion 文档的风格，简洁清晰</code></pre>
+<p>用 Claude Code 完成一个完整对话：提问 → 看回复 → 追问 → 确认。感受对话历史的上下文记忆能力。</p></div></article>
+<article id="day4"><div class="day-header"><span class="day-badge">Day 4</span><h1>文本处理与创作：文案到周报</h1><div class="meta">5月15日 周五</div></div><div class="day-body"><h2>产品描述创作</h2>
+<p>方法：提供产品名、特点、目标用户、风格。</p>
+<p>示例输入：</p>
+<pre><code>请帮我写一款智能耳机的产品描述，主要特点包括：
+降噪功能、长续航、舒适佩戴、音质出色，
+目标用户是年轻白领，风格要时尚现代。</code></pre>
+<p>Claude 会生成类似这样的文案：</p>
+<p>> 【SoundPro 智能降噪耳机】——你的私人音乐空间</p>
+<p>></p>
+<p>> 在喧嚣的城市中，找到一片宁静的音乐天地。SoundPro 采用先进的主动降噪技术，有效隔绝外界噪音……超长续航 30 小时，支持快充……人体工学设计，轻量化机身仅 250g……</p>
+<h2>广告文案</h2>
+<p>创意广告示例——智能水杯：</p>
+<pre><code>请帮我写一个创意广告文案，产品是智能水杯，
+功能包括：提醒喝水、记录饮水量、温度显示，
+目标用户是上班族。</code></pre>
+<p>促销广告示例——咖啡店周年庆：</p>
+<pre><code>咖啡店周年庆，全场买一送一，活动三天。
+帮我写促销文案。</code></pre>
+<h2>邮件写作</h2>
+<p>有背景的邮件请求：</p>
+<pre><code>请帮我写一封邮件，背景是：客户对我们的产品提出了
+一个功能需求，我们需要回复客户，告知这个需求
+已经记录下来，会考虑在后续版本中实现，同时感谢反馈。</code></pre>
+<h2>周报和日报</h2>
+<pre><code>git log --since=&quot;last monday&quot; --author=&quot;你的名字&quot; --oneline \
+  | claude -p &quot;根据 git 提交记录写本周工作总结&quot;</code></pre>
+<h2>翻译与国际化</h2>
+<pre><code>把这些中文翻译成英文，保持 JSON 结构不变</code></pre>
+<pre><code>检查代码里有没有中文硬编码文本，建议放到 i18n 文件</code></pre>
+<h2>写作技巧：说清受众和场景</h2>
+<table><tr><td>模糊</td><td>清晰</td></tr><tr><td>帮我写个介绍</td><td>用于公司官网产品页，目标用户是潜在客户，语言专业不晦涩</td></tr><tr><td>帮我介绍产品</td><td>受众是没有技术背景的普通用户，语言通俗易懂，避免专业术语</td></tr></table>
 <h2>今日任务</h2>
-<p>选一个场景试试：</p>
+<p>用 Claude Code 帮你写一段你真实需要的文案——产品介绍、周报、邮件都可以。记住说清：产品特点、目标用户、字数、风格。</p></div></article>
+<article id="day5"><div class="day-header"><span class="day-badge">Day 5</span><h1>文档管理与处理：长文提取术</h1><div class="meta">5月18日 周一</div></div><div class="day-body"><h2>从长文档提取关键信息</h2>
+<h3>提取摘要</h3>
+<pre><code>请帮我为这篇文档生成一个 200 字的摘要
+（然后上传文档或粘贴内容）</code></pre>
+<p>Claude 会输出类似：</p>
+<ul>
+<li>本文档介绍了公司 2026 年度工作计划</li>
+<li>总体目标：营收增长 20%，拓展 3 个新市场</li>
+<li>市场策略：加强线上营销，优化产品线……</li>
+</ol>
+<h3>提取要点</h3>
+<pre><code>请从这个会议纪要中提取决议事项
+（上传会议纪要）</code></pre>
+<p>输出示例：</p>
 <ol>
-<li>让 Claude 给你最近的项目生成一份 API 文档</li>
-<li>用 git diff 生成上周的周报</li>
-<li>翻译一段代码注释</li>
-</ol></div></article>
-<article id="day5"><div class="day-header"><span class="day-badge">Day 5</span><h1>文档管理与处理：让代码库开口说话</h1><div class="meta">5月18日 周一</div></div><div class="day-body"><h2>读代码不是找文件</h2>
-<p>Claude Code 的读代码能力强在「理解」而不是「检索」：</p>
-<h3>代码考古</h3>
-<p>面对一个你不熟悉的遗留项目：</p>
-<pre><code>这个项目是什么？从 git 历史能看到它怎么一步步变成现在这样的吗？</code></pre>
-<pre><code>@src/legacy/ 这个目录下的代码还有人在用吗？
-搜索全项目找出所有引用它的地方</code></pre>
-<h3>死亡路径分析</h3>
-<pre><code>如果这个 API 调用的第三方服务超时了，错误会怎么传播？
-最终用户会看到什么？有没有哪一层吞掉了错误？</code></pre>
-<h3>安全审查</h3>
-<pre><code>审查 @src/api/ 下所有接口的安全性：
+<li>产品开发：决定开发移动端 APP，预计 6 个月完成</li>
+<li>市场推广：投入 100 万用于线上广告投放</li>
+<li>团队调整：新增市场部经理岗位，技术团队扩充 5 人</li>
+</ol>
+<h3>提取特定信息</h3>
+<pre><code>请从这个合同中提取所有的日期信息
+（上传合同文件）</code></pre>
+<p>输出：</p>
+<ul>
+<li>合同签订日期：2024 年 1 月 15 日</li>
+<li>首付款日期：2024 年 2 月 1 日</li>
+<li>尾款日期：2025 年 1 月 15 日……</li>
+</ol>
+<h2>生成详细摘要</h2>
+<pre><code>请为这份报告生成详细摘要，包括：
+背景、方法、结果、结论</code></pre>
+<h2>安全审查代码</h2>
+<pre><code>审查这些接口的安全性：
 - 哪些接口没有鉴权？
 - 有没有 SQL 注入风险？
 - 用户输入有没有被校验和清洗？
-- 敏感信息是否泄漏到日志里？</code></pre>
-<h2>数据库与 Schema</h2>
-<pre><code>@prisma/schema.prisma 画出 ER 图（Mermaid 格式），
-标出一对多和多对多关系</code></pre>
-<pre><code>分析这个 schema，有没有冗余字段？
-有没有应该加索引但没加的地方？</code></pre>
+- 敏感信息有没有泄漏到日志里？</code></pre>
 <h2>依赖分析</h2>
-<pre><code>分析 @src/ 下所有模块的依赖关系，
-画出依赖图，标出循环依赖</code></pre>
-<pre><code>package.json 里有哪些依赖是多余的？
-哪些依赖有已知安全漏洞？</code></pre>
-<h2>配置文件管理</h2>
-<pre><code>@.env.example @config/ 检查所有环境变量：
-哪些没有默认值？哪些没有文档说明？
-哪些在不同环境下容易配错？</code></pre>
-<h2>批量文档生成</h2>
-<pre><code>给 @src/utils/ 下每个函数生成 JSDoc 注释，
-包含参数类型、返回值、使用示例</code></pre>
-<pre><code>把 @src/ 的所有 public API 整理成一份索引文档，
-按模块分组，每个函数一句话说明</code></pre>
+<pre><code>分析所有模块的依赖关系，画出依赖图，标出循环依赖</code></pre>
+<pre><code>package.json 里哪些依赖是多余的？哪些有已知安全漏洞？</code></pre>
 <h2>今日任务</h2>
-<p>选一个你项目中「没人敢动」的老代码目录，让 Claude 做一次代码考古——画出依赖图，找出 dead code，生成使用文档。</p></div></article>
-<article id="day6"><div class="day-header"><span class="day-badge">Day 6</span><h1>数据处理与分析：Claude 是你的数据分析师</h1><div class="meta">5月19日 周二</div></div><div class="day-body"><h2>日志分析</h2>
-<p>最省力的用法——把日志丢给它：</p>
-<pre><code># 直接管道
-cat app.log | claude -p &quot;找出所有 ERROR 级别的日志，
-按原因分类统计，找出最常见的 3 种错误&quot;
-
-# 时间范围过滤
-grep &quot;2026-05-19 10:&quot; app.log | claude -p &quot;
-分析这个时间段内发生了什么，有没有异常模式？&quot;</code></pre>
+<p>找一份你手头的长文档（PDF、会议纪要、合周都可以），让 Claude 提取关键信息。上传或粘贴都行——感受一下它从 5000 字里抓出 5 个要点的能力。</p></div></article>
+<article id="day6"><div class="day-header"><span class="day-badge">Day 6</span><h1>数据处理与分析：Excel 和日志</h1><div class="meta">5月19日 周二</div></div><div class="day-body"><h2>Excel 数据清洗</h2>
+<h3>删除重复数据</h3>
+<pre><code>请帮我删除这个 Excel 表格中的重复行
+（上传表格）</code></pre>
+<p>Claude 会汇报：原始 150 行 → 删除 12 行重复 → 剩余 138 行。</p>
+<h3>填充空白单元格</h3>
+<pre><code>请帮我填充空白单元格，用&quot;无&quot;填充</code></pre>
+<h3>统一日期格式</h3>
+<pre><code>请帮我把日期统一为 YYYY-MM-DD 格式</code></pre>
+<p>原始可能是「2024/1/5」「2024-1-5」「2024年1月5日」混合格式，Claude 会统一处理。</p>
+<h3>统一数字格式</h3>
+<pre><code>帮我把金额格式统一：保留两位小数，加千位分隔符</code></pre>
+<h2>日志分析</h2>
+<pre><code>cat app.log | claude -p &quot;找出所有 ERROR 级别日志，按原因分类统计&quot;</code></pre>
+<h2>数据报表</h2>
+<pre><code>分析这份销售数据：
+1. 总体统计（总销售额、平均、最高/最低）
+2. 按产品分类统计
+3. 按地区分类统计
+4. 时间趋势分析
+5. 数据洞察和改进建议</code></pre>
 <h2>CSV 和 JSON 处理</h2>
-<pre><code>@data.csv 分析这份数据：
-1. 各列的基本统计（均值、中位数、分布）
-2. 有没有异常值？
-3. 按「地区」列分组，统计各组的销售额</code></pre>
-<pre><code>@response.json 这个 API 返回的 JSON 结构有没有问题？
-哪些字段可能为空？嵌套层级能不能简化？</code></pre>
-<h2>数据库查询分析</h2>
-<pre><code>这个 SQL 查询有什么问题？
-@query.sql
-分析它的执行计划，有没有优化的空间？</code></pre>
-<pre><code>把这段 SQL 改成 ORM 代码（用 Prisma）：
-
-SELECT u.name, COUNT(o.id) as order_count
-FROM users u
-LEFT JOIN orders o ON u.id = o.user_id
-WHERE o.created_at &gt; &#x27;2026-01-01&#x27;
-GROUP BY u.id
-HAVING COUNT(o.id) &gt; 5</code></pre>
-<h2>数据清洗</h2>
-<pre><code>@raw_data.csv 这份数据需要清洗：
-1. 找出重复行
-2. 检查每一列的数据类型是否一致
-3. 处理缺失值
-4. 生成清洗后的 CSV</code></pre>
+<pre><code>分析这份 CSV：各列基本统计、有没有异常值、按地区分组统计</code></pre>
+<pre><code>这个 API 返回的 JSON 结构有没有问题？嵌套层级能不能简化？</code></pre>
 <h2>生成测试数据</h2>
-<pre><code>根据 @prisma/schema.prisma 的 User 模型，
-生成 100 条符合真实场景的测试数据：
-- 姓名：中文，男女各半
-- 邮箱：符合格式
-- 年龄：18-65 正态分布
-- 输出为 SQL INSERT 语句</code></pre>
-<h2>报表生成</h2>
-<pre><code>@monthly_sales.csv 生成一份月度销售分析报告：
-1. 总体趋势
-2. 各产品线对比
-3. 增长最快的 3 个品类
-4. 下月预测建议
-输出为 Markdown 格式</code></pre>
+<pre><code>根据这个数据模型，生成 100 条符合真实场景的测试数据：
+姓名中文、男女各半、年龄 18-65 正态分布</code></pre>
 <h2>今日任务</h2>
-<p>找你项目里一份日志文件或数据文件，让 Claude 分析一遍。第一次用管道可能不习惯，但试一次就会上瘾。</p></div></article>
-<article id="day7"><div class="day-header"><span class="day-badge">Day 7</span><h1>个性化工作流：让 Claude 变成你的形状</h1><div class="meta">5月20日 周三</div></div><div class="day-body"><h2>CLAUDE.md：你的项目说明书</h2>
-<p>在项目根目录创建一个 CLAUDE.md——这是你跟 Claude 之间的「合同」。每次启动 Claude Code，它都会先读这个文件。</p>
-<h3>基础版 CLAUDE.md</h3>
+<p>找一份你手里的表格数据——Excel 或 CSV 都行——让 Claude 帮你清洗和分析。即使数据不大也能感受到效率提升。</p></div></article>
+<article id="day7"><div class="day-header"><span class="day-badge">Day 7</span><h1>个性化工作流：模板和习惯</h1><div class="meta">5月20日 周三</div></div><div class="day-body"><h2>创建常用模板</h2>
+<p>模板让你不用每次都重复写一样的提示词。</p>
+<h3>文案生成模板</h3>
+<pre><code>请帮我写一段[类型]文案，产品是[产品名称]，
+主要特点包括[特点1]、[特点2]、[特点3]，
+目标用户是[目标用户]，风格要求是[风格]。
+
+要求：
+1. 突出核心卖点
+2. 语言生动有趣
+3. 字数在[字数]左右
+4. 包含行动号召</code></pre>
+<p>使用时把方括号里的内容替换掉即可。</p>
+<h3>多模板管理</h3>
+<p>你可以拥有多套模板：产品描述、广告文案、社交媒体内容、邮件写作……每套模板专注于一类任务。</p>
+<p>保存方式：把模板写进 CLAUDE.md（见下文），或者直接保存在一个文本文件里，用的时候复制粘贴。</p>
+<h2>让 Claude 记住你的偏好：CLAUDE.md</h2>
+<p>在项目根目录创建 CLAUDE.md：</p>
 <pre><code># CLAUDE.md
 
 ## 项目概述
-这是一个电商后台管理系统，
-前端 React + TypeScript，后端 Node.js + Prisma。
+电商后台管理系统，前端 React + TypeScript，后端 Node.js + Prisma。
 
-## 技术约定
-- 所有组件的 props 用 interface 定义
-- 状态管理用 Zustand
-- API 请求统一用 src/utils/request.ts 里的封装
-- 测试用 Vitest，覆盖率要求 70%+
-
-## Commit 规范
-- 格式：type(scope): 描述
-- type: feat / fix / refactor / docs / test
-- 用中文写 commit message</code></pre>
-<h3>进阶版 CLAUDE.md</h3>
-<pre><code>## 工作习惯
-- 修改代码之前先解释计划，等我说「继续」再动手
-- 不要自动创建新文件，除非我明确要求
-- 重构时保持 API 兼容，不要改已有的 import 路径
-
-## 代码风格偏好
+## 代码风格
 - 函数优先于类
-- 能一行解决的不用三行
-- 注释解释「为什么」，不是「是什么」
-- 错误处理不要吞异常，必须向上抛或记录日志
+- 注释解释&quot;为什么&quot;，不是&quot;是什么&quot;
+- 错误不要吞掉，必须向上抛或记录日志
 
-## 线上环境规则
-- 永远不要修改 production 配置
-- 数据库操作只读，除非我明确说「可以写」
-- 不要运行 npm publish 或任何部署命令</code></pre>
-<h2>模板化工作流</h2>
-<p>把常用的指令保存到 CLAUDE.md：</p>
-<pre><code>## 常用工作流
-
-### 代码审查
-当我说「review」时，运行以下检查：
-1. 安全检查（SQL 注入、XSS、敏感信息）
-2. 性能检查（N+1 查询、不必要的循环）
-3. 代码风格检查（命名、结构）
-4. 测试覆盖检查
-
-### 修复 bug
-当我说「fix」时：
-1. 先分析根因
-2. 给出修复方案（2-3 种）
-3. 等我确认后再改代码
-4. 加上对应的测试用例</code></pre>
-<h2>分支策略</h2>
-<p>用 .gitignore 配合 CLAUDE.md：</p>
-<pre><code>## Git 工作流
-- 在当前分支工作，不要自动切分支
-- push 之前先让我确认
-- commit message 用中文，包含 issue 编号</code></pre>
+## 快捷指令
+- 说&quot;review&quot; → 自动执行代码审查
+- 说&quot;fix&quot; → 分析 bug 并给出修复方案</code></pre>
+<h2>保存常用提示词</h2>
+<p>把每次成功的提示词记录下来：</p>
+<ul>
+<li>什么场景</li>
+<li>怎么问的</li>
+<li>结果怎么样</li>
+<li>有什么可以改进的</li>
+</ol>
+<p>积累 10 个你自己的高效提示词，比收藏 100 个别人的模板更有用。</p>
 <h2>今日任务</h2>
-<p>在你的主项目里创建一个 CLAUDE.md，至少包含：项目概述、技术约定、代码风格偏好。写完让 Claude 读一遍，问它「根据 CLAUDE.md，你觉得这个项目应该怎么写代码？」</p></div></article>
-<article id="day8"><div class="day-header"><span class="day-badge">Day 8</span><h1>提示词优化技巧（上）：问对问题比会写代码重要</h1><div class="meta">5月21日 周四</div></div><div class="day-body"><h2>核心原则</h2>
-<p>好的提示词不是花哨的模板，而是清晰传递你的意图。</p>
-<h3>坏 vs 好</h3>
-<table><tr><td>坏的提问</td><td>好的提问</td></tr><tr><td>「帮我优化这段代码」</td><td>「这段代码循环里有数据库查询，帮我把查询提到循环外面」</td></tr><tr><td>「这个项目有什么问题」</td><td>「审查 @src/api/ 的安全性和错误处理」</td></tr><tr><td>「写个登录功能」</td><td>「用 JWT 实现登录，需要 refresh token，参考 @src/auth/ 的现有结构」</td></tr></table>
-<h2>四大提示要素</h2>
+<ol>
+<li>创建你的第一个提示词模板（产品描述/邮件/周报，选一个你最常用的场景）</li>
+<li>在你的项目里创建 CLAUDE.md，至少包含项目概述和一条快捷指令</li>
+</ol></div></article>
+<article id="day8"><div class="day-header"><span class="day-badge">Day 8</span><h1>提示词优化技巧（上）：清晰表达</h1><div class="meta">5月21日 周四</div></div><div class="day-body"><h2>模糊 vs 清晰：飞书文档的经典对比</h2>
+<h3>给出具体指令</h3>
+<p>不推荐：</p>
+<pre><code>帮我写个文案</code></pre>
+<p>推荐：</p>
+<pre><code>请帮我写一段产品描述文案，产品是智能手表，
+主要特点包括健康监测、运动追踪、消息提醒，
+目标用户是年轻白领，字数在 200 字左右，风格时尚现代。</code></pre>
+<h3>提供完整信息</h3>
+<p>不推荐：</p>
+<pre><code>帮我分析这个数据</code></pre>
+<p>推荐：</p>
+<pre><code>请帮我分析这份销售数据，包含：
+1. 总体统计（总销售额、平均、最高/最低）
+2. 按产品分类统计
+3. 按地区分类统计
+4. 时间趋势分析
+5. 数据洞察和改进建议</code></pre>
+<h3>明确输出格式</h3>
+<p>不推荐：</p>
+<pre><code>帮我整理这些信息</code></pre>
+<p>推荐：</p>
+<pre><code>请帮我整理这些信息，输出格式为表格，
+包含以下列：姓名、部门、职位、入职日期</code></pre>
+<h3>说明受众和场景</h3>
+<p>不推荐：</p>
+<pre><code>帮我写个介绍</code></pre>
+<p>推荐（面向潜在客户）：</p>
+<pre><code>请帮我写一个产品介绍，用于公司官网的产品页面，
+目标用户是潜在客户，需要突出核心优势，
+语言要专业但不晦涩。</code></pre>
+<p>推荐（面向普通用户）：</p>
+<pre><code>请帮我介绍产品，受众是没有技术背景的普通用户，
+语言要通俗易懂，步骤要详细，避免专业术语。</code></pre>
+<h2>四大要素总结</h2>
 <p>每次提问尽量包含：</p>
 <ol>
-<li>上下文：告诉 Claude 现在在干什么</li>
-<li>输入：用 @ 引用具体的文件或代码</li>
-<li>指令：你要它做什么</li>
-<li>约束：有什么要求</li>
+<li><strong>做什么</strong>：具体任务</li>
+<li><strong>用什么</strong>：上传或粘贴材料</li>
+<li><strong>给谁看</strong>：受众是谁</li>
+<li><strong>什么格式</strong>：表格？列表？段落？</li>
 </ol>
-<p>示例：</p>
-<pre><code>（上下文）我在重构支付模块，
-所有金额现在统一用「分」为单位。
-
-（输入）@src/services/payment.ts
-
-（指令）把所有金额相关的计算从「元」改成「分」，
-更新对应的类型定义。
-
-（约束）不要改 API 接口格式，
-入参出参仍然用「元」，转换在 service 层做。</code></pre>
-<h2>角色扮演</h2>
-<p>给 Claude 一个身份，它会在那个框架下思考：</p>
-<pre><code>你是一个有 10 年后端经验的架构师。
-审查这个微服务方案有什么隐患。</code></pre>
-<pre><code>你是一个刚被 oncall 吵醒的 SRE。
-下面的告警日志，最需要先处理什么问题？</code></pre>
-<pre><code>你是一个完全不懂技术的新人 PM。
-我跟你解释这段代码在做什么，你用白话复述一遍，
-确认我讲清楚没有。</code></pre>
-<h2>分步 vs 一次完成</h2>
-<p>简单任务可以一次说完。复杂任务要拆：</p>
-<pre><code># 不要这样（太模糊）
-帮我重构用户模块
-
-# 这样（分步）
-第一步：分析 @src/modules/user/ 的结构，
-告诉我有哪些可以优化的地方
-
-# Claude 分析完后
-第二步：先重构 services 层，
-把业务逻辑从 controller 里抽出来
-
-# 完成后
-第三步：更新测试，确保覆盖率不掉</code></pre>
-<h2>让 Claude 自我审查</h2>
-<p>改完代码后：</p>
-<pre><code>你刚才改了什么？为什么这么改？
-有没有更好的方案？</code></pre>
-<pre><code>检查你刚才的改动：
-有没有引入新的 bug？有没有破坏现有的 API？</code></pre>
-<p>这个「二次审查」能抓到很多 Claude 自己疏忽的问题。</p>
 <h2>今日任务</h2>
-<p>用「四要素法」和「角色扮演」分别各提一个问题，看看输出质量有没有明显提升。</p></div></article>
-<article id="day9"><div class="day-header"><span class="day-badge">Day 9</span><h1>常用快捷键：让你的手不用离开键盘</h1><div class="meta">5月22日 周五</div></div><div class="day-body"><h2>Claude Code 快捷键</h2>
-<p>所有操作都在终端里完成，记住这几个能省大量时间：</p>
-<h3>输入模式</h3>
-<table><tr><td>快捷键</td><td>功能</td></tr><tr><td>Esc</td><td>退出输入模式</td></tr><tr><td>↑/↓</td><td>浏览历史消息</td></tr><tr><td>Ctrl+A</td><td>光标移到行首</td></tr><tr><td>Ctrl+E</td><td>光标移到行尾</td></tr><tr><td>Ctrl+U</td><td>删除当前行</td></tr></table>
-<h3>文件编辑模式</h3>
-<p>Claude Code 内置了一个编辑器：</p>
-<table><tr><td>快捷键</td><td>功能</td></tr><tr><td>i</td><td>进入编辑模式</td></tr><tr><td>Esc</td><td>退出编辑模式</td></tr><tr><td>:w</td><td>保存并退出</td></tr><tr><td>:q</td><td>不保存退出</td></tr></table>
-<h3>对话控制</h3>
-<table><tr><td>操作</td><td>方式</td></tr><tr><td>打断正在生成的回复</td><td>Ctrl+C</td></tr><tr><td>粘贴多行代码</td><td>先粘再按 Enter 两次发送</td></tr><tr><td>清屏</td><td>输入 /clear</td></tr><tr><td>压缩对话</td><td>输入 /compact</td></tr><tr><td>查看模型和用量</td><td>输入 /status</td></tr></table>
-<h2>终端多路复用</h2>
-<p>Claude Code 在终端里跑，所以终端本身的效率工具也重要：</p>
-<h3>tmux 配合 Claude Code</h3>
-<pre><code># 启动 tmux
-tmux new -s dev
-
-# 分屏：左边 Claude Code，右边写代码
-# Ctrl+B % 垂直分屏
-# Ctrl+B &quot; 水平分屏
-
-# 切换窗格
-# Ctrl+B 方向键</code></pre>
+<p>用「四大要素法」改写一个你之前问过但效果不好的问题。对比两次输出，感受差距。</p></div></article>
+<article id="day9"><div class="day-header"><span class="day-badge">Day 9</span><h1>常用快捷键：效率翻倍</h1><div class="meta">5月22日 周五</div></div><div class="day-body"><h2>基础快捷键</h2>
+<table><tr><td>操作</td><td>Windows/Linux</td><td>macOS</td></tr><tr><td>发送消息</td><td>Enter</td><td>Enter</td></tr><tr><td>多行输入</td><td>Shift+Enter</td><td>Shift+Enter</td></tr><tr><td>全选</td><td>Ctrl+A</td><td>Cmd+A</td></tr><tr><td>复制</td><td>Ctrl+C</td><td>Cmd+C</td></tr><tr><td>粘贴</td><td>Ctrl+V</td><td>Cmd+V</td></tr><tr><td>撤销</td><td>Ctrl+Z</td><td>Cmd+Z</td></tr></table>
+<h2>对话控制快捷键</h2>
+<table><tr><td>操作</td><td>方式</td></tr><tr><td>打断正在生成的回复</td><td>Ctrl+C</td></tr><tr><td>清屏 / 新对话</td><td>输入 `/clear`</td></tr><tr><td>压缩上下文</td><td>输入 `/compact`</td></tr><tr><td>查看用量和模型</td><td>输入 `/status`</td></tr></table>
+<h2>Claude Code 内置编辑器快捷键</h2>
+<table><tr><td>快捷键</td><td>功能</td></tr><tr><td>`i`</td><td>进入编辑模式</td></tr><tr><td>`Esc`</td><td>退出编辑模式</td></tr><tr><td>`:w`</td><td>保存并退出</td></tr><tr><td>`:q`</td><td>不保存退出</td></tr></table>
+<h2>效率技巧</h2>
+<h3>批量处理</h3>
+<p>同时处理多个文件：</p>
+<ul>
+<li>多选上传：Ctrl+点击（Windows）或 Cmd+点击（macOS）选多个文件</li>
+<li>拖拽上传：直接拖多个文件到 Claude Code</li>
+</ol>
+<p>批量生成内容：</p>
+<pre><code>请帮我为以下 5 个产品各写一段产品描述：
+（列出产品名称和特点）</code></pre>
+<h3>快速切换模型</h3>
+<ul>
+<li>方法一：通过工具栏模型选择器</li>
+<li>方法二：输入 <code>/model</code> 命令切换</li>
+</ol>
+<h3>快速访问历史</h3>
+<ul>
+<li>打开历史记录面板浏览过往对话</li>
+<li>使用搜索功能查找特定对话</li>
+</ol>
 <h2>效率流水线</h2>
 <p>一个日常高效流程：</p>
 <ol>
-<li>Ctrl+C 打断不想要的回复（别犹豫，早点打断省时间）</li>
+<li>Ctrl+C 打断不想要的回复（别等它跑完）</li>
 <li>↑ 找到之前的命令，修改后重新发送</li>
 <li>/compact 每 15 轮压缩一次</li>
 <li>/clear 完成一个功能后清空上下文</li>
-<li>Ctrl+D 退出 Claude Code</li>
+<li>每个任务结束记录成功的提示词</li>
 </ol>
-<h2>自定义快捷键</h2>
-<p>在 CLAUDE.md 里可以定义自己的快捷指令：</p>
-<pre><code>## 快捷指令
-- 说 &quot;review&quot; → 你自动执行代码审查
-- 说 &quot;fix&quot; → 你分析 bug 并给出修复方案
-- 说 &quot;deploy checklist&quot; → 输出上线前检查清单
-- 说 &quot;onboard&quot; → 为当前项目生成新人上手指南</code></pre>
 <h2>今日任务</h2>
-<p>试试在 Claude Code 里用 /compact 和 /clear，感受一下上下文管理对响应质量的影响。顺便在 CLAUDE.md 里加两个自己的快捷指令。</p></div></article>
-<article id="day10"><div class="day-header"><span class="day-badge">Day 10</span><h1>提示词优化技巧（下）：高手是怎么跟 Claude 说话的</h1><div class="meta">5月25日 周一</div></div><div class="day-body"><h2>多方案输出</h2>
-<p>不要让它只给一个答案：</p>
+<ol>
+<li>试试用 Ctrl+C 打断一次正在生成的回复（习惯了这个操作能省很多时间）</li>
+<li>用 /compact 压缩一次长对话，感受上下文管理</li>
+</ol></div></article>
+<article id="day10"><div class="day-header"><span class="day-badge">Day 10</span><h1>提示词优化技巧（下）：高手思路</h1><div class="meta">5月25日 周一</div></div><div class="day-body"><h2>多方案输出</h2>
+<p>不要只让 Claude 给一个答案：</p>
 <pre><code>实现这个功能，给我三个方案：
-1. 最简单的（可能不够好）
-2. 最稳健的（中等复杂度）
-3. 最优雅的（高复杂度）
+1. 最简单的（快速上线）
+2. 最稳健的（适合长期维护）
+3. 最优雅的（技术含量最高）
 每个方案说明优缺点和适用场景</code></pre>
-<h2>对比式提问</h2>
-<pre><code>方案 A：用 Redux 管理全局状态
-方案 B：用 Context + useReducer
-
-从以下维度对比：
-- 学习成本
-- 性能
-- 代码量
-- 调试体验
-- 社区生态
-
-给出你的推荐和理由</code></pre>
 <h2>强制约束</h2>
-<p>给 Claude 戴上紧箍咒：</p>
-<pre><code>重写这个函数，但必须遵守：
-- 不引入新的依赖
-- 不改变函数签名
-- 时间复杂度不能比原来差
-- 加完整的 JSDoc 注释
-- 加至少 3 个测试用例</code></pre>
-<h2>生成自我验证</h2>
-<pre><code>实现一个 throttle 函数，然后：
-1. 给它写单元测试
-2. 用它处理一个真实场景（搜索框输入防抖）
-3. 写一个 edge case 让它出错
-4. 修复这个 bug</code></pre>
-<h2>反向思维</h2>
-<pre><code>我写的这段代码，最可能在什么情况下崩溃？
-构造 5 个让它出 bug 的场景</code></pre>
-<pre><code>这段逻辑如果被恶意利用，攻击者会怎么做？
-帮我找出安全漏洞</code></pre>
+<p>给 Claude 戴上紧箍咒，避免它自由发挥过头：</p>
+<pre><code>重写这段话，必须遵守：
+- 不改变原意
+- 控制在 200 字以内
+- 用主动语态
+- 每段不超过 3 句话
+- 至少包含一个具体例子</code></pre>
+<h2>对比式提问</h2>
+<pre><code>方案 A：用表格展示数据
+方案 B：用图表展示数据
+
+从以下维度对比：可读性、信息密度、制作成本、适用场景
+给出推荐和理由</code></pre>
 <h2>渐进式细化</h2>
-<p>不要一次把规范说完——先给框架，再逐层细化：</p>
-<pre><code># 第一轮
-我需要一个缓存层的接口设计，先给我接口定义
+<pre><code>第一轮：我需要一份市场分析报告的大纲
 
-# 第二轮
-好的，现在用 Redis 实现它，加过期策略
+第二轮：好的，请展开「竞争格局」这个部分
 
-# 第三轮
-加个内存层做一级缓存，Redis 做二级
+第三轮：把竞争对手的具体数据填进去
 
-# 第四轮
-加上缓存击穿保护</code></pre>
-<h2>让 Claude 当你的老师</h2>
-<pre><code>我不知道这个项目的数据库为什么这么设计。
-你研究一下 @prisma/schema.prisma，
-用我能理解的方式解释设计意图</code></pre>
-<pre><code>解释这个 PR 里的技术决策。
-如果是我第一次看，我需要知道什么背景？</code></pre>
+第四轮：加上行动建议</code></pre>
+<p>不要一次把规范全说完——先框架，再逐层细化。Claude 在每层都能给出更好的结果。</p>
+<h2>反向思维：让它找漏洞</h2>
+<pre><code>我写的这段内容，最可能在哪里出问题？
+构造 3 个读者可能提出的反对意见</code></pre>
+<pre><code>这段逻辑如果被误解，会产生什么后果？
+帮我找出所有有歧义的表达</code></pre>
+<h2>自我审查</h2>
+<pre><code>你刚才写了什么？为什么这么写？
+有没有可以改进的地方？</code></pre>
+<p>这个二次审查经常抓到 Claude 自己疏忽的问题。</p>
 <h2>今日任务</h2>
-<p>找一个你最近写的功能，用「多方案输出」让 Claude 给出三个不同等级的实现，看看哪个比你原来写的更好。</p></div></article>
-<article id="day11"><div class="day-header"><span class="day-badge">Day 11</span><h1>用编程的思维解决问题：拆解大任务</h1><div class="meta">5月26日 周二</div></div><div class="day-body"><h2>大任务拆解</h2>
-<p>Claude Code 不擅长一口气做一大堆事。把大任务拆成小块：</p>
-<pre><code>我需要实现一个「用户权限管理系统」。
-帮我拆分成可执行的小任务，按依赖关系排序</code></pre>
-<p>Claude 会给出类似这样的拆解：</p>
+<p>找一个你最近的任务，用「渐进式细化」分三轮完成——先要框架，再细化一个部分，最后加上具体数据。对比一次输出全部的效果。</p></div></article>
+<article id="day11"><div class="day-header"><span class="day-badge">Day 11</span><h1>用编程的思维解决问题：拆解大任务</h1><div class="meta">5月26日 周二</div></div><div class="day-body"><h2>什么是编程思维</h2>
+<p>编程思维就是把复杂问题分解为简单步骤，然后按逻辑顺序执行。你其实经常用到它——只是没意识到。</p>
+<h3>日常类比：做菜</h3>
 <ol>
-<li>定义数据模型（Role、Permission、UserRole）</li>
-<li>实现权限检查中间件</li>
-<li>实现角色管理 CRUD</li>
-<li>实现权限分配界面</li>
-<li>给已有接口加权限守卫</li>
-<li>写权限测试用例</li>
+<li>分解问题：准备食材 → 处理食材 → 烹饪 → 装盘</li>
+<li>识别模式：每次做菜都遵循类似步骤</li>
+<li>抽象概括：总结出做菜的一般流程</li>
+<li>算法设计：按照食谱的步骤执行</li>
 </ol>
-<p>然后逐个推进。</p>
-<h2>技术方案设计</h2>
-<pre><code>我要做一个「订单超时自动取消」功能。
-帮我设计技术方案，考虑：
-- 用什么方式实现延迟任务（消息队列 / 定时扫表 / Redis 过期回调）
-- 各方案的优缺点
-- 并发问题怎么处理
-- 失败重试策略</code></pre>
-<h2>从需求到任务的完整流程</h2>
-<pre><code>产品需求：用户可以在订单未支付时修改收货地址。
-
-1. 先分析影响范围
-2. 列出需要改动的文件和模块
-3. 给出数据迁移方案（如果需要）
-4. 拆分成可执行的编码任务
-5. 估算每个任务的复杂度</code></pre>
-<h2>程序员的思维检查清单</h2>
-<p>在做任何改动之前，让 Claude 先做这 5 个检查：</p>
-<pre><code>在做这个改动之前，帮我分析：
-1. 影响范围：哪些模块会受影响？
-2. 边界情况：有哪些 edge case？
-3. 向后兼容：会不会影响现有功能？
-4. 测试策略：需要更新哪些测试？
-5. 回滚方案：如果出问题怎么回滚？</code></pre>
-<h2>像 Code Review 一样 Review 想法</h2>
-<pre><code>我要给数据库加一个字段来标记「软删除」。
-你觉得这个方案有什么问题？有没有更好的做法？</code></pre>
-<p>Claude 可能回答：</p>
+<h3>日常类比：旅行</h3>
+<ol>
+<li>分解问题：确定目的地 → 查询交通 → 订票 → 打包 → 出发</li>
+<li>识别模式：每次旅行都遵循类似步骤</li>
+<li>抽象概括：总结出旅行的通用流程</li>
+<li>算法设计：按照计划执行</li>
+</ol>
+<h2>用编程思维让 Claude 帮你</h2>
+<h3>实例：公司销售额连续三个月下降</h3>
+<p>用 5W1H 拆解：</p>
 <ul>
-<li>建议加 deleted_at 而不是 is_deleted 布尔值（可以知道删除时间）</li>
-<li>所有查询需要加 WHERE deleted_at IS NULL，漏一个就是 bug</li>
-<li>考虑用 Prisma 的 middleware 自动过滤</li>
-<li>索引需要包含 deleted_at</li>
+<li><strong>What</strong>：销售额下降</li>
+<li><strong>Why</strong>：市场竞争、产品竞争力、营销效果</li>
+<li><strong>Who</strong>：销售团队、市场团队、产品团队</li>
+<li><strong>When</strong>：近三个月</li>
+<li><strong>Where</strong>：全国市场</li>
+</ol>
+<p>然后把每个维度分别丢给 Claude：</p>
+<pre><code>分析近三个月的销售数据，分别按产品、地区、渠道统计趋势</code></pre>
+<pre><code>对比我和竞争对手在产品功能上的差距，
+列出一个功能对照表</code></pre>
+<h2>大任务拆解实战</h2>
+<pre><code>我需要做一个「客户满意度调查分析」。
+帮我拆成可执行的小任务，按依赖关系排序。</code></pre>
+<p>Claude 会给出：</p>
+<ol>
+<li>设计调查问卷</li>
+<li>收集数据</li>
+<li>清洗数据</li>
+<li>统计分析</li>
+<li>生成报告</li>
+</ol>
+<p>然后逐个推进——不要一口气让它全做完。</p>
+<h2>决策前先做检查清单</h2>
+<pre><code>在做这个决策之前，帮我分析：
+1. 影响范围：哪些部门会受影响？
+2. 风险：最坏的后果是什么？
+3. 成本：需要多少资源？
+4. 替代方案：还有没有其他选项？
+5. 回滚方案：如果出问题怎么补救？</code></pre>
+<h2>今日任务</h2>
+<p>把你手头一个复杂的任务用 5W1H 或「分解问题→识别模式→抽象概括→算法设计」拆开，选其中一个小块让 Claude 先帮你处理。感受「分步做」比「一次全做」的质量差异。</p></div></article>
+<article id="day12"><div class="day-header"><span class="day-badge">Day 12</span><h1>高级功能：工具、Hook、MCP</h1><div class="meta">5月27日 周三</div></div><div class="day-body"><h2>自定义工具</h2>
+<h3>什么是自定义工具</h3>
+<p>用户根据自己的需求创建的特定功能模块，可以扩展 Claude Code 的能力：</p>
+<ul>
+<li>针对性：针对特定需求设计</li>
+<li>可复用：可以多次使用</li>
+<li>可配置：可以调整参数</li>
+</ol>
+<h3>如何查找工具</h3>
+<ol>
+<li>官方文档</li>
+<li>社区分享</li>
+<li>插件市场</li>
+<li>搜索引擎</li>
+</ol>
+<h3>配置示例：数据清洗工具</h3>
+<p>需求：需要一个工具来清洗 Excel 数据。</p>
+<p>定义功能：</p>
+<ul>
+<li>删除重复行</li>
+<li>填充空白单元格</li>
+<li>统一日期格式</li>
+<li>统一数字格式</li>
+</ol>
+<p>创建提示词模板：</p>
+<pre><code>请帮我清洗这个数据：
+- 删除重复行
+- 填充空白单元格为&quot;无&quot;
+- 统一日期格式为 YYYY-MM-DD
+- 统一数字格式为保留两位小数</code></pre>
+<p>把这个模板保存下来，命名为「数据清洗工具」，每次需要时调用。</p>
+<h2>Hooks：自动化你的工作流</h2>
+<p>Hooks 在特定事件发生时自动执行操作：</p>
+<table><tr><td>事件</td><td>触发时机</td></tr><tr><td>PreToolUse</td><td>工具被调用之前</td></tr><tr><td>PostToolUse</td><td>工具被调用之后</td></tr><tr><td>Stop</td><td>会话结束时</td></tr></table>
+<p>示例：文件保存后自动格式化：</p>
+<pre><code>{&quot;hooks&quot;: {&quot;PostToolUse&quot;: [{&quot;matcher&quot;: &quot;Edit|Write&quot;,
+  &quot;command&quot;: &quot;prettier --write&quot;}]}}</code></pre>
+<h2>MCP：扩展能力边界</h2>
+<p>MCP（Model Context Protocol）让 Claude 能连接外部工具。常用 MCP Server：</p>
+<ul>
+<li>GitHub：管理 Issues、PRs、仓库</li>
+<li>文件系统：安全的文件访问</li>
+<li>数据库：只读查询</li>
+<li>Slack / Jira：消息和工单管理</li>
 </ol>
 <h2>今日任务</h2>
-<p>把一个你拖延的复杂需求丢给 Claude，让它拆成小任务列表。拆完后你自己评估一下——它拆得比你细还是比你粗？</p></div></article>
-<article id="day12"><div class="day-header"><span class="day-badge">Day 12</span><h1>高级功能：Hooks 和 MCP</h1><div class="meta">5月27日 周三</div></div><div class="day-body"><h2>Hooks：自动化你的工作流</h2>
-<p>Hooks 是 Claude Code 的自动化机制——在特定事件发生时自动执行操作。</p>
-<h3>Hook 类型</h3>
-<table><tr><td>事件</td><td>触发时机</td></tr><tr><td>PreToolUse</td><td>工具被调用之前</td></tr><tr><td>PostToolUse</td><td>工具被调用之后</td></tr><tr><td>Notification</td><td>Claude 发出通知时</td></tr><tr><td>UserPromptSubmit</td><td>用户提交消息时</td></tr><tr><td>Stop</td><td>会话结束时</td></tr></table>
-<h3>实用 Hook 示例</h3>
-<pre><code>// .claude/settings.json
-{
-  &quot;hooks&quot;: {
-    &quot;PostToolUse&quot;: [
-      {
-        &quot;matcher&quot;: &quot;Edit|Write&quot;,
-        &quot;command&quot;: &quot;prettier --write $CLAUDE_FILE_PATH&quot;
-      }
-    ]
-  }
-}</code></pre>
-<p>这个配置让 Claude 每次编辑或写入文件后自动运行 Prettier 格式化。</p>
-<h3>高级 Hook：提交前检查</h3>
-<pre><code>{
-  &quot;hooks&quot;: {
-    &quot;PreToolUse&quot;: [
-      {
-        &quot;matcher&quot;: &quot;Bash(git push*)&quot;,
-        &quot;command&quot;: &quot;npm test &amp;&amp; npm run lint&quot;
-      }
-    ]
-  }
-}</code></pre>
-<p>在 git push 之前自动跑测试和 lint。失败了就阻止 push。</p>
-<h2>MCP：扩展 Claude 的能力边界</h2>
-<p>MCP（Model Context Protocol）让 Claude 能连接外部工具和数据源。</p>
-<h3>配置 MCP Server</h3>
-<pre><code>// .claude/mcp.json
-{
-  &quot;mcpServers&quot;: {
-    &quot;filesystem&quot;: {
-      &quot;command&quot;: &quot;npx&quot;,
-      &quot;args&quot;: [&quot;-y&quot;, &quot;@anthropic/mcp-server-filesystem&quot;, &quot;/path/to/allowed/dir&quot;]
-    },
-    &quot;github&quot;: {
-      &quot;command&quot;: &quot;npx&quot;,
-      &quot;args&quot;: [&quot;-y&quot;, &quot;@anthropic/mcp-server-github&quot;]
-    }
-  }
-}</code></pre>
-<h3>常用 MCP Server</h3>
-<table><tr><td>Server</td><td>用途</td></tr><tr><td>mcp-server-github</td><td>管理 Issues、PRs、仓库</td></tr><tr><td>mcp-server-filesystem</td><td>安全的文件系统访问</td></tr><tr><td>mcp-server-postgres</td><td>数据库查询（只读）</td></tr><tr><td>mcp-server-slack</td><td>Slack 消息和频道管理</td></tr><tr><td>mcp-server-jira</td><td>Jira 工单管理</td></tr></table>
-<h3>MCP 实战：一键发 PR</h3>
-<p>配置好 GitHub MCP 后：</p>
-<pre><code>看看 git diff，写 commit message，push，
-然后在 GitHub 上开一个 PR 到 main 分支</code></pre>
-<p>Claude 会一步步执行：diff → message → push → create PR。</p>
-<h2>今日任务</h2>
 <ol>
-<li>配一个简单的 PostToolUse hook：让 Claude 每次写文件后自动格式化</li>
-<li>如果能拿到 GitHub token，试试搭 GitHub MCP，体验一键发 PR</li>
+<li>把你最常用的一个提示词保存为「自定义工具」——用文本文件或 CLAUDE.md 记录即可</li>
+<li>了解一下你工作中还有哪些重复性操作可以让 Claude + 工具自动化</li>
 </ol></div></article>
 <article id="day13"><div class="day-header"><span class="day-badge">Day 13</span><h1>让 Claude 自动解决问题（上）：多文件与终端</h1><div class="meta">5月28日 周四</div></div><div class="day-body"><h2>多文件编辑</h2>
-<p>Claude Code 的强大之处在于它能同时理解和修改多个文件：</p>
+<p>Claude Code 的强项：同时理解和修改多个文件。</p>
 <h3>重构一个模块</h3>
-<pre><code>把 @src/modules/user/ 下的所有 API 调用从 axios 改成 fetch，
+<pre><code>把 user 模块下所有 API 调用从 axios 改成 fetch，
 同时更新类型定义、错误处理和测试</code></pre>
-<p>Claude 会：</p>
-<ol>
-<li>扫描 src/modules/user/ 下的所有文件</li>
-<li>找到所有的 axios 调用</li>
-<li>逐个替换成 fetch</li>
-<li>更新对应的类型定义</li>
-<li>更新错误处理逻辑</li>
-<li>改测试文件中的 mock</li>
-</ol>
-<p>不需要你逐个文件去说。</p>
+<p>Claude 会自动：扫描文件 → 找到所有 axios 调用 → 逐个替换 → 更新类型 → 更新测试。不需要你逐个文件指挥。</p>
 <h3>全局重命名</h3>
 <pre><code>把项目里所有的 user_token 改名为 access_token，
 包括：变量名、数据库字段、API 参数、测试数据</code></pre>
-<h3>批量添加相同的功能</h3>
-<pre><code>给 @src/api/ 下所有接口加上请求日志：
+<h3>批量添加相同功能</h3>
+<pre><code>给所有接口加上请求日志：
 记录请求方法、路径、耗时、状态码</code></pre>
 <h2>终端命令</h2>
-<p>Claude Code 可以执行终端命令，不只是读写文件：</p>
-<pre><code># 安装依赖
-帮我安装 axios 和它的类型定义
-
-# Claude 会执行
-npm install axios
-npm install -D @types/axios</code></pre>
-<pre><code># 运行测试
-跑一下 user 模块的测试，看看有没有失败的</code></pre>
-<h3>安全的终端执行</h3>
-<p>Claude Code 在执行可能有风险的操作时会先问你：</p>
-<pre><code>⚠️ 即将执行：rm -rf node_modules
-是否继续？[y/N]</code></pre>
-<p>你可以写进 CLAUDE.md 来控制哪些操作允许/禁止：</p>
-<pre><code>## 终端权限
-- 允许：npm install, npm test, npm run build
+<p>Claude Code 不只是读写文件，还可以执行终端命令：</p>
+<pre><code>帮我安装 axios</code></pre>
+<p>Claude 会执行 <code>npm install axios</code></p>
+<pre><code>跑一下测试，看看有没有失败的</code></pre>
+<h3>安全控制</h3>
+<p>有风险的操作 Claude 会先确认。你也可以设置权限规则：</p>
+<pre><code>- 允许：npm install, npm test, npm run build
 - 需要确认：git push, npm publish
 - 禁止：rm -rf, 任何数据库写操作</code></pre>
 <h2>调试协助</h2>
-<pre><code>运行 npm run dev 看看有没有报错？
-如果有，帮我分析原因</code></pre>
-<pre><code>@src/services/payment.ts 这个函数有时候会返回 NaN，
-帮我排查哪里可能出问题</code></pre>
+<pre><code>运行项目看看有没有报错？有的话帮我分析原因</code></pre>
+<pre><code>这个函数有时候会返回 NaN，帮我排查哪里可能出问题</code></pre>
 <h2>今日任务</h2>
-<p>找一个模块做一次「全局重构」——比如统一错误处理格式、统一日志输出、或者把一类 API 调用从一种库换到另一种。感受多文件编辑的威力。</p></div></article>
-<article id="day14"><div class="day-header"><span class="day-badge">Day 14</span><h1>让 Claude 自动解决问题（下）：Git 与测试</h1><div class="meta">5月29日 周五</div></div><div class="day-body"><h2>Git 工作流</h2>
-<h3>智能 Commit</h3>
-<pre><code>看看 git diff，用中文写一句规范的 commit message</code></pre>
-<p>不止是描述「改了什么」——Claude 会写出「为什么改」和「怎么改的」。</p>
-<h3>冲突解决</h3>
-<pre><code>git merge 出冲突了。分析冲突原因，帮我决定保留哪个版本</code></pre>
-<h3>交互式 Rebase</h3>
-<pre><code>把最近 5 个 commit 合并成 2 个：
-前 3 个合并为「重构用户模块」
-后 2 个合并为「添加缓存层」</code></pre>
-<h3>生成 Changelog</h3>
-<pre><code>git log v1.0.0..v1.1.0 --oneline | claude -p &quot;
-生成 CHANGELOG.md：
-- 按 Breaking Changes / Features / Fixes 分组
-- 每条写明对应的 PR 或 issue 编号
-&quot;</code></pre>
-<h2>测试</h2>
-<h3>写测试</h3>
-<pre><code>给 @src/utils/math.ts 写单元测试，
-覆盖正常输入、边界值、异常输入</code></pre>
-<h3>补测试覆盖</h3>
-<pre><code>查一下 src/modules/user/ 的测试覆盖率，
-给没有覆盖到的分支补测试</code></pre>
-<h3>测试驱动的 Debug</h3>
-<pre><code>这个函数在处理负数时会返回错误结果。
-先写一个能暴露这个 bug 的测试，再修代码</code></pre>
-<h3>重构安全网</h3>
-<pre><code>我要重构 @src/services/order.ts。
-先跑一下现有测试确保全绿，
-然后我改代码，每次改完你都跑测试确认没有破坏现有功能</code></pre>
-<h2>完整工作流演示</h2>
-<p>假设要修复一个 bug：</p>
-<pre><code># 1. 分析问题
-用户说登录后偶尔会跳到 404 页面。帮我分析可能的根因。
-
-# 2. 写复现测试
-先写一个测试来复现这个 bug
-
-# 3. 修复
-现在修复它，确保测试通过
-
-# 4. 提交
-git diff 看看改动，写 commit message，commit
-
-# 5. 补充测试
-给相关的代码路径补上缺失的测试
-
-# 6. Push
-git push origin fix/login-redirect</code></pre>
-<h2>今日任务</h2>
-<p>找项目中一个实际的 bug，用上面的完整工作流走一遍——从分析到 push，让 Claude 全程参与。</p></div></article>
-<article id="day15"><div class="day-header"><span class="day-badge">Day 15</span><h1>复用文档解决同类问题：模板化思维</h1><div class="meta">6月1日 周一</div></div><div class="day-body"><h2>建立你自己的模板库</h2>
-<p>每次让 Claude 帮你完成一件事后，把过程记录下来：</p>
-<pre><code># CLAUDE.md 中的模板区
-
-## 模板：新功能开发
-说「new feature [功能名]」时，自动执行：
-1. 分析现有代码，确定改动范围
-2. 设计 API 和数据模型
-3. 实现核心逻辑
-4. 写测试
-5. 更新文档
-6. 生成 commit message
-
-## 模板：Bug 修复
-说「fix bug [描述]」时，自动执行：
-1. 复现并定位根因
-2. 给出 2-3 种修复方案
-3. 等我选择后实现
-4. 写回归测试
-5. 生成 fix commit</code></pre>
-<h2>会话保存与复用</h2>
-<p>有价值的对话不要丢：</p>
-<pre><code># 会话会自动保存
-# 用 --resume 恢复
-claude --resume
-
-# 把重要的结论记录到 CLAUDE.md
-# 下次 Claude 启动时自动加载这些知识</code></pre>
-<h2>成本控制</h2>
-<h3>查看用量</h3>
-<pre><code>/status</code></pre>
-<p>显示当前会话的 token 用量和预估费用。</p>
-<h3>省钱技巧</h3>
+<p>在你的项目里做一次「全局操作」——统一命名、统一格式、或者批量添加日志、注释。感受多文件编辑不需要逐个文件操作的快感。</p></div></article>
+<article id="day14"><div class="day-header"><span class="day-badge">Day 14</span><h1>让 Claude 自动解决问题（下）：从单次到批量</h1><div class="meta">5月29日 周五</div></div><div class="day-body"><h2>记录成功的单次任务</h2>
+<p>每次成功的任务都是资产。记录这些内容：</p>
 <ol>
-<li>用 /compact 而不是开新会话：压缩比重开省 token</li>
-<li>先让它给计划再执行：避免它瞎跑浪费 token</li>
-<li>小任务用便宜模型：简单问答没必要用 Opus</li>
-<li>写清楚约束：越模糊越消耗 token</li>
-<li>清理不用的会话：避免上下文膨胀</li>
+<li>任务描述：做了什么</li>
+<li>任务目标：要达到什么效果</li>
+<li>任务步骤：怎么做的</li>
+<li>任务结果：效果怎么样</li>
+<li>经验教训：下次怎么改进</li>
 </ol>
-<h2>进阶资源</h2>
+<h3>记录示例</h3>
+<pre><code>任务：生成智能手表产品文案
+- 描述：为新产品生成 200 字左右的产品描述
+- 步骤：提供产品信息 → 使用提示词模板生成 → 人工审核调整 → 保存
+- 结果：成功生成符合要求的文案
+- 经验：提示词模板很有效，可以复用</code></pre>
+<h2>分析任务的重复性</h2>
+<p>把过去一个月的任务列出来：</p>
 <ul>
-<li>Claude Code 官方文档：docs.anthropic.com/claude-code</li>
-<li>CLAUDE.md 最佳实践：搜「Claude Code CLAUDE.md examples」</li>
-<li>MCP 生态：github.com/modelcontextprotocol/servers</li>
-<li>Hook 示例：Claude Code 文档中的 hooks 章节</li>
+<li>哪些任务每周至少出现一次？</li>
+<li>哪些任务步骤和格式完全一样，只是数据不同？</li>
+<li>哪些任务自己做要 1 小时，Claude 做只要 5 分钟？</li>
+</ol>
+<h3>重复性分析示例</h3>
+<pre><code>任务：生成产品文案
+- 频率：每周一次
+- 模式：都是产品文案，格式要求相同
+- 变化：产品信息不同，但格式不变
+- 价值：每次节省 1-2 小时
+- 结论：适合批量处理</code></pre>
+<h2>设计批量处理方案</h2>
+<h3>效率对比</h3>
+<p>没有模板时：</p>
+<ul>
+<li>每次都要详细描述需求</li>
+<li>每次都要调整提示词</li>
+<li>每次都要审核结果</li>
+<li>耗时：每个任务 10-15 分钟</li>
+</ol>
+<p>有模板后：</p>
+<ul>
+<li>快速检索模板</li>
+<li>替换关键信息</li>
+<li>生成一致的结果</li>
+<li>耗时：每个任务 3-5 分钟</li>
+<li><strong>效率提升 60-70%</strong></li>
+</ol>
+<h2>今日任务</h2>
+<p>回顾过去两周你在 Claude Code 里完成的任务，把最常用的 2-3 个写成标准化模板。下次用的时候复制粘贴改几个词就好。</p></div></article>
+<article id="day15"><div class="day-header"><span class="day-badge">Day 15</span><h1>知识沉淀：文档化你的经验</h1><div class="meta">6月1日 周一</div></div><div class="day-body"><h2>AI 可以直接从文档中获取经验</h2>
+<p>把经验写成结构化文档，下次 Claude 直接调用。</p>
+<h3>文档化示例：产品文案生成指南</h3>
+<pre><code># 产品文案生成指南
+
+## 文案类型
+- 产品描述
+- 社交媒体内容
+- 邮件内容
+
+## 必备要素
+- 产品名称
+- 主要特点
+- 目标用户
+- 字数要求
+
+## 写作要求
+- 突出核心卖点
+- 符合目标用户需求
+- 包含行动号召
+
+## 示例
+[示例1：智能手表产品描述]
+[示例2：有机蔬菜产品介绍]
+[示例3：咖啡店促销文案]</code></pre>
+<p>把这样的文档放进项目里，Claude 可以直接参考，输出更一致。</p>
+<h2>效率收益</h2>
+<table><tr><td>维度</td><td>无文档</td><td>有文档</td></tr><tr><td>每次耗时</td><td>10-15 分钟</td><td>3-5 分钟</td></tr><tr><td>输出一致性</td><td>波动大</td><td>高度一致</td></tr><tr><td>新人上手</td><td>需要培训</td><td>看文档即可</td></tr></table>
+<h2>成本控制</h2>
+<pre><code>/status  → 查看当前用量和费用
+/compact → 压缩上下文，节省 token</code></pre>
+<p>省钱技巧：</p>
+<ol>
+<li>用 <code>/compact</code> 而不是开新会话</li>
+<li>简单任务用便宜模型（GLM-4/Qwen）</li>
+<li>复杂任务才用贵模型（Claude Sonnet/Opus）</li>
+<li>写清楚约束——越模糊越费 token</li>
 </ol>
 <h2>十五天回顾</h2>
-<p>你已经走完了从新手到熟练的完整路径：</p>
-<table><tr><td>阶段</td><td>学的内容</td></tr><tr><td>上手</td><td>安装启动、国内模型接入、基础操作</td></tr><tr><td>实战</td><td>文本处理、代码分析、数据处理</td></tr><tr><td>进阶</td><td>工作流定制、提示词技巧、快捷键</td></tr><tr><td>专家</td><td>任务拆解、Hooks/MCP、多文件编辑</td></tr><tr><td>精通</td><td>Git 工作流、测试调试、模板复用</td></tr></table>
-<p>接下来的路很简单：每天用。用得越多，CLAUDE.md 越聪明，模板越丰富，Claude 越懂你。</p>
+<table><tr><td>阶段</td><td>内容</td></tr><tr><td>上手</td><td>安装 Trae、接入国内模型、基础操作</td></tr><tr><td>实战</td><td>文案创作、文档提取、数据处理</td></tr><tr><td>进阶</td><td>模板定制、提示词技巧、快捷键</td></tr><tr><td>思维</td><td>任务拆解、编程思维、批量处理</td></tr><tr><td>沉淀</td><td>自定义工具、文档化、成本控制</td></tr></table>
+<h2>接下来的路</h2>
+<p>每天用。用得越多，模板越丰富，Claude 越懂你。</p>
+<p>把你每次成功的提示词、模板、经验都记录下来——一个月后回头翻，你会惊讶自己已经积累了一套完整的工作流。</p>
 <p>恭喜毕业 🎉</p></div></article>
 </main>
 <script>
