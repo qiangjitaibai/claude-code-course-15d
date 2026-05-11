@@ -98,19 +98,12 @@
 <li>智能理解：即使表达不够精确也能给出有用帮助</li>
 <li>所见即所得：直接看到处理结果</li>
 </ol>
-<h2>安装 Trae 国内版 + Claude Code 插件</h2>
-<p>Trae 是国内可用的编辑器，完全兼容 VS Code 插件。用它来装 Claude Code 插件最方便。</p>
-<h3>步骤 1：下载 Trae</h3>
-<p>访问 Trae 官网下载安装包（约 613MB）：</p>
-<ul>
-<li>Windows：选 Windows 10/11 版</li>
-<li>macOS：选 Intel 芯片版或 M 系列芯片版</li>
-</ol>
-<p>安装时建议选 SSD 路径，预留 1GB 以上空间。</p>
-<h3>步骤 2：安装 Claude Code 插件</h3>
-<p>Trae 完全兼容 VS Code 插件市场。在 Trae 的插件面板搜索「Claude Code」，安装即可。</p>
-<h3>步骤 3：给 Claude Code 热身</h3>
-<p>打开 Claude Code 后，试试这些开场：</p>
+<h2>安装 Claude Code</h2>
+<p>Claude Code 支持 VS Code 和 JetBrains 插件，直接在插件市场搜索「Claude Code」安装即可。也支持终端命令行方式：</p>
+<pre><code>npm install -g @anthropic-ai/claude-code</code></pre>
+<p>安装完成后，打开任意项目文件夹，Claude Code 会自动读取项目上下文。</p>
+<h3>热身：第一句对话</h3>
+<p>装好后，试试这些开场：</p>
 <pre><code>介绍一下你自己</code></pre>
 <pre><code>帮我写一段产品介绍</code></pre>
 <pre><code>如何提高工作效率</code></pre>
@@ -125,7 +118,7 @@
 目标用户是年轻白领，字数在 200 字左右，风格要时尚现代。</code></pre>
 <p>提供的信息越完整，Claude 给出的结果越精准。</p>
 <h2>今日任务</h2>
-<p>装好 Trae + Claude Code 插件，用上面「具体表达」的模板试试——把智能手表换成你实际在做的产品或项目，看看它给出的文案。</p></div></article>
+<p>装好 Claude Code，用上面「具体表达」的模板试试——把智能手表换成你实际在做的产品或项目，看看它给出的文案。</p></div></article>
 <article id="day2"><div class="day-header"><span class="day-badge">Day 2</span><h1>接入国内大模型：快、省、稳</h1><div class="meta">5月13日 周三</div></div><div class="day-body"><h2>为什么选国内模型</h2>
 <ul>
 <li>响应更快：服务器在国内，1-2 秒内回复</li>
@@ -147,13 +140,11 @@
 <li>适用：代码补全、代码解释、系统设计</li>
 </ol>
 <h2>配置方式</h2>
-<h3>方案一：Trae 插件直接配置</h3>
-<p>在 Trae 的 Claude Code 插件设置中，找到「模型配置」，填入对应的 API 地址和 Key。</p>
-<h3>方案二：LiteLLM 中转</h3>
+<h3>方案一：LiteLLM 中转</h3>
 <pre><code>pip install litellm
 litellm --model deepseek/deepseek-chat \
   --api_base https://api.deepseek.com/v1</code></pre>
-<h3>方案三：One API</h3>
+<h3>方案二：One API</h3>
 <p>一站式管理多个模型 Key，可视化界面，支持 DeepSeek、通义千问、智谱、Moonshot 等几乎所有国内模型。</p>
 <h2>模型选择策略</h2>
 <table><tr><td>任务</td><td>推荐</td></tr><tr><td>文案生成、日常问答</td><td>GLM-4 / Qwen Plus</td></tr><tr><td>代码开发、复杂分析</td><td>Claude Sonnet / Qwen Max</td></tr><tr><td>大量批量处理</td><td>DeepSeek V3（最省成本）</td></tr></table>
@@ -692,7 +683,7 @@ litellm --model deepseek/deepseek-chat \
 <li>写清楚约束——越模糊越费 token</li>
 </ol>
 <h2>十五天回顾</h2>
-<table><tr><td>阶段</td><td>内容</td></tr><tr><td>上手</td><td>安装 Trae、接入国内模型、基础操作</td></tr><tr><td>实战</td><td>文案创作、文档提取、数据处理</td></tr><tr><td>进阶</td><td>模板定制、提示词技巧、快捷键</td></tr><tr><td>思维</td><td>任务拆解、编程思维、批量处理</td></tr><tr><td>沉淀</td><td>自定义工具、文档化、成本控制</td></tr></table>
+<table><tr><td>阶段</td><td>内容</td></tr><tr><td>上手</td><td>安装配置、接入国内模型、基础操作</td></tr><tr><td>实战</td><td>文案创作、文档提取、数据处理</td></tr><tr><td>进阶</td><td>模板定制、提示词技巧、快捷键</td></tr><tr><td>思维</td><td>任务拆解、编程思维、批量处理</td></tr><tr><td>沉淀</td><td>自定义工具、文档化、成本控制</td></tr></table>
 <h2>接下来的路</h2>
 <p>每天用。用得越多，模板越丰富，Claude 越懂你。</p>
 <p>把你每次成功的提示词、模板、经验都记录下来——一个月后回头翻，你会惊讶自己已经积累了一套完整的工作流。</p>
