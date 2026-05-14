@@ -3,13 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Claude Code 15天实战指南 v4</title>
+<title>Claude Code 完全指南 — 从入门到精通</title>
 <style>
   :root {
     --bg: #0d1117; --bg-card: #161b22; --border: #30363d;
     --text: #c9d1d9; --text-secondary: #8b949e; --accent: #58a6ff;
     --accent-glow: rgba(88,166,255,0.12); --code-bg: #1c2128;
-    --heading: #f0f6fc;
+    --heading: #f0f6fc; --green: #3fb950; --orange: #d29922;
+    --red: #f85149; --purple: #bc8cff;
   }
   * { margin:0; padding:0; box-sizing:border-box; }
   body {
@@ -18,366 +19,365 @@
     display: flex; min-height: 100vh;
   }
   nav {
-    width: 270px; background: var(--bg-card); border-right: 1px solid var(--border);
+    width: 280px; background: var(--bg-card); border-right: 1px solid var(--border);
     padding: 28px 0; position: sticky; top: 0; height: 100vh; overflow-y: auto; flex-shrink: 0;
   }
-  nav .logo { padding: 0 20px 22px; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
-  nav .logo h2 { font-size: 17px; color: var(--heading); font-weight: 700; }
-  nav .logo p { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
-  nav a { display: flex; align-items: center; padding: 10px 20px; color: var(--text-secondary);
-    text-decoration: none; font-size: 14px; transition: all 0.15s;
+  nav::-webkit-scrollbar { width: 4px; }
+  nav::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  nav .logo { padding: 0 20px 18px; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
+  nav .logo h2 { font-size: 16px; color: var(--heading); font-weight: 700; }
+  nav .logo p { font-size: 11px; color: var(--text-secondary); margin-top: 4px; }
+  nav .part-label { padding: 14px 20px 6px; font-size: 11px; font-weight: 700; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 1px; }
+  nav a { display: flex; align-items: center; padding: 8px 20px; color: var(--text-secondary);
+    text-decoration: none; font-size: 13px; transition: all 0.15s;
     border-left: 3px solid transparent; cursor: pointer; }
   nav a:hover { color: var(--text); background: rgba(88,166,255,0.04); }
   nav a.active { color: var(--accent); background: var(--accent-glow); border-left-color: var(--accent); font-weight: 600; }
-  nav .num { color: var(--accent); font-weight: 700; margin-right: 10px; font-size: 12px; min-width: 22px; }
-  main { flex: 1; max-width: 840px; padding: 44px 52px; margin: 0 auto; }
+  nav .num { color: var(--accent); font-weight: 700; margin-right: 10px; font-size: 11px; min-width: 22px; }
+  main { flex: 1; max-width: 880px; padding: 44px 52px; margin: 0 auto; }
   article { display: none; }
   article.active { display: block; animation: fadeIn 0.3s ease; }
   @keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
-  article .day-header { margin-bottom: 38px; padding-bottom: 28px; border-bottom: 2px solid var(--border); }
-  article .day-badge { display: inline-block; background: var(--accent); color: #fff;
-    padding: 3px 14px; border-radius: 20px; font-size: 12px; font-weight: 700;
+  .section-header { margin-bottom: 38px; padding-bottom: 28px; border-bottom: 2px solid var(--border); }
+  .section-badge { display: inline-block; background: var(--accent); color: #fff;
+    padding: 3px 14px; border-radius: 20px; font-size: 11px; font-weight: 700;
     letter-spacing: 1px; margin-bottom: 14px; text-transform: uppercase; }
-  article h1 { font-size: 27px; color: var(--heading); font-weight: 700; line-height: 1.4; }
-  article .meta { color: var(--text-secondary); font-size: 14px; margin-top: 4px; }
-  .day-body h2 { font-size: 20px; color: var(--heading); margin: 40px 0 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
-  .day-body h3 { font-size: 17px; color: var(--heading); margin: 32px 0 10px; }
-  .day-body p { margin: 12px 0; }
-  .day-body strong { color: var(--heading); }
-  .day-body ul, .day-body ol { margin: 8px 0 8px 26px; }
-  .day-body li { margin: 5px 0; }
-  .day-body pre { background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px;
+  .section-badge.green { background: var(--green); }
+  .section-badge.orange { background: var(--orange); }
+  .section-badge.red { background: var(--red); }
+  .section-badge.purple { background: var(--purple); }
+  article h1 { font-size: 26px; color: var(--heading); font-weight: 700; line-height: 1.4; }
+  article .meta { color: var(--text-secondary); font-size: 13px; margin-top: 4px; }
+  .content h2 { font-size: 20px; color: var(--heading); margin: 40px 0 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  .content h3 { font-size: 17px; color: var(--heading); margin: 32px 0 10px; }
+  .content h4 { font-size: 15px; color: var(--heading); margin: 24px 0 8px; }
+  .content p { margin: 12px 0; }
+  .content strong { color: var(--heading); }
+  .content ul, .content ol { margin: 8px 0 8px 26px; }
+  .content li { margin: 5px 0; }
+  .content pre { background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px;
     padding: 16px 20px; overflow-x: auto; margin: 14px 0; font-size: 13px; line-height: 1.75; }
-  .day-body code { font-family: "JetBrains Mono","SF Mono","Fira Code",monospace; font-size: 13px;
+  .content code { font-family: "JetBrains Mono","SF Mono","Fira Code",monospace; font-size: 13px;
     background: var(--code-bg); padding: 2px 6px; border-radius: 4px; color: #e6edf3; }
-  .day-body pre code { background: none; padding: 0; }
-  .day-body table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
-  .day-body th { text-align: left; padding: 10px 14px; border-bottom: 2px solid var(--border);
+  .content pre code { background: none; padding: 0; }
+  .content table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px; }
+  .content th { text-align: left; padding: 10px 14px; border-bottom: 2px solid var(--border);
     color: var(--heading); font-weight: 600; background: var(--code-bg); }
-  .day-body td { padding: 10px 14px; border-bottom: 1px solid var(--border); }
-  .day-body hr { border: none; border-top: 1px solid var(--border); margin: 36px 0; }
+  .content td { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+  .content hr { border: none; border-top: 1px solid var(--border); margin: 36px 0; }
+  .content blockquote { border-left: 3px solid var(--accent); margin: 16px 0; padding: 8px 16px;
+    background: var(--accent-glow); border-radius: 0 6px 6px 0; }
+  .tip-box { background: rgba(63,185,80,0.08); border: 1px solid rgba(63,185,80,0.3);
+    border-radius: 8px; padding: 14px 18px; margin: 16px 0; }
+  .tip-box strong { color: var(--green); }
+  .warn-box { background: rgba(210,153,34,0.08); border: 1px solid rgba(210,153,34,0.3);
+    border-radius: 8px; padding: 14px 18px; margin: 16px 0; }
+  .warn-box strong { color: var(--orange); }
+  .hero { text-align: center; padding: 60px 20px; }
+  .hero h1 { font-size: 34px; margin-bottom: 16px; background: linear-gradient(135deg, var(--accent), var(--purple));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .hero p { font-size: 16px; color: var(--text-secondary); max-width: 600px; margin: 0 auto 24px; }
+  .hero .stats { display: flex; justify-content: center; gap: 32px; margin-top: 32px; flex-wrap: wrap; }
+  .hero .stat { text-align: center; }
+  .hero .stat-num { font-size: 28px; font-weight: 700; color: var(--accent); }
+  .hero .stat-label { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+  .grid-2 > div { background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
   @media (max-width: 768px) {
     body { flex-direction: column; }
     nav { width: 100%; height: auto; position: static; border-right: none;
       border-bottom: 1px solid var(--border); padding: 14px; display: flex;
       flex-wrap: wrap; gap: 4px; overflow-x: auto; }
-    nav .logo { display: none; }
-    nav a { padding: 6px 14px; border-left: none; border-radius: 20px;
-      font-size: 13px; white-space: nowrap; border: 1px solid var(--border); }
+    nav .logo, nav .part-label { display: none; }
+    nav a { padding: 6px 12px; border-left: none; border-radius: 20px;
+      font-size: 12px; white-space: nowrap; border: 1px solid var(--border); }
     nav a.active { border-color: var(--accent); background: var(--accent-glow); }
     main { padding: 24px 16px; }
     article h1 { font-size: 22px; }
+    .grid-2 { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 26px; }
+    .hero .stats { gap: 20px; }
   }
 </style>
 </head>
 <body>
 <nav>
-  <div class="logo"><h2>Claude Code 实战指南</h2><p>15天 · 实战指南 · v4</p></div>
-<a onclick="showDay(1)"><span class="num">01</span>快速上手</a>
-<a onclick="showDay(2)"><span class="num">02</span>接入国内大模型</a>
-<a onclick="showDay(3)"><span class="num">03</span>入门基础操作</a>
-<a onclick="showDay(4)"><span class="num">04</span>文本处理与创作</a>
-<a onclick="showDay(5)"><span class="num">05</span>文档管理与处理</a>
-<a onclick="showDay(6)"><span class="num">06</span>数据处理与分析</a>
-<a onclick="showDay(7)"><span class="num">07</span>个性化工作流</a>
-<a onclick="showDay(8)"><span class="num">08</span>提示词优化技巧（上）</a>
-<a onclick="showDay(9)"><span class="num">09</span>常用快捷键</a>
-<a onclick="showDay(10)"><span class="num">10</span>提示词优化技巧（下）</a>
-<a onclick="showDay(11)"><span class="num">11</span>用编程的思维解决问题</a>
-<a onclick="showDay(12)"><span class="num">12</span>高级功能</a>
-<a onclick="showDay(13)"><span class="num">13</span>让 Claude 自动解决问题（上）</a>
-<a onclick="showDay(14)"><span class="num">14</span>让 Claude 自动解决问题（下）</a>
-<a onclick="showDay(15)"><span class="num">15</span>知识沉淀</a>
+  <div class="logo"><h2>Claude Code 完全指南</h2><p>从入门到精通 · 17 个模块</p></div>
+  <a onclick="show(0)"><span class="num">⬡</span>欢迎</a>
+  <div class="part-label">Part 1 · 快速入门</div>
+  <a onclick="show(1)"><span class="num">01</span>快速上手与安装</a>
+  <a onclick="show(2)"><span class="num">02</span>接入国内大模型</a>
+  <a onclick="show(3)"><span class="num">03</span>入门基础操作</a>
+  <a onclick="show(4)"><span class="num">04</span>文本处理与创作</a>
+  <a onclick="show(5)"><span class="num">05</span>提示词优化技巧</a>
+  <div class="part-label">Part 2 · 核心功能</div>
+  <a onclick="show(6)"><span class="num">06</span>斜杠命令</a>
+  <a onclick="show(7)"><span class="num">07</span>记忆系统</a>
+  <a onclick="show(8)"><span class="num">08</span>Skills 技能</a>
+  <a onclick="show(9)"><span class="num">09</span>子代理</a>
+  <a onclick="show(10)"><span class="num">10</span>MCP 集成</a>
+  <div class="part-label">Part 3 · 高级进阶</div>
+  <a onclick="show(11)"><span class="num">11</span>Hooks 钩子</a>
+  <a onclick="show(12)"><span class="num">12</span>插件系统</a>
+  <a onclick="show(13)"><span class="num">13</span>检查点</a>
+  <a onclick="show(14)"><span class="num">14</span>高级特性</a>
+  <a onclick="show(15)"><span class="num">15</span>CLI 命令行</a>
+  <div class="part-label">Part 4 · 学习路线</div>
+  <a onclick="show(16)"><span class="num">16</span>学习路线图</a>
+  <a onclick="show(17)"><span class="num">17</span>快速参考卡</a>
 </nav>
 <main id="content">
-<article id="day1"><div class="day-header"><span class="day-badge">Day 1</span><h1>快速上手：安装到第一句对话</h1><div class="meta">5月12日 周二</div></div><div class="day-body"><h2>什么是 Claude Code</h2>
+
+<!-- Section 0: Welcome/Hero -->
+<article id="s0">
+<div class="hero">
+<h1>Claude Code 完全指南</h1>
+<p>从零基础入门到高级工作流自动化，涵盖 Claude Code 的全部核心功能。无论你是初次使用还是资深用户，都能在这里找到提升效率的方法。</p>
+<div class="stats">
+<div class="stat"><div class="stat-num">17</div><div class="stat-label">学习模块</div></div>
+<div class="stat"><div class="stat-num">55+</div><div class="stat-label">内置命令</div></div>
+<div class="stat"><div class="stat-num">25</div><div class="stat-label">Hook 事件</div></div>
+<div class="stat"><div class="stat-num">6</div><div class="stat-label">权限模式</div></div>
+</div>
+</div>
+<div class="content">
+<h2>指南结构</h2>
+<table>
+<tr><th>部分</th><th>内容</th><th>适合谁</th></tr>
+<tr><td><strong>Part 1：快速入门</strong></td><td>安装、配置、基础操作、文本创作、提示词技巧</td><td>所有人</td></tr>
+<tr><td><strong>Part 2：核心功能</strong></td><td>斜杠命令、记忆系统、Skills、子代理、MCP</td><td>日常使用者</td></tr>
+<tr><td><strong>Part 3：高级进阶</strong></td><td>Hooks、插件、检查点、高级特性、CLI</td><td>进阶用户</td></tr>
+<tr><td><strong>Part 4：学习路线</strong></td><td>路线图、速查卡</td><td>所有人</td></tr>
+</table>
+<h2>快速开始</h2>
+<p>如果你完全没用过 Claude Code，从 <strong>Part 1 第 01 节</strong> 开始。如果你已经会基本操作，可以直接跳到 <strong>Part 2</strong> 学习核心功能。</p>
+<pre><code># 安装 Claude Code
+npm install -g @anthropic-ai/claude-code
+
+# 启动交互式会话
+claude
+
+# 或者直接提问
+claude -p "解释这个项目的结构"</code></pre>
+</div>
+</article>
+
+<!-- Section 1: 快速上手与安装 -->
+<article id="s1">
+<div class="section-header"><span class="section-badge green">Part 1</span><h1>快速上手与安装</h1><div class="meta">从零开始，5 分钟完成第一次对话</div></div>
+<div class="content">
+<h2>什么是 Claude Code</h2>
 <p>Claude Code 是一个 AI 助手工具，就像一个随时待命的智能同事。你不需要懂编程——用中文直接跟它聊天就行。</p>
-<p>它的三个特点：</p>
 <ul>
-<li>自然语言交互：像和朋友聊天一样简单</li>
-<li>智能理解：即使表达不够精确也能给出有用帮助</li>
-<li>所见即所得：直接看到处理结果</li>
-</ol>
-<h2>安装 Claude Code</h2>
-<p>Claude Code 支持 VS Code 和 JetBrains 插件，直接在插件市场搜索「Claude Code」安装即可。也支持终端命令行方式：</p>
+<li><strong>自然语言交互</strong>：像和朋友聊天一样简单</li>
+<li><strong>智能理解</strong>：即使表达不够精确也能给出有用帮助</li>
+<li><strong>所见即所得</strong>：直接看到处理结果</li>
+</ul>
+
+<h2>安装方式</h2>
+<h3>方式一：命令行安装（推荐）</h3>
 <pre><code>npm install -g @anthropic-ai/claude-code</code></pre>
-<p>安装完成后，打开任意项目文件夹，Claude Code 会自动读取项目上下文。</p>
-<h3>热身：第一句对话</h3>
-<p>装好后，试试这些开场：</p>
-<pre><code>介绍一下你自己</code></pre>
-<pre><code>帮我写一段产品介绍</code></pre>
-<pre><code>如何提高工作效率</code></pre>
+<h3>方式二：IDE 插件</h3>
+<p>在 VS Code 或 JetBrains 插件市场搜索「Claude Code」安装即可。安装完成后，打开任意项目文件夹，Claude Code 会自动读取项目上下文。</p>
+
 <h2>两种使用模式</h2>
-<table><tr><td>模式</td><td>适用场景</td></tr><tr><td>聊天窗口</td><td>日常对话、多轮追问</td></tr><tr><td>输入框 + 回车</td><td>单次快速提问</td></tr></table>
-<p><strong>小技巧</strong>：Shift+Enter 可以换行输入多行内容；也可以直接粘贴大段文字。</p>
+<table>
+<tr><th>模式</th><th>启动方式</th><th>适用场景</th></tr>
+<tr><td>交互式 REPL</td><td><code>claude</code></td><td>日常对话、多轮追问</td></tr>
+<tr><td>打印模式</td><td><code>claude -p "问题"</code></td><td>单次快速提问、脚本集成</td></tr>
+</table>
+
+<h2>第一次对话</h2>
+<p>装好后，试试这些开场：</p>
+<pre><code># 交互模式
+claude
+
+# 然后输入：
+介绍一下你自己
+帮我写一段产品介绍
+如何提高工作效率</code></pre>
+
 <h2>给 Claude 提供上下文</h2>
-<p>模糊表达（不推荐）：<code>帮我写个文案</code></p>
-<p>具体表达（推荐）：</p>
-<pre><code>请帮我写一段产品描述文案，产品是智能手表，
-主要特点包括健康监测、运动追踪、消息提醒，
-目标用户是年轻白领，字数在 200 字左右，风格要时尚现代。</code></pre>
+<div class="grid-2">
+<div><strong>❌ 模糊表达</strong><br><code>帮我写个文案</code></div>
+<div><strong>✅ 具体表达</strong><br><code>请帮我写一段产品描述文案，产品是智能手表，主要特点包括健康监测、运动追踪、消息提醒，目标用户是年轻白领，字数在 200 字左右，风格要时尚现代。</code></div>
+</div>
 <p>提供的信息越完整，Claude 给出的结果越精准。</p>
-<h2>今日任务</h2>
-<p>装好 Claude Code，用上面「具体表达」的模板试试——把智能手表换成你实际在做的产品或项目，看看它给出的文案。</p></div></article>
-<article id="day2"><div class="day-header"><span class="day-badge">Day 2</span><h1>接入国内大模型：快、省、稳</h1><div class="meta">5月13日 周三</div></div><div class="day-body"><h2>为什么选国内模型</h2>
+
+<h2>基本操作</h2>
+<table>
+<tr><th>操作</th><th>方式</th></tr>
+<tr><td>发送消息</td><td>Enter</td></tr>
+<tr><td>多行输入</td><td>Shift+Enter</td></tr>
+<tr><td>打断生成</td><td>Ctrl+C</td></tr>
+<tr><td>清空对话</td><td><code>/clear</code></td></tr>
+<tr><td>压缩上下文</td><td><code>/compact</code></td></tr>
+<tr><td>查看状态</td><td><code>/status</code></td></tr>
+</table>
+
+<div class="tip-box"><strong>💡 小技巧：</strong>Shift+Enter 可以换行输入多行内容；也可以直接粘贴大段文字。Claude 会记住上下文，可以引用之前的内容追问。</div>
+</div>
+</article>
+
+<!-- Section 2: 接入国内大模型 -->
+<article id="s2">
+<div class="section-header"><span class="section-badge green">Part 1</span><h1>接入国内大模型</h1><div class="meta">快、省、稳 —— 国内模型配置指南</div></div>
+<div class="content">
+<h2>为什么选国内模型</h2>
 <ul>
-<li>响应更快：服务器在国内，1-2 秒内回复</li>
-<li>成本更低：比海外模型低 30%-50%</li>
-<li>中文更好：成语、俗语、文化语境理解更精准</li>
-<li>支付方便：支持支付宝、微信支付</li>
-</ol>
+<li><strong>响应更快</strong>：服务器在国内，1-2 秒内回复</li>
+<li><strong>成本更低</strong>：比海外模型低 30%-50%</li>
+<li><strong>中文更好</strong>：成语、俗语、文化语境理解更精准</li>
+<li><strong>支付方便</strong>：支持支付宝、微信支付</li>
+</ul>
+
 <h2>主要厂商</h2>
 <h3>智谱 AI（GLM）</h3>
-<p>代表模型：GLM-4、GLM-3</p>
-<ul>
-<li>优势：中文理解能力强，代码生成质量高</li>
-<li>适用：代码开发、文档生成、智能问答</li>
-</ol>
+<p>代表模型：GLM-4、GLM-3。优势：中文理解能力强，代码生成质量高。</p>
+
 <h3>通义千问（Qwen）</h3>
-<p>代表模型：Qwen Plus、Qwen Max</p>
-<ul>
-<li>优势：多模态能力强，支持图像和代码</li>
-<li>适用：代码补全、代码解释、系统设计</li>
-</ol>
+<p>代表模型：Qwen Plus、Qwen Max。优势：多模态能力强，支持图像和代码。</p>
+
+<h3>DeepSeek</h3>
+<p>代表模型：DeepSeek V3。优势：成本极低，适合大量批量处理。</p>
+
 <h2>配置方式</h2>
 <h3>方案一：LiteLLM 中转</h3>
 <pre><code>pip install litellm
 litellm --model deepseek/deepseek-chat \
   --api_base https://api.deepseek.com/v1</code></pre>
+
 <h3>方案二：One API</h3>
 <p>一站式管理多个模型 Key，可视化界面，支持 DeepSeek、通义千问、智谱、Moonshot 等几乎所有国内模型。</p>
+
 <h2>模型选择策略</h2>
-<table><tr><td>任务</td><td>推荐</td></tr><tr><td>文案生成、日常问答</td><td>GLM-4 / Qwen Plus</td></tr><tr><td>代码开发、复杂分析</td><td>Claude Sonnet / Qwen Max</td></tr><tr><td>大量批量处理</td><td>DeepSeek V3（最省成本）</td></tr></table>
-<p><strong>黄金法则</strong>：80% 日常任务用国内模型，关键决策用最好的模型。</p>
-<h2>今日任务</h2>
-<p>至少配通一个国内模型。推荐从智谱 GLM-4 或通义千问入手——它们都有免费额度，注册即用。</p></div></article>
-<article id="day3"><div class="day-header"><span class="day-badge">Day 3</span><h1>入门基础操作：对话、查看、管理</h1><div class="meta">5月14日 周四</div></div><div class="day-body"><h2>输入框操作</h2>
-<p>基本操作：</p>
-<ul>
-<li>输入问题 → Enter 发送</li>
-<li>Shift+Enter → 多行输入</li>
-<li>Ctrl+A / Cmd+A → 全选</li>
-<li>直接粘贴剪贴板内容</li>
-</ol>
-<p>发送后，Claude Code 会显示「正在思考」，然后逐字显示回复。</p>
-<h2>查看回复</h2>
-<p>Claude 的回复可能包含：</p>
-<ul>
-<li>纯文本说明</li>
-<li>列表（项目符号或编号）</li>
-<li>代码块（特殊格式显示）</li>
-<li>表格（结构化数据）</li>
-</ol>
-<p>回复较长时直接滚动查看。</p>
-<h2>对话历史</h2>
-<ul>
-<li>最新消息在最下方</li>
-<li>向上滚动看之前的对话</li>
-<li>Claude 会记住上下文，可以引用之前的内容追问</li>
-</ol>
+<table>
+<tr><th>任务</th><th>推荐模型</th><th>理由</th></tr>
+<tr><td>文案生成、日常问答</td><td>GLM-4 / Qwen Plus</td><td>性价比高</td></tr>
+<tr><td>代码开发、复杂分析</td><td>Claude Sonnet / Qwen Max</td><td>推理能力强</td></tr>
+<tr><td>大量批量处理</td><td>DeepSeek V3</td><td>最省成本</td></tr>
+</table>
+
+<div class="tip-box"><strong>💡 黄金法则：</strong>80% 日常任务用国内模型，关键决策用最好的模型。</div>
+</div>
+</article>
+
+<!-- Section 3: 入门基础操作 -->
+<article id="s3">
+<div class="section-header"><span class="section-badge green">Part 1</span><h1>入门基础操作</h1><div class="meta">对话技巧、输出控制、核心习惯</div></div>
+<div class="content">
 <h2>输出格式控制</h2>
-<pre><code>用表格对比这两种方案</code></pre>
-<pre><code>只给我改动的代码，不要解释</code></pre>
-<pre><code>用编号列表列出步骤</code></pre>
-<p>格式说清楚，Claude 就不会给你不需要的形式。</p>
+<p>明确告诉 Claude 你想要什么格式：</p>
+<pre><code>用表格对比这两种方案
+只给我改动的代码，不要解释
+用编号列表列出步骤
+以 JSON 格式输出结果</code></pre>
+
 <h2>三个核心习惯</h2>
 <ol>
 <li><strong>具体再具体</strong>：不要说「帮我写个文案」，说「帮我写一段 200 字的智能手表产品描述，目标用户年轻白领，风格时尚」</li>
 <li><strong>一次一个任务</strong>：一个问句塞三个需求，Claude 容易顾此失彼</li>
 <li><strong>追问确认</strong>：收到结果后追问「为什么这么写？」或「能换个风格吗？」，质量翻倍</li>
 </ol>
-<h2>常用命令</h2>
-<ul>
-<li><code>/clear</code>：清空当前对话，重新开始</li>
-<li><code>/compact</code>：压缩对话历史（上下文快满时用）</li>
-<li><code>/status</code>：查看当前模型和用量</li>
-</ol>
-<h2>今日任务</h2>
-<p>用 Claude Code 完成一个完整对话：提问 → 看回复 → 追问 → 确认。感受对话历史的上下文记忆能力。</p></div></article>
-<article id="day4"><div class="day-header"><span class="day-badge">Day 4</span><h1>文本处理与创作：文案到周报</h1><div class="meta">5月15日 周五</div></div><div class="day-body"><h2>产品描述创作</h2>
-<p>方法：提供产品名、特点、目标用户、风格。</p>
-<p>示例输入：</p>
+
+<h2>常用命令速查</h2>
+<table>
+<tr><th>命令</th><th>作用</th></tr>
+<tr><td><code>/clear</code></td><td>清空当前对话，重新开始</td></tr>
+<tr><td><code>/compact</code></td><td>压缩对话历史（上下文快满时用）</td></tr>
+<tr><td><code>/status</code></td><td>查看当前模型和用量</td></tr>
+<tr><td><code>/model</code></td><td>切换模型</td></tr>
+<tr><td><code>/help</code></td><td>显示帮助</td></tr>
+<tr><td><code>/cost</code></td><td>查看 token 使用统计</td></tr>
+</table>
+
+<h2>快捷键</h2>
+<table>
+<tr><th>操作</th><th>Windows/Linux</th><th>macOS</th></tr>
+<tr><td>发送消息</td><td>Enter</td><td>Enter</td></tr>
+<tr><td>多行输入</td><td>Shift+Enter</td><td>Shift+Enter</td></tr>
+<tr><td>打断生成</td><td>Ctrl+C</td><td>Ctrl+C</td></tr>
+<tr><td>全选</td><td>Ctrl+A</td><td>Cmd+A</td></tr>
+<tr><td>复制</td><td>Ctrl+C</td><td>Cmd+C</td></tr>
+<tr><td>粘贴</td><td>Ctrl+V</td><td>Cmd+V</td></tr>
+</table>
+
+<h2>批量处理技巧</h2>
+<pre><code># 通过管道处理文件
+cat error.log | claude -p "找出所有 ERROR 级别日志，按原因分类统计"
+
+# 处理多个文件
+git log --since="last monday" --oneline | claude -p "写本周工作总结"
+
+# 批量生成
+请帮我为以下 5 个产品各写一段产品描述：
+1. 智能手表 - 健康监测
+2. 无线耳机 - 降噪
+3. 智能音箱 - 语音助手
+4. 电动牙刷 - 声波清洁
+5. 空气净化器 - HEPA 过滤</code></pre>
+</div>
+</article>
+
+<!-- Section 4: 文本处理与创作 -->
+<article id="s4">
+<div class="section-header"><span class="section-badge green">Part 1</span><h1>文本处理与创作</h1><div class="meta">从文案到周报、从翻译到文档提取</div></div>
+<div class="content">
+<h2>产品文案创作</h2>
 <pre><code>请帮我写一款智能耳机的产品描述，主要特点包括：
 降噪功能、长续航、舒适佩戴、音质出色，
 目标用户是年轻白领，风格要时尚现代。</code></pre>
-<p>Claude 会生成类似这样的文案：</p>
-<p>> 【SoundPro 智能降噪耳机】——你的私人音乐空间</p>
-<p>></p>
-<p>> 在喧嚣的城市中，找到一片宁静的音乐天地。SoundPro 采用先进的主动降噪技术，有效隔绝外界噪音……超长续航 30 小时，支持快充……人体工学设计，轻量化机身仅 250g……</p>
-<h2>广告文案</h2>
-<p>创意广告示例——智能水杯：</p>
-<pre><code>请帮我写一个创意广告文案，产品是智能水杯，
-功能包括：提醒喝水、记录饮水量、温度显示，
-目标用户是上班族。</code></pre>
-<p>促销广告示例——咖啡店周年庆：</p>
-<pre><code>咖啡店周年庆，全场买一送一，活动三天。
-帮我写促销文案。</code></pre>
+
 <h2>邮件写作</h2>
-<p>有背景的邮件请求：</p>
 <pre><code>请帮我写一封邮件，背景是：客户对我们的产品提出了
 一个功能需求，我们需要回复客户，告知这个需求
 已经记录下来，会考虑在后续版本中实现，同时感谢反馈。</code></pre>
-<h2>周报和日报</h2>
-<pre><code>git log --since=&quot;last monday&quot; --author=&quot;你的名字&quot; --oneline \
-  | claude -p &quot;根据 git 提交记录写本周工作总结&quot;</code></pre>
+
+<h2>周报生成</h2>
+<pre><code>git log --since="last monday" --author="你的名字" --oneline \
+  | claude -p "根据 git 提交记录写本周工作总结"</code></pre>
+
+<h2>文档提取</h2>
+<pre><code># 提取摘要
+请帮我为这篇文档生成一个 200 字的摘要
+
+# 提取要点
+请从这个会议纪要中提取决议事项
+
+# 提取特定信息
+请从这个合同中提取所有的日期信息</code></pre>
+
+<h2>数据处理</h2>
+<pre><code># 日志分析
+cat app.log | claude -p "找出所有 ERROR 级别日志，按原因分类统计"
+
+# 数据报表
+分析这份销售数据：
+1. 总体统计（总销售额、平均、最高/最低）
+2. 按产品分类统计
+3. 按地区分类统计
+4. 时间趋势分析
+5. 数据洞察和改进建议</code></pre>
+
 <h2>翻译与国际化</h2>
-<pre><code>把这些中文翻译成英文，保持 JSON 结构不变</code></pre>
-<pre><code>检查代码里有没有中文硬编码文本，建议放到 i18n 文件</code></pre>
+<pre><code>把这些中文翻译成英文，保持 JSON 结构不变
+检查代码里有没有中文硬编码文本，建议放到 i18n 文件</code></pre>
+
 <h2>写作技巧：说清受众和场景</h2>
-<table><tr><td>模糊</td><td>清晰</td></tr><tr><td>帮我写个介绍</td><td>用于公司官网产品页，目标用户是潜在客户，语言专业不晦涩</td></tr><tr><td>帮我介绍产品</td><td>受众是没有技术背景的普通用户，语言通俗易懂，避免专业术语</td></tr></table>
-<h2>今日任务</h2>
-<p>用 Claude Code 帮你写一段你真实需要的文案——产品介绍、周报、邮件都可以。记住说清：产品特点、目标用户、字数、风格。</p></div></article>
-<article id="day5"><div class="day-header"><span class="day-badge">Day 5</span><h1>文档管理与处理：长文提取术</h1><div class="meta">5月18日 周一</div></div><div class="day-body"><h2>从长文档提取关键信息</h2>
-<h3>提取摘要</h3>
-<pre><code>请帮我为这篇文档生成一个 200 字的摘要
-（然后上传文档或粘贴内容）</code></pre>
-<p>Claude 会输出类似：</p>
-<ul>
-<li>本文档介绍了公司 2026 年度工作计划</li>
-<li>总体目标：营收增长 20%，拓展 3 个新市场</li>
-<li>市场策略：加强线上营销，优化产品线……</li>
-</ol>
-<h3>提取要点</h3>
-<pre><code>请从这个会议纪要中提取决议事项
-（上传会议纪要）</code></pre>
-<p>输出示例：</p>
-<ol>
-<li>产品开发：决定开发移动端 APP，预计 6 个月完成</li>
-<li>市场推广：投入 100 万用于线上广告投放</li>
-<li>团队调整：新增市场部经理岗位，技术团队扩充 5 人</li>
-</ol>
-<h3>提取特定信息</h3>
-<pre><code>请从这个合同中提取所有的日期信息
-（上传合同文件）</code></pre>
-<p>输出：</p>
-<ul>
-<li>合同签订日期：2024 年 1 月 15 日</li>
-<li>首付款日期：2024 年 2 月 1 日</li>
-<li>尾款日期：2025 年 1 月 15 日……</li>
-</ol>
-<h2>生成详细摘要</h2>
-<pre><code>请为这份报告生成详细摘要，包括：
-背景、方法、结果、结论</code></pre>
-<h2>安全审查代码</h2>
-<pre><code>审查这些接口的安全性：
-- 哪些接口没有鉴权？
-- 有没有 SQL 注入风险？
-- 用户输入有没有被校验和清洗？
-- 敏感信息有没有泄漏到日志里？</code></pre>
-<h2>依赖分析</h2>
-<pre><code>分析所有模块的依赖关系，画出依赖图，标出循环依赖</code></pre>
-<pre><code>package.json 里哪些依赖是多余的？哪些有已知安全漏洞？</code></pre>
-<h2>今日任务</h2>
-<p>找一份你手头的长文档（PDF、会议纪要、合周都可以），让 Claude 提取关键信息。上传或粘贴都行——感受一下它从 5000 字里抓出 5 个要点的能力。</p></div></article>
-<article id="day6"><div class="day-header"><span class="day-badge">Day 6</span><h1>数据处理与分析：Excel 和日志</h1><div class="meta">5月19日 周二</div></div><div class="day-body"><h2>Excel 数据清洗</h2>
-<h3>删除重复数据</h3>
-<pre><code>请帮我删除这个 Excel 表格中的重复行
-（上传表格）</code></pre>
-<p>Claude 会汇报：原始 150 行 → 删除 12 行重复 → 剩余 138 行。</p>
-<h3>填充空白单元格</h3>
-<pre><code>请帮我填充空白单元格，用&quot;无&quot;填充</code></pre>
-<h3>统一日期格式</h3>
-<pre><code>请帮我把日期统一为 YYYY-MM-DD 格式</code></pre>
-<p>原始可能是「2024/1/5」「2024-1-5」「2024年1月5日」混合格式，Claude 会统一处理。</p>
-<h3>统一数字格式</h3>
-<pre><code>帮我把金额格式统一：保留两位小数，加千位分隔符</code></pre>
-<h2>日志分析</h2>
-<pre><code>cat app.log | claude -p &quot;找出所有 ERROR 级别日志，按原因分类统计&quot;</code></pre>
-<h2>数据报表</h2>
-<pre><code>分析这份销售数据：
-1. 总体统计（总销售额、平均、最高/最低）
-2. 按产品分类统计
-3. 按地区分类统计
-4. 时间趋势分析
-5. 数据洞察和改进建议</code></pre>
-<h2>CSV 和 JSON 处理</h2>
-<pre><code>分析这份 CSV：各列基本统计、有没有异常值、按地区分组统计</code></pre>
-<pre><code>这个 API 返回的 JSON 结构有没有问题？嵌套层级能不能简化？</code></pre>
-<h2>生成测试数据</h2>
-<pre><code>根据这个数据模型，生成 100 条符合真实场景的测试数据：
-姓名中文、男女各半、年龄 18-65 正态分布</code></pre>
-<h2>今日任务</h2>
-<p>找一份你手里的表格数据——Excel 或 CSV 都行——让 Claude 帮你清洗和分析。即使数据不大也能感受到效率提升。</p></div></article>
-<article id="day7"><div class="day-header"><span class="day-badge">Day 7</span><h1>个性化工作流：模板和习惯</h1><div class="meta">5月20日 周三</div></div><div class="day-body"><h2>创建常用模板</h2>
-<p>模板让你不用每次都重复写一样的提示词。</p>
-<h3>文案生成模板</h3>
-<pre><code>请帮我写一段[类型]文案，产品是[产品名称]，
-主要特点包括[特点1]、[特点2]、[特点3]，
-目标用户是[目标用户]，风格要求是[风格]。
+<table>
+<tr><th>模糊</th><th>清晰</th></tr>
+<tr><td>帮我写个介绍</td><td>用于公司官网产品页，目标用户是潜在客户，语言专业不晦涩</td></tr>
+<tr><td>帮我介绍产品</td><td>受众是没有技术背景的普通用户，语言通俗易懂，避免专业术语</td></tr>
+</table>
+</div>
+</article>
 
-要求：
-1. 突出核心卖点
-2. 语言生动有趣
-3. 字数在[字数]左右
-4. 包含行动号召</code></pre>
-<p>使用时把方括号里的内容替换掉即可。</p>
-<h3>多模板管理</h3>
-<p>你可以拥有多套模板：产品描述、广告文案、社交媒体内容、邮件写作……每套模板专注于一类任务。</p>
-<p>保存方式：把模板写进 CLAUDE.md（见下文），或者直接保存在一个文本文件里，用的时候复制粘贴。</p>
-<h2>让 Claude 记住你的偏好：CLAUDE.md</h2>
-<p>在项目根目录创建 CLAUDE.md：</p>
-<pre><code># CLAUDE.md
-
-## 项目概述
-电商后台管理系统，前端 React + TypeScript，后端 Node.js + Prisma。
-
-## 代码风格
-- 函数优先于类
-- 注释解释&quot;为什么&quot;，不是&quot;是什么&quot;
-- 错误不要吞掉，必须向上抛或记录日志
-
-## 快捷指令
-- 说&quot;review&quot; → 自动执行代码审查
-- 说&quot;fix&quot; → 分析 bug 并给出修复方案</code></pre>
-<h2>保存常用提示词</h2>
-<p>把每次成功的提示词记录下来：</p>
-<ul>
-<li>什么场景</li>
-<li>怎么问的</li>
-<li>结果怎么样</li>
-<li>有什么可以改进的</li>
-</ol>
-<p>积累 10 个你自己的高效提示词，比收藏 100 个别人的模板更有用。</p>
-<h2>今日任务</h2>
-<ol>
-<li>创建你的第一个提示词模板（产品描述/邮件/周报，选一个你最常用的场景）</li>
-<li>在你的项目里创建 CLAUDE.md，至少包含项目概述和一条快捷指令</li>
-</ol></div></article>
-<article id="day8"><div class="day-header"><span class="day-badge">Day 8</span><h1>提示词优化技巧（上）：清晰表达</h1><div class="meta">5月21日 周四</div></div><div class="day-body"><h2>模糊 vs 清晰：经典对比</h2>
-<h3>给出具体指令</h3>
-<p>不推荐：</p>
-<pre><code>帮我写个文案</code></pre>
-<p>推荐：</p>
-<pre><code>请帮我写一段产品描述文案，产品是智能手表，
-主要特点包括健康监测、运动追踪、消息提醒，
-目标用户是年轻白领，字数在 200 字左右，风格时尚现代。</code></pre>
-<h3>提供完整信息</h3>
-<p>不推荐：</p>
-<pre><code>帮我分析这个数据</code></pre>
-<p>推荐：</p>
-<pre><code>请帮我分析这份销售数据，包含：
-1. 总体统计（总销售额、平均、最高/最低）
-2. 按产品分类统计
-3. 按地区分类统计
-4. 时间趋势分析
-5. 数据洞察和改进建议</code></pre>
-<h3>明确输出格式</h3>
-<p>不推荐：</p>
-<pre><code>帮我整理这些信息</code></pre>
-<p>推荐：</p>
-<pre><code>请帮我整理这些信息，输出格式为表格，
-包含以下列：姓名、部门、职位、入职日期</code></pre>
-<h3>说明受众和场景</h3>
-<p>不推荐：</p>
-<pre><code>帮我写个介绍</code></pre>
-<p>推荐（面向潜在客户）：</p>
-<pre><code>请帮我写一个产品介绍，用于公司官网的产品页面，
-目标用户是潜在客户，需要突出核心优势，
-语言要专业但不晦涩。</code></pre>
-<p>推荐（面向普通用户）：</p>
-<pre><code>请帮我介绍产品，受众是没有技术背景的普通用户，
-语言要通俗易懂，步骤要详细，避免专业术语。</code></pre>
-<h2>四大要素总结</h2>
+<!-- Section 5: 提示词优化技巧 -->
+<article id="s5">
+<div class="section-header"><span class="section-badge green">Part 1</span><h1>提示词优化技巧</h1><div class="meta">四大要素法 + 高手进阶思路</div></div>
+<div class="content">
+<h2>四大要素法</h2>
 <p>每次提问尽量包含：</p>
 <ol>
 <li><strong>做什么</strong>：具体任务</li>
@@ -385,319 +385,1194 @@ litellm --model deepseek/deepseek-chat \
 <li><strong>给谁看</strong>：受众是谁</li>
 <li><strong>什么格式</strong>：表格？列表？段落？</li>
 </ol>
-<h2>今日任务</h2>
-<p>用「四大要素法」改写一个你之前问过但效果不好的问题。对比两次输出，感受差距。</p></div></article>
-<article id="day9"><div class="day-header"><span class="day-badge">Day 9</span><h1>常用快捷键：效率翻倍</h1><div class="meta">5月22日 周五</div></div><div class="day-body"><h2>基础快捷键</h2>
-<table><tr><td>操作</td><td>Windows/Linux</td><td>macOS</td></tr><tr><td>发送消息</td><td>Enter</td><td>Enter</td></tr><tr><td>多行输入</td><td>Shift+Enter</td><td>Shift+Enter</td></tr><tr><td>全选</td><td>Ctrl+A</td><td>Cmd+A</td></tr><tr><td>复制</td><td>Ctrl+C</td><td>Cmd+C</td></tr><tr><td>粘贴</td><td>Ctrl+V</td><td>Cmd+V</td></tr><tr><td>撤销</td><td>Ctrl+Z</td><td>Cmd+Z</td></tr></table>
-<h2>对话控制快捷键</h2>
-<table><tr><td>操作</td><td>方式</td></tr><tr><td>打断正在生成的回复</td><td>Ctrl+C</td></tr><tr><td>清屏 / 新对话</td><td>输入 `/clear`</td></tr><tr><td>压缩上下文</td><td>输入 `/compact`</td></tr><tr><td>查看用量和模型</td><td>输入 `/status`</td></tr></table>
-<h2>Claude Code 内置编辑器快捷键</h2>
-<table><tr><td>快捷键</td><td>功能</td></tr><tr><td>`i`</td><td>进入编辑模式</td></tr><tr><td>`Esc`</td><td>退出编辑模式</td></tr><tr><td>`:w`</td><td>保存并退出</td></tr><tr><td>`:q`</td><td>不保存退出</td></tr></table>
-<h2>效率技巧</h2>
-<h3>批量处理</h3>
-<p>同时处理多个文件：</p>
-<ul>
-<li>多选上传：Ctrl+点击（Windows）或 Cmd+点击（macOS）选多个文件</li>
-<li>拖拽上传：直接拖多个文件到 Claude Code</li>
-</ol>
-<p>批量生成内容：</p>
-<pre><code>请帮我为以下 5 个产品各写一段产品描述：
-（列出产品名称和特点）</code></pre>
-<h3>快速切换模型</h3>
-<ul>
-<li>方法一：通过工具栏模型选择器</li>
-<li>方法二：输入 <code>/model</code> 命令切换</li>
-</ol>
-<h3>快速访问历史</h3>
-<ul>
-<li>打开历史记录面板浏览过往对话</li>
-<li>使用搜索功能查找特定对话</li>
-</ol>
-<h2>效率流水线</h2>
-<p>一个日常高效流程：</p>
-<ol>
-<li>Ctrl+C 打断不想要的回复（别等它跑完）</li>
-<li>↑ 找到之前的命令，修改后重新发送</li>
-<li>/compact 每 15 轮压缩一次</li>
-<li>/clear 完成一个功能后清空上下文</li>
-<li>每个任务结束记录成功的提示词</li>
-</ol>
-<h2>今日任务</h2>
-<ol>
-<li>试试用 Ctrl+C 打断一次正在生成的回复（习惯了这个操作能省很多时间）</li>
-<li>用 /compact 压缩一次长对话，感受上下文管理</li>
-</ol></div></article>
-<article id="day10"><div class="day-header"><span class="day-badge">Day 10</span><h1>提示词优化技巧（下）：高手思路</h1><div class="meta">5月25日 周一</div></div><div class="day-body"><h2>多方案输出</h2>
-<p>不要只让 Claude 给一个答案：</p>
+
+<h2>多方案输出</h2>
 <pre><code>实现这个功能，给我三个方案：
 1. 最简单的（快速上线）
 2. 最稳健的（适合长期维护）
 3. 最优雅的（技术含量最高）
 每个方案说明优缺点和适用场景</code></pre>
+
 <h2>强制约束</h2>
-<p>给 Claude 戴上紧箍咒，避免它自由发挥过头：</p>
 <pre><code>重写这段话，必须遵守：
 - 不改变原意
 - 控制在 200 字以内
 - 用主动语态
 - 每段不超过 3 句话
 - 至少包含一个具体例子</code></pre>
-<h2>对比式提问</h2>
-<pre><code>方案 A：用表格展示数据
-方案 B：用图表展示数据
 
-从以下维度对比：可读性、信息密度、制作成本、适用场景
-给出推荐和理由</code></pre>
 <h2>渐进式细化</h2>
 <pre><code>第一轮：我需要一份市场分析报告的大纲
-
 第二轮：好的，请展开「竞争格局」这个部分
-
 第三轮：把竞争对手的具体数据填进去
-
 第四轮：加上行动建议</code></pre>
 <p>不要一次把规范全说完——先框架，再逐层细化。Claude 在每层都能给出更好的结果。</p>
+
 <h2>反向思维：让它找漏洞</h2>
 <pre><code>我写的这段内容，最可能在哪里出问题？
 构造 3 个读者可能提出的反对意见</code></pre>
-<pre><code>这段逻辑如果被误解，会产生什么后果？
-帮我找出所有有歧义的表达</code></pre>
+
 <h2>自我审查</h2>
 <pre><code>你刚才写了什么？为什么这么写？
 有没有可以改进的地方？</code></pre>
 <p>这个二次审查经常抓到 Claude 自己疏忽的问题。</p>
-<h2>今日任务</h2>
-<p>找一个你最近的任务，用「渐进式细化」分三轮完成——先要框架，再细化一个部分，最后加上具体数据。对比一次输出全部的效果。</p></div></article>
-<article id="day11"><div class="day-header"><span class="day-badge">Day 11</span><h1>用编程的思维解决问题：拆解大任务</h1><div class="meta">5月26日 周二</div></div><div class="day-body"><h2>什么是编程思维</h2>
-<p>编程思维就是把复杂问题分解为简单步骤，然后按逻辑顺序执行。你其实经常用到它——只是没意识到。</p>
-<h3>日常类比：做菜</h3>
-<ol>
-<li>分解问题：准备食材 → 处理食材 → 烹饪 → 装盘</li>
-<li>识别模式：每次做菜都遵循类似步骤</li>
-<li>抽象概括：总结出做菜的一般流程</li>
-<li>算法设计：按照食谱的步骤执行</li>
-</ol>
-<h3>日常类比：旅行</h3>
-<ol>
-<li>分解问题：确定目的地 → 查询交通 → 订票 → 打包 → 出发</li>
-<li>识别模式：每次旅行都遵循类似步骤</li>
-<li>抽象概括：总结出旅行的通用流程</li>
-<li>算法设计：按照计划执行</li>
-</ol>
-<h2>用编程思维让 Claude 帮你</h2>
-<h3>实例：公司销售额连续三个月下降</h3>
-<p>用 5W1H 拆解：</p>
-<ul>
-<li><strong>What</strong>：销售额下降</li>
-<li><strong>Why</strong>：市场竞争、产品竞争力、营销效果</li>
-<li><strong>Who</strong>：销售团队、市场团队、产品团队</li>
-<li><strong>When</strong>：近三个月</li>
-<li><strong>Where</strong>：全国市场</li>
-</ol>
-<p>然后把每个维度分别丢给 Claude：</p>
-<pre><code>分析近三个月的销售数据，分别按产品、地区、渠道统计趋势</code></pre>
-<pre><code>对比我和竞争对手在产品功能上的差距，
-列出一个功能对照表</code></pre>
-<h2>大任务拆解实战</h2>
-<pre><code>我需要做一个「客户满意度调查分析」。
-帮我拆成可执行的小任务，按依赖关系排序。</code></pre>
-<p>Claude 会给出：</p>
-<ol>
-<li>设计调查问卷</li>
-<li>收集数据</li>
-<li>清洗数据</li>
-<li>统计分析</li>
-<li>生成报告</li>
-</ol>
-<p>然后逐个推进——不要一口气让它全做完。</p>
-<h2>决策前先做检查清单</h2>
-<pre><code>在做这个决策之前，帮我分析：
-1. 影响范围：哪些部门会受影响？
-2. 风险：最坏的后果是什么？
-3. 成本：需要多少资源？
-4. 替代方案：还有没有其他选项？
-5. 回滚方案：如果出问题怎么补救？</code></pre>
-<h2>今日任务</h2>
-<p>把你手头一个复杂的任务用 5W1H 或「分解问题→识别模式→抽象概括→算法设计」拆开，选其中一个小块让 Claude 先帮你处理。感受「分步做」比「一次全做」的质量差异。</p></div></article>
-<article id="day12"><div class="day-header"><span class="day-badge">Day 12</span><h1>高级功能：工具、Hook、MCP</h1><div class="meta">5月27日 周三</div></div><div class="day-body"><h2>自定义工具</h2>
-<h3>什么是自定义工具</h3>
-<p>用户根据自己的需求创建的特定功能模块，可以扩展 Claude Code 的能力：</p>
-<ul>
-<li>针对性：针对特定需求设计</li>
-<li>可复用：可以多次使用</li>
-<li>可配置：可以调整参数</li>
-</ol>
-<h3>如何查找工具</h3>
-<ol>
-<li>官方文档</li>
-<li>社区分享</li>
-<li>插件市场</li>
-<li>搜索引擎</li>
-</ol>
-<h3>配置示例：数据清洗工具</h3>
-<p>需求：需要一个工具来清洗 Excel 数据。</p>
-<p>定义功能：</p>
-<ul>
-<li>删除重复行</li>
-<li>填充空白单元格</li>
-<li>统一日期格式</li>
-<li>统一数字格式</li>
-</ol>
-<p>创建提示词模板：</p>
-<pre><code>请帮我清洗这个数据：
-- 删除重复行
-- 填充空白单元格为&quot;无&quot;
-- 统一日期格式为 YYYY-MM-DD
-- 统一数字格式为保留两位小数</code></pre>
-<p>把这个模板保存下来，命名为「数据清洗工具」，每次需要时调用。</p>
-<h2>Hooks：自动化你的工作流</h2>
-<p>Hooks 在特定事件发生时自动执行操作：</p>
-<table><tr><td>事件</td><td>触发时机</td></tr><tr><td>PreToolUse</td><td>工具被调用之前</td></tr><tr><td>PostToolUse</td><td>工具被调用之后</td></tr><tr><td>Stop</td><td>会话结束时</td></tr></table>
-<p>示例：文件保存后自动格式化：</p>
-<pre><code>{&quot;hooks&quot;: {&quot;PostToolUse&quot;: [{&quot;matcher&quot;: &quot;Edit|Write&quot;,
-  &quot;command&quot;: &quot;prettier --write&quot;}]}}</code></pre>
-<h2>MCP：扩展能力边界</h2>
-<p>MCP（Model Context Protocol）让 Claude 能连接外部工具。常用 MCP Server：</p>
-<ul>
-<li>GitHub：管理 Issues、PRs、仓库</li>
-<li>文件系统：安全的文件访问</li>
-<li>数据库：只读查询</li>
-<li>Slack / Jira：消息和工单管理</li>
-</ol>
-<h2>今日任务</h2>
-<ol>
-<li>把你最常用的一个提示词保存为「自定义工具」——用文本文件或 CLAUDE.md 记录即可</li>
-<li>了解一下你工作中还有哪些重复性操作可以让 Claude + 工具自动化</li>
-</ol></div></article>
-<article id="day13"><div class="day-header"><span class="day-badge">Day 13</span><h1>让 Claude 自动解决问题（上）：多文件与终端</h1><div class="meta">5月28日 周四</div></div><div class="day-body"><h2>多文件编辑</h2>
-<p>Claude Code 的强项：同时理解和修改多个文件。</p>
-<h3>重构一个模块</h3>
-<pre><code>把 user 模块下所有 API 调用从 axios 改成 fetch，
-同时更新类型定义、错误处理和测试</code></pre>
-<p>Claude 会自动：扫描文件 → 找到所有 axios 调用 → 逐个替换 → 更新类型 → 更新测试。不需要你逐个文件指挥。</p>
-<h3>全局重命名</h3>
-<pre><code>把项目里所有的 user_token 改名为 access_token，
-包括：变量名、数据库字段、API 参数、测试数据</code></pre>
-<h3>批量添加相同功能</h3>
-<pre><code>给所有接口加上请求日志：
-记录请求方法、路径、耗时、状态码</code></pre>
-<h2>终端命令</h2>
-<p>Claude Code 不只是读写文件，还可以执行终端命令：</p>
-<pre><code>帮我安装 axios</code></pre>
-<p>Claude 会执行 <code>npm install axios</code></p>
-<pre><code>跑一下测试，看看有没有失败的</code></pre>
-<h3>安全控制</h3>
-<p>有风险的操作 Claude 会先确认。你也可以设置权限规则：</p>
-<pre><code>- 允许：npm install, npm test, npm run build
-- 需要确认：git push, npm publish
-- 禁止：rm -rf, 任何数据库写操作</code></pre>
-<h2>调试协助</h2>
-<pre><code>运行项目看看有没有报错？有的话帮我分析原因</code></pre>
-<pre><code>这个函数有时候会返回 NaN，帮我排查哪里可能出问题</code></pre>
-<h2>今日任务</h2>
-<p>在你的项目里做一次「全局操作」——统一命名、统一格式、或者批量添加日志、注释。感受多文件编辑不需要逐个文件操作的快感。</p></div></article>
-<article id="day14"><div class="day-header"><span class="day-badge">Day 14</span><h1>让 Claude 自动解决问题（下）：从单次到批量</h1><div class="meta">5月29日 周五</div></div><div class="day-body"><h2>记录成功的单次任务</h2>
-<p>每次成功的任务都是资产。记录这些内容：</p>
-<ol>
-<li>任务描述：做了什么</li>
-<li>任务目标：要达到什么效果</li>
-<li>任务步骤：怎么做的</li>
-<li>任务结果：效果怎么样</li>
-<li>经验教训：下次怎么改进</li>
-</ol>
-<h3>记录示例</h3>
-<pre><code>任务：生成智能手表产品文案
-- 描述：为新产品生成 200 字左右的产品描述
-- 步骤：提供产品信息 → 使用提示词模板生成 → 人工审核调整 → 保存
-- 结果：成功生成符合要求的文案
-- 经验：提示词模板很有效，可以复用</code></pre>
-<h2>分析任务的重复性</h2>
-<p>把过去一个月的任务列出来：</p>
-<ul>
-<li>哪些任务每周至少出现一次？</li>
-<li>哪些任务步骤和格式完全一样，只是数据不同？</li>
-<li>哪些任务自己做要 1 小时，Claude 做只要 5 分钟？</li>
-</ol>
-<h3>重复性分析示例</h3>
-<pre><code>任务：生成产品文案
-- 频率：每周一次
-- 模式：都是产品文案，格式要求相同
-- 变化：产品信息不同，但格式不变
-- 价值：每次节省 1-2 小时
-- 结论：适合批量处理</code></pre>
-<h2>设计批量处理方案</h2>
-<h3>效率对比</h3>
-<p>没有模板时：</p>
-<ul>
-<li>每次都要详细描述需求</li>
-<li>每次都要调整提示词</li>
-<li>每次都要审核结果</li>
-<li>耗时：每个任务 10-15 分钟</li>
-</ol>
-<p>有模板后：</p>
-<ul>
-<li>快速检索模板</li>
-<li>替换关键信息</li>
-<li>生成一致的结果</li>
-<li>耗时：每个任务 3-5 分钟</li>
-<li><strong>效率提升 60-70%</strong></li>
-</ol>
-<h2>今日任务</h2>
-<p>回顾过去两周你在 Claude Code 里完成的任务，把最常用的 2-3 个写成标准化模板。下次用的时候复制粘贴改几个词就好。</p></div></article>
-<article id="day15"><div class="day-header"><span class="day-badge">Day 15</span><h1>知识沉淀：文档化你的经验</h1><div class="meta">6月1日 周一</div></div><div class="day-body"><h2>AI 可以直接从文档中获取经验</h2>
-<p>把经验写成结构化文档，下次 Claude 直接调用。</p>
-<h3>文档化示例：产品文案生成指南</h3>
-<pre><code># 产品文案生成指南
 
-## 文案类型
-- 产品描述
-- 社交媒体内容
-- 邮件内容
+<h2>CLAUDE.md：让 Claude 记住偏好</h2>
+<pre><code># CLAUDE.md - 放在项目根目录
 
-## 必备要素
-- 产品名称
-- 主要特点
-- 目标用户
-- 字数要求
+## 项目概述
+电商后台管理系统，前端 React + TypeScript，后端 Node.js + Prisma。
 
-## 写作要求
-- 突出核心卖点
-- 符合目标用户需求
-- 包含行动号召
+## 代码风格
+- 函数优先于类
+- 注释解释"为什么"，不是"是什么"
+- 错误不要吞掉，必须向上抛或记录日志
 
-## 示例
-[示例1：智能手表产品描述]
-[示例2：有机蔬菜产品介绍]
-[示例3：咖啡店促销文案]</code></pre>
-<p>把这样的文档放进项目里，Claude 可以直接参考，输出更一致。</p>
-<h2>效率收益</h2>
-<table><tr><td>维度</td><td>无文档</td><td>有文档</td></tr><tr><td>每次耗时</td><td>10-15 分钟</td><td>3-5 分钟</td></tr><tr><td>输出一致性</td><td>波动大</td><td>高度一致</td></tr><tr><td>新人上手</td><td>需要培训</td><td>看文档即可</td></tr></table>
-<h2>成本控制</h2>
-<pre><code>/status  → 查看当前用量和费用
-/compact → 压缩上下文，节省 token</code></pre>
-<p>省钱技巧：</p>
+## 快捷指令
+- 说"review" → 自动执行代码审查
+- 说"fix" → 分析 bug 并给出修复方案</code></pre>
+</div>
+</article>
+
+<!-- Section 6: 斜杠命令 -->
+<article id="s6">
+<div class="section-header"><span class="section-badge">Part 2</span><h1>斜杠命令（Slash Commands）</h1><div class="meta">55+ 内置命令 + 自定义命令参考</div></div>
+<div class="content">
+<h2>概览</h2>
+<p>Slash command 是你在 Claude 的交互式会话中用来控制行为的快捷方式，主要分为几类：</p>
+<ul>
+<li><strong>内置命令</strong>：Claude Code 自带，例如 <code>/help</code>、<code>/clear</code>、<code>/model</code></li>
+<li><strong>Skills</strong>：你自己定义的命令，基于 <code>SKILL.md</code> 文件</li>
+<li><strong>插件命令</strong>：来自已安装插件的命令</li>
+<li><strong>MCP prompts</strong>：来自 MCP server 的命令</li>
+</ul>
+
+<h2>内置命令速查（精选）</h2>
+<table>
+<tr><th>命令</th><th>作用</th></tr>
+<tr><td><code>/clear</code></td><td>清空对话（别名：/reset、/new）</td></tr>
+<tr><td><code>/compact [instructions]</code></td><td>压缩对话，可附带聚焦指令</td></tr>
+<tr><td><code>/model [model]</code></td><td>选择模型</td></tr>
+<tr><td><code>/cost</code></td><td>查看 token 使用统计</td></tr>
+<tr><td><code>/effort [low|medium|high|max]</code></td><td>设置推理强度</td></tr>
+<tr><td><code>/plan [description]</code></td><td>进入规划模式</td></tr>
+<tr><td><code>/resume [session]</code></td><td>恢复对话</td></tr>
+<tr><td><code>/branch [name]</code></td><td>分支到新会话</td></tr>
+<tr><td><code>/diff</code></td><td>查看未提交更改的交互式 diff</td></tr>
+<tr><td><code>/context</code></td><td>可视化上下文占用</td></tr>
+<tr><td><code>/memory</code></td><td>编辑 CLAUDE.md</td></tr>
+<tr><td><code>/skills</code></td><td>列出可用 Skills</td></tr>
+<tr><td><code>/mcp</code></td><td>管理 MCP servers</td></tr>
+<tr><td><code>/hooks</code></td><td>查看 hook 配置</td></tr>
+<tr><td><code>/rewind</code></td><td>回退对话和/或代码</td></tr>
+<tr><td><code>/voice</code></td><td>语音输入</td></tr>
+<tr><td><code>/schedule</code></td><td>定时任务</td></tr>
+</table>
+
+<h3>内置 Skills</h3>
+<table>
+<tr><th>Skill</th><th>作用</th></tr>
+<tr><td><code>/batch</code></td><td>使用 worktree 编排大规模并行修改</td></tr>
+<tr><td><code>/claude-api</code></td><td>加载 Claude API 参考</td></tr>
+<tr><td><code>/debug</code></td><td>启用调试日志</td></tr>
+<tr><td><code>/loop [interval]</code></td><td>按固定间隔重复运行</td></tr>
+<tr><td><code>/simplify</code></td><td>审查改动文件的代码质量</td></tr>
+</table>
+
+<h2>自定义命令（Skills 方式）</h2>
+<p>创建 <code>.claude/skills/my-command/SKILL.md</code>：</p>
+<pre><code>---
+name: my-command
+description: 这个命令做什么，以及何时使用它
+argument-hint: [可选参数]
+allowed-tools: Bash(npm *), Read, Grep
+---
+
+# 命令标题
+
+## 上下文
+- 当前分支：!`git branch --show-current`
+- 相关文件：@package.json
+
+## 指令
+1. 第一步
+2. 第二步，参数：$ARGUMENTS
+3. 第三步</code></pre>
+
+<h3>动态上下文注入</h3>
+<p>用 <code>!`command`</code> 在 prompt 发送前执行 shell 命令：</p>
+<pre><code>---
+name: commit
+description: 使用上下文创建 git commit
+allowed-tools: Bash(git *)
+---
+
+## 上下文
+- 当前 git 状态：!`git status`
+- 当前 diff：!`git diff HEAD`
+- 当前分支：!`git branch --show-current`
+- 最近提交：!`git log --oneline -5`
+
+## 你的任务
+根据以上变更，创建一个 git commit。</code></pre>
+
+<h2>Frontmatter 参考</h2>
+<table>
+<tr><th>字段</th><th>作用</th><th>默认值</th></tr>
+<tr><td><code>name</code></td><td>命令名（会变成 /name）</td><td>目录名</td></tr>
+<tr><td><code>description</code></td><td>简短说明</td><td>第一段</td></tr>
+<tr><td><code>allowed-tools</code></td><td>可无权限使用的工具</td><td>继承</td></tr>
+<tr><td><code>model</code></td><td>指定模型</td><td>继承</td></tr>
+<tr><td><code>disable-model-invocation</code></td><td>只有用户能调用</td><td>false</td></tr>
+<tr><td><code>context</code></td><td>设为 fork 时在隔离 subagent 中运行</td><td>无</td></tr>
+</table>
+</div>
+</article>
+
+<!-- Section 7: 记忆系统 -->
+<article id="s7">
+<div class="section-header"><span class="section-badge">Part 2</span><h1>记忆系统（Memory）</h1><div class="meta">让 Claude 跨会话记住上下文</div></div>
+<div class="content">
+<h2>概览</h2>
+<p>Memory 让 Claude Code 在不同会话之间保留上下文。你可以把团队规范、项目规则、个人偏好写进 <code>CLAUDE.md</code>，让 Claude 在合适的时候自动加载。</p>
+
+<h2>Memory 命令速查</h2>
+<table>
+<tr><th>命令</th><th>作用</th></tr>
+<tr><td><code>/init</code></td><td>初始化项目级 CLAUDE.md</td></tr>
+<tr><td><code>/memory</code></td><td>打开并编辑记忆文件</td></tr>
+<tr><td><code>#</code></td><td>快速把当前规则写入 memory</td></tr>
+</table>
+
+<h2>快速上手</h2>
+<h3>使用 /init</h3>
+<pre><code>/init</code></pre>
+<p>Claude 会根据当前项目生成一个 CLAUDE.md。</p>
+
+<h3>使用 # 快速更新</h3>
+<pre><code># 这个项目始终使用 TypeScript 严格模式
+# 优先使用 async/await，而不是 promise 链
+# 每次提交前都运行 npm test
+# 文件名统一使用 kebab-case</code></pre>
+
+<h2>记忆层级</h2>
+<table>
+<tr><th>层级</th><th>作用范围</th><th>典型内容</th></tr>
+<tr><td>受管策略</td><td>组织级</td><td>合规、安全、统一流程</td></tr>
+<tr><td>项目记忆</td><td>单个项目</td><td>架构、编码标准、工作流</td></tr>
+<tr><td>目录记忆</td><td>子目录</td><td>模块约束、局部规范</td></tr>
+<tr><td>用户记忆</td><td>单个用户</td><td>个人偏好、默认设置</td></tr>
+</table>
+
+<h2>项目记忆结构示例</h2>
+<pre><code># 项目配置
+
+## 项目概览
+电商后台管理系统，React + TypeScript + Prisma
+
+## 架构
+- 前后端分离，API 统一 RESTful
+- 数据库使用 PostgreSQL
+
+## 开发规范
+### 代码风格
+- 函数优先于类
+- 使用 ESLint + Prettier
+
+### Git 工作流
+- feature 分支开发
+- PR 必须有 review
+
+### 测试要求
+- 核心逻辑必须有单元测试
+- API 端点必须有集成测试
+
+## 常用命令
+- `npm run dev` - 启动开发服务器
+- `npm test` - 运行测试
+- `npm run lint` - 代码检查</code></pre>
+
+<h2>个人记忆示例</h2>
+<pre><code># 我的开发偏好（~/.claude/CLAUDE.md）
+
+## 代码偏好
+- 偏好函数式编程风格
+- 错误处理用 Result 模式
+- 注释用中文
+
+## 调试偏好
+- 先看日志再看代码
+- 偏好 console.log 而非 debugger
+
+## 沟通方式
+- 回复简洁直接
+- 代码注释要解释"为什么"</code></pre>
+
+<h2>目录结构</h2>
+<pre><code>project/
+├── CLAUDE.md           ← 项目级
+├── src/
+│   ├── CLAUDE.md       ← src 目录级
+│   └── api/
+│       └── CLAUDE.md   ← api 目录级
+~/.claude/
+└── CLAUDE.md           ← 个人级</code></pre>
+
+<div class="tip-box"><strong>💡 最佳实践：</strong>先写简洁规则，再逐步补充。不要把 README 整份复制进 CLAUDE.md，只保留真正影响 Claude 行为的信息。</div>
+</div>
+</article>
+
+<!-- Section 8: Skills 技能 -->
+<article id="s8">
+<div class="section-header"><span class="section-badge">Part 2</span><h1>Skills 技能</h1><div class="meta">可复用、可自动触发的能力包</div></div>
+<div class="content">
+<h2>概览</h2>
+<p>Skills 是可以复用、可自动触发的能力包。一个 skill 通常包含 SKILL.md、参考文件、脚本和模板。Claude 在合适的场景下会自动加载它。</p>
+
+<h2>渐进式披露：三层加载</h2>
 <ol>
-<li>用 <code>/compact</code> 而不是开新会话</li>
-<li>简单任务用便宜模型（GLM-4/Qwen）</li>
-<li>复杂任务才用贵模型（Claude Sonnet/Opus）</li>
-<li>写清楚约束——越模糊越费 token</li>
+<li><strong>只看描述</strong>：先判断这个 skill 是否相关</li>
+<li><strong>加载 SKILL.md</strong>：读取核心说明</li>
+<li><strong>按需加载支持文件</strong>：脚本、模板、参考资料</li>
 </ol>
-<h2>十五天回顾</h2>
-<table><tr><td>阶段</td><td>内容</td></tr><tr><td>上手</td><td>安装配置、接入国内模型、基础操作</td></tr><tr><td>实战</td><td>文案创作、文档提取、数据处理</td></tr><tr><td>进阶</td><td>模板定制、提示词技巧、快捷键</td></tr><tr><td>思维</td><td>任务拆解、编程思维、批量处理</td></tr><tr><td>沉淀</td><td>自定义工具、文档化、成本控制</td></tr></table>
-<h2>接下来的路</h2>
-<p>每天用。用得越多，模板越丰富，Claude 越懂你。</p>
-<p>把你每次成功的提示词、模板、经验都记录下来——一个月后回头翻，你会惊讶自己已经积累了一套完整的工作流。</p>
-<p>恭喜毕业 🎉</p></div></article>
+
+<h2>Skill 位置</h2>
+<table>
+<tr><th>位置</th><th>范围</th></tr>
+<tr><td><code>.claude/skills/</code></td><td>项目级（团队共享）</td></tr>
+<tr><td><code>~/.claude/skills/</code></td><td>用户级（个人使用）</td></tr>
+</table>
+
+<h2>创建自定义 Skill</h2>
+<h3>基本结构</h3>
+<pre><code>my-skill/
+├── SKILL.md          ← 核心说明
+├── scripts/          ← 辅助脚本
+├── templates/        ← 输出模板
+└── references/       ← 参考资料</code></pre>
+
+<h3>SKILL.md 格式</h3>
+<pre><code>---
+name: code-review
+description: 审查代码质量、安全问题和最佳实践。当用户说"review"或修改了代码时自动触发。
+allowed-tools: Read, Grep, Bash(npm test)
+---
+
+# 代码审查
+
+## 审查维度
+1. 代码质量（命名、结构、复杂度）
+2. 安全性（注入、鉴权、数据泄漏）
+3. 性能（N+1 查询、内存泄漏）
+4. 测试覆盖
+
+## 输出格式
+- 风险等级：🔴 高 / 🟡 中 / 🟢 低
+- 每条发现包含：位置、问题、建议修复</code></pre>
+
+<h2>控制调用方式</h2>
+<table>
+<tr><th>字段</th><th>效果</th></tr>
+<tr><td><code>disable-model-invocation: true</code></td><td>只有用户能调用，Claude 不能自动触发</td></tr>
+<tr><td><code>user-invocable: false</code></td><td>不出现在 / 菜单中</td></tr>
+<tr><td><code>context: fork</code></td><td>在隔离 subagent 中运行</td></tr>
+</table>
+
+<h2>Skills vs 其他功能</h2>
+<table>
+<tr><th>功能</th><th>触发方式</th><th>适合场景</th></tr>
+<tr><td>Skills</td><td>自动/半自动</td><td>复用能力、流程标准化</td></tr>
+<tr><td>Slash Commands</td><td>手动</td><td>快捷命令</td></tr>
+<tr><td>Subagents</td><td>自动委派</td><td>隔离任务</td></tr>
+<tr><td>Hooks</td><td>事件触发</td><td>自动化和验证</td></tr>
+</table>
+
+<h2>安装示例</h2>
+<pre><code># 安装到个人目录
+mkdir -p ~/.claude/skills
+cp -r code-review ~/.claude/skills/
+
+# 查看可用 Skills
+/skills</code></pre>
+
+<div class="tip-box"><strong>💡 最佳实践：</strong>一个 skill 解决一个问题。描述要具体，包含触发词。SKILL.md 控制在 500 行以内。</div>
+</div>
+</article>
+
+<!-- Section 9: 子代理 -->
+<article id="s9">
+<div class="section-header"><span class="section-badge">Part 2</span><h1>子代理（Subagents）</h1><div class="meta">专门处理某类任务的独立 AI 助手</div></div>
+<div class="content">
+<h2>概览</h2>
+<p>Subagents 是专门处理某类任务的独立 AI 助手。它们拥有隔离的上下文、自己的提示词和工具权限，适合把复杂工作拆分给不同角色。</p>
+
+<h2>主要好处</h2>
+<ul>
+<li><strong>上下文隔离</strong>：不会污染主会话</li>
+<li><strong>角色分工</strong>：每个 agent 专注于一件事</li>
+<li><strong>适合并行</strong>：多个 agent 可以同时工作</li>
+<li><strong>便于委派</strong>：Claude 自动选择合适的 agent</li>
+</ul>
+
+<h2>配置格式</h2>
+<pre><code>---
+name: code-reviewer
+description: 审查代码质量和安全问题
+tools: Read, Grep, Bash
+model: sonnet
+---
+
+# Code Reviewer
+
+你是一个资深代码审查员。关注以下方面：
+- 代码质量和可维护性
+- 安全漏洞
+- 性能问题
+- 测试覆盖率</code></pre>
+
+<h2>文件位置</h2>
+<table>
+<tr><th>位置</th><th>范围</th></tr>
+<tr><td><code>.claude/agents/</code></td><td>项目级</td></tr>
+<tr><td><code>~/.claude/agents/</code></td><td>用户级</td></tr>
+</table>
+
+<h2>内置 Subagents</h2>
+<ul>
+<li>通用助手</li>
+<li>Planning agent</li>
+<li>Explore agent</li>
+<li>Bash agent</li>
+</ul>
+
+<h2>常见 Subagent 角色</h2>
+<table>
+<tr><th>角色</th><th>用途</th><th>工具权限</th></tr>
+<tr><td>Code Reviewer</td><td>代码质量审查</td><td>Read, Grep, Glob</td></tr>
+<tr><td>Test Engineer</td><td>测试策略和生成</td><td>Read, Edit, Bash</td></tr>
+<tr><td>Documentation Writer</td><td>技术文档写作</td><td>Read, Write</td></tr>
+<tr><td>Secure Reviewer</td><td>安全检查（只读）</td><td>Read, Grep</td></tr>
+<tr><td>Implementation Agent</td><td>功能实现</td><td>Read, Edit, Bash</td></tr>
+<tr><td>Debugger</td><td>定位 bug</td><td>Read, Bash, Grep</td></tr>
+</table>
+
+<h2>使用方式</h2>
+<h3>自动委派</h3>
+<p>主 agent 根据任务描述自动把工作分配给合适的 subagent。</p>
+<h3>显式调用</h3>
+<pre><code># 通过 /agents 命令管理
+/agents
+
+# 通过 CLI 定义自定义 agent
+claude --agents ./agents.json</code></pre>
+
+<h2>串联 Subagents</h2>
+<p>复杂任务里可以让多个 subagent 依次协作：</p>
+<ol>
+<li>Code Reviewer → 发现问题</li>
+<li>Implementation Agent → 修复问题</li>
+<li>Test Engineer → 验证修复</li>
+</ol>
+
+<h2>安装</h2>
+<pre><code>mkdir -p .claude/agents
+cp code-reviewer.md .claude/agents/
+cp test-engineer.md .claude/agents/</code></pre>
+
+<div class="tip-box"><strong>💡 设计原则：</strong>单一职责、描述明确、工具权限最小化。审查型 subagent 只读，实现型适度开放写权限。</div>
+</div>
+</article>
+
+<!-- Section 10: MCP 集成 -->
+<article id="s10">
+<div class="section-header"><span class="section-badge">Part 2</span><h1>MCP 集成</h1><div class="meta">Model Context Protocol — 连接外部工具和服务</div></div>
+<div class="content">
+<h2>概览</h2>
+<p>MCP 是 Claude Code 访问外部工具、服务和 API 的标准协议。你可以把 GitHub、数据库、文件系统、聊天系统等都接到 Claude 里。</p>
+
+<h2>MCP 架构</h2>
+<pre><code>Claude Code  ←→  MCP Server  ←→  外部服务
+                                    ├── GitHub
+                                    ├── 数据库
+                                    ├── 文件系统
+                                    └── Slack / Jira</code></pre>
+
+<h2>安装方式</h2>
+<h3>HTTP 传输（推荐）</h3>
+<pre><code># 基本 HTTP 连接
+claude mcp add my-server --transport http --url https://server.example.com
+
+# 带认证
+claude mcp add my-server --transport http --url https://server.example.com \
+  --header "Authorization: Bearer $TOKEN"</code></pre>
+
+<h3>Stdio 传输（本地）</h3>
+<pre><code># 本地 Node.js server
+claude mcp add github -- npx -y @modelcontextprotocol/server-github
+
+# 带环境变量
+GITHUB_TOKEN=xxx claude mcp add github -- npx -y @modelcontextprotocol/server-github</code></pre>
+
+<h2>MCP 作为 Slash Command</h2>
+<pre><code>/mcp__github__list_prs
+/mcp__github__pr_review 456
+/mcp__jira__create_issue "Bug title" high</code></pre>
+
+<h2>管理命令</h2>
+<pre><code># 添加 MCP server
+claude mcp add &lt;name&gt; -- &lt;command&gt;
+
+# 列出所有 servers
+claude mcp list
+
+# 查看详情
+claude mcp get &lt;name&gt;
+
+# 移除
+claude mcp remove &lt;name&gt;</code></pre>
+
+<h2>实战示例：GitHub MCP</h2>
+<pre><code># 设置
+export GITHUB_TOKEN="your_token"
+claude mcp add github -- npx -y @modelcontextprotocol/server-github
+
+# 使用
+/mcp__github__list_prs        # 列出 PR
+/mcp__github__get_issue 42    # 获取 Issue
+/mcp__github__create_pr       # 创建 PR</code></pre>
+
+<h2>MCP vs Memory 决策矩阵</h2>
+<table>
+<tr><th>需求</th><th>用 Memory</th><th>用 MCP</th></tr>
+<tr><td>长期规则和偏好</td><td>✅</td><td></td></tr>
+<tr><td>项目规范</td><td>✅</td><td></td></tr>
+<tr><td>实时数据访问</td><td></td><td>✅</td></tr>
+<tr><td>外部 API 调用</td><td></td><td>✅</td></tr>
+<tr><td>工具操作</td><td></td><td>✅</td></tr>
+</table>
+
+<h2>安全注意事项</h2>
+<ul>
+<li>只授权必要的工具</li>
+<li>优先使用最小权限</li>
+<li>不要把 token 写死在仓库里</li>
+<li>用环境变量存认证信息</li>
+</ul>
+</div>
+</article>
+
+<!-- Section 11: Hooks 钩子 -->
+<article id="s11">
+<div class="section-header"><span class="section-badge orange">Part 3</span><h1>Hooks 钩子</h1><div class="meta">事件驱动的自动化机制 — 25 个事件、4 种类型</div></div>
+<div class="content">
+<h2>概览</h2>
+<p>Hooks 是在 Claude Code 事件发生时自动执行的 shell 命令，用来做格式化、校验、通知、审计等自动化工作。不需要你手动触发。</p>
+
+<h2>Hook 类型（4 类、25 个事件）</h2>
+<h3>Tool Hooks</h3>
+<table>
+<tr><th>事件</th><th>触发时机</th></tr>
+<tr><td><code>PreToolUse</code></td><td>工具被调用之前</td></tr>
+<tr><td><code>PostToolUse</code></td><td>工具被调用之后</td></tr>
+<tr><td><code>PostToolUseFailure</code></td><td>工具调用失败后</td></tr>
+<tr><td><code>PermissionRequest</code></td><td>请求权限时</td></tr>
+</table>
+
+<h3>Session Hooks</h3>
+<table>
+<tr><th>事件</th><th>触发时机</th></tr>
+<tr><td><code>SessionStart</code></td><td>会话开始</td></tr>
+<tr><td><code>SessionEnd</code></td><td>会话结束</td></tr>
+<tr><td><code>Stop</code></td><td>Claude 停止响应</td></tr>
+<tr><td><code>SubagentStart</code></td><td>子代理启动</td></tr>
+<tr><td><code>SubagentStop</code></td><td>子代理停止</td></tr>
+</table>
+
+<h3>Task Hooks</h3>
+<table>
+<tr><th>事件</th><th>触发时机</th></tr>
+<tr><td><code>UserPromptSubmit</code></td><td>用户提交提示词</td></tr>
+<tr><td><code>TaskCompleted</code></td><td>任务完成</td></tr>
+<tr><td><code>TaskCreated</code></td><td>任务创建</td></tr>
+</table>
+
+<h3>Lifecycle Hooks</h3>
+<table>
+<tr><th>事件</th><th>触发时机</th></tr>
+<tr><td><code>ConfigChange</code></td><td>配置变化</td></tr>
+<tr><td><code>FileChanged</code></td><td>文件变化</td></tr>
+<tr><td><code>PreCompact</code></td><td>压缩前</td></tr>
+<tr><td><code>PostCompact</code></td><td>压缩后</td></tr>
+</table>
+
+<h2>配置示例</h2>
+<pre><code>// ~/.claude/settings.json
+{
+  "hooks": {
+    "PreToolUse": [{
+      "matcher": "Write",
+      "hooks": [{
+        "type": "command",
+        "command": "~/.claude/hooks/format-code.sh"
+      }]
+    }],
+    "PostToolUse": [{
+      "matcher": "Write",
+      "hooks": [{
+        "type": "command",
+        "command": "~/.claude/hooks/security-scan.sh"
+      }]
+    }],
+    "Stop": [{
+      "hooks": [{
+        "type": "command",
+        "command": "~/.claude/hooks/notify-team.sh"
+      }]
+    }]
+  }
+}</code></pre>
+
+<h2>常见用途</h2>
+<ul>
+<li><strong>format-code.sh</strong> - 写入前自动格式化</li>
+<li><strong>pre-commit.sh</strong> - 提交前跑测试</li>
+<li><strong>security-scan.sh</strong> - 做安全扫描</li>
+<li><strong>log-bash.sh</strong> - 记录 bash 命令</li>
+<li><strong>validate-prompt.sh</strong> - 校验输入</li>
+<li><strong>notify-team.sh</strong> - 发通知</li>
+</ul>
+
+<h2>安装</h2>
+<pre><code>mkdir -p ~/.claude/hooks
+cp format-code.sh ~/.claude/hooks/
+chmod +x ~/.claude/hooks/*.sh</code></pre>
+
+<div class="tip-box"><strong>💡 最佳实践：</strong>把 hooks 保持短小明确，只做单一职责。先在本地测试，不要在 hook 里放复杂业务逻辑。</div>
+</div>
+</article>
+
+<!-- Section 12: 插件系统 -->
+<article id="s12">
+<div class="section-header"><span class="section-badge orange">Part 3</span><h1>插件系统（Plugins）</h1><div class="meta">打包多个功能为一体化方案</div></div>
+<div class="content">
+<h2>概览</h2>
+<p>插件是把 slash commands、subagents、MCP servers 和 hooks 组合在一起的功能集合，可以通过一条命令安装。它们代表了 Claude Code 最高级别的扩展方式。</p>
+
+<h2>插件结构</h2>
+<pre><code>my-plugin/
+├── .claude-plugin/
+│   └── plugin.json       # 清单
+├── commands/             # Slash commands
+├── agents/               # Subagents
+├── skills/               # Skills
+├── hooks/                # Hooks 配置
+│   └── hooks.json
+├── .mcp.json             # MCP 配置
+├── .lsp.json             # LSP 配置
+├── settings.json         # 默认设置
+├── scripts/              # 辅助脚本
+└── docs/                 # 文档</code></pre>
+
+<h2>plugin.json 示例</h2>
+<pre><code>{
+  "name": "pr-review",
+  "version": "1.0.0",
+  "description": "完整 PR 审查工作流",
+  "author": { "name": "Your Name" },
+  "license": "MIT"
+}</code></pre>
+
+<h2>插件管理命令</h2>
+<pre><code># 安装
+/plugin install plugin-name
+/plugin install github:username/repo
+
+# 管理
+/plugin list              # 列出已安装
+/plugin enable name       # 启用
+/plugin disable name      # 禁用
+/plugin uninstall name    # 卸载
+/plugin update name       # 更新
+
+# 本地开发测试
+claude --plugin-dir ./my-plugin</code></pre>
+
+<h2>插件类型</h2>
+<table>
+<tr><th>类型</th><th>范围</th><th>维护者</th></tr>
+<tr><td>官方</td><td>全局</td><td>Anthropic</td></tr>
+<tr><td>社区</td><td>公开</td><td>社区</td></tr>
+<tr><td>组织</td><td>内部</td><td>公司</td></tr>
+<tr><td>个人</td><td>个人</td><td>开发者</td></tr>
+</table>
+
+<h2>插件 vs 独立功能</h2>
+<table>
+<tr><th>功能</th><th>独立命令</th><th>插件</th></tr>
+<tr><td>安装</td><td>手动复制</td><td>一条命令</td></tr>
+<tr><td>设置时间</td><td>5-15 分钟</td><td>2 分钟</td></tr>
+<tr><td>版本管理</td><td>手动</td><td>自动</td></tr>
+<tr><td>团队共享</td><td>复制文件</td><td>安装 ID</td></tr>
+<tr><td>更新</td><td>手动</td><td>自动</td></tr>
+</table>
+
+<h2>何时创建插件</h2>
+<ul>
+<li>✅ 需要多个组件（commands + subagents + MCP）</li>
+<li>✅ 需要和团队共享</li>
+<li>✅ 需要自动配置</li>
+<li>❌ 快速任务自动化 → 用 command</li>
+<li>❌ 单一领域能力 → 用 skill</li>
+</ul>
+
+<h2>热重载</h2>
+<pre><code>/reload-plugins</code></pre>
+<p>修改插件文件后无需重启会话，直接重新加载。</p>
+</div>
+</article>
+
+<!-- Section 13: 检查点 -->
+<article id="s13">
+<div class="section-header"><span class="section-badge orange">Part 3</span><h1>检查点（Checkpoints）</h1><div class="meta">保存状态、安全试验、随时回退</div></div>
+<div class="content">
+<h2>概览</h2>
+<p>Checkpoints 可以让你保存对话状态，并在 Claude Code 会话中回退到之前的时间点。无论你是在探索不同方案、修复错误，还是比较多个实现路径，这个能力都非常有用。</p>
+
+<h2>核心概念</h2>
+<table>
+<tr><th>概念</th><th>说明</th></tr>
+<tr><td><strong>Checkpoint</strong></td><td>保存消息、文件和上下文的对话快照</td></tr>
+<tr><td><strong>Rewind</strong></td><td>回到之前的 checkpoint，丢弃之后的更改</td></tr>
+<tr><td><strong>Branch Point</strong></td><td>从同一个 checkpoint 出发，探索多个方案</td></tr>
+</table>
+
+<h2>访问方式</h2>
+<ul>
+<li><strong>键盘快捷键</strong>：按两次 <code>Esc</code>（Esc + Esc）</li>
+<li><strong>Slash Command</strong>：<code>/rewind</code> 或 <code>/checkpoint</code></li>
+</ul>
+
+<h2>Rewind 选项</h2>
+<ol>
+<li><strong>恢复代码和对话</strong> - 把文件和消息都恢复</li>
+<li><strong>恢复对话</strong> - 只回退消息，保留当前代码</li>
+<li><strong>恢复代码</strong> - 只回退文件修改，保留对话历史</li>
+<li><strong>从这里开始总结</strong> - 把之后的对话压缩成摘要</li>
+<li><strong>算了</strong> - 取消</li>
+</ol>
+
+<h2>自动 Checkpoints</h2>
+<ul>
+<li>每次用户提示都会自动创建 checkpoint</li>
+<li>跨会话保留</li>
+<li>30 天后自动清理</li>
+</ul>
+
+<h2>工作流模式</h2>
+<h3>探索分支策略</h3>
+<pre><code>1. 初始实现 → Checkpoint A
+2. 尝试方案 1 → Checkpoint B
+3. 回退到 Checkpoint A
+4. 尝试方案 2 → Checkpoint C
+5. 比较 B 和 C 的结果
+6. 选择最佳方案继续</code></pre>
+
+<h3>安全重构模式</h3>
+<pre><code>1. 当前状态 → Checkpoint（自动）
+2. 开始重构
+3. 运行测试
+4. 测试通过 → 继续
+5. 测试失败 → Rewind 并尝试别的方案</code></pre>
+
+<h2>使用场景</h2>
+<table>
+<tr><th>场景</th><th>工作流</th></tr>
+<tr><td>探索方案</td><td>保存 → 试 A → Rewind → 试 B → 比较</td></tr>
+<tr><td>安全重构</td><td>保存 → 重构 → 测试 → 失败时 Rewind</td></tr>
+<tr><td>A/B 测试</td><td>保存 → 设计 A → Rewind → 设计 B</td></tr>
+<tr><td>错误恢复</td><td>发现问题 → Rewind 到正常状态</td></tr>
+</table>
+
+<div class="tip-box"><strong>💡 核心价值：</strong>Checkpoints 让你敢于试错。"先试再说"和"试错后回退"变得安全，帮你更快找到正确方案。</div>
+</div>
+</article>
+
+<!-- Section 14: 高级特性 -->
+<article id="s14">
+<div class="section-header"><span class="section-badge orange">Part 3</span><h1>高级特性</h1><div class="meta">Planning、Extended Thinking、Auto Mode、后台任务、权限控制</div></div>
+<div class="content">
+<h2>规划模式（Planning Mode）</h2>
+<p>Planning mode 允许 Claude 在真正实现前先梳理复杂任务，生成一份你可以审阅并批准的详细计划。</p>
+<h3>启动方式</h3>
+<pre><code># Slash command
+/plan Implement user authentication system
+
+# CLI 参数
+claude --permission-mode plan
+
+# 快捷键
+Shift + Tab  # 切换权限模式</code></pre>
+
+<h3>适合场景</h3>
+<ul>
+<li>✅ 复杂的多文件重构</li>
+<li>✅ 新功能开发</li>
+<li>✅ 架构调整</li>
+<li>❌ 简单 bug 修复</li>
+<li>❌ 单文件编辑</li>
+</ul>
+
+<h2>扩展思考（Extended Thinking）</h2>
+<p>让 Claude 在给出解决方案前花更多时间进行复杂推理。</p>
+<pre><code># 快捷键切换
+Option + T (macOS) / Alt + T (Windows/Linux)
+
+# 配置
+{
+  "thinking": {
+    "enabled": true,
+    "effort": "high"  // low, medium, high, max
+  }
+}</code></pre>
+
+<h2>自动模式（Auto Mode）</h2>
+<p>用后台安全分类器在每个动作执行前评估风险：</p>
+<pre><code># 启用
+claude --enable-auto-mode
+
+# 在 REPL 中用 Shift+Tab 切换
+# 或
+claude --permission-mode auto</code></pre>
+
+<h2>后台任务</h2>
+<p>长时间任务不阻塞对话——构建、测试、下载、扫描都可以在后台运行。</p>
+
+<h2>权限模式（6 种）</h2>
+<table>
+<tr><th>模式</th><th>行为</th></tr>
+<tr><td><code>default</code></td><td>风险操作需要审批</td></tr>
+<tr><td><code>acceptEdits</code></td><td>自动接受文件编辑</td></tr>
+<tr><td><code>plan</code></td><td>只读分析，不做修改</td></tr>
+<tr><td><code>auto</code></td><td>后台分类器自动决定</td></tr>
+<tr><td><code>dontAsk</code></td><td>除危险操作外全部接受</td></tr>
+<tr><td><code>bypassPermissions</code></td><td>全部接受（需要特殊参数）</td></tr>
+</table>
+
+<h2>会话管理</h2>
+<pre><code># 继续最后一次对话
+claude -c
+
+# 恢复指定会话
+claude -r "feature-auth"
+
+# 恢复并分叉
+claude -r "feature-auth" --fork
+
+# 重命名当前会话
+/rename "auth-refactor"</code></pre>
+
+<h2>语音输入</h2>
+<p>支持按住说话，20 种语言语音识别：</p>
+<pre><code>/voice</code></pre>
+
+<h2>远程控制</h2>
+<pre><code># 启动远程控制
+claude --remote-control
+
+# 创建 web session
+claude --remote "implement API"
+
+# 本地恢复 web session
+claude --teleport</code></pre>
+
+<h2>Git 工作树（Worktrees）</h2>
+<pre><code># 在隔离 worktree 中启动
+claude -w</code></pre>
+<p>非常适合并行尝试多个方案、隔离高风险重构。</p>
+
+<h2>定时任务</h2>
+<pre><code># 每 10 分钟运行
+/loop 10m Run tests and report failures
+
+# 一次性提醒
+/schedule "remind me to review the PR in 30 minutes"</code></pre>
+</div>
+</article>
+
+<!-- Section 15: CLI 命令行 -->
+<article id="s15">
+<div class="section-header"><span class="section-badge orange">Part 3</span><h1>CLI 命令行参考</h1><div class="meta">完整的命令行接口文档</div></div>
+<div class="content">
+<h2>核心命令</h2>
+<table>
+<tr><th>命令</th><th>说明</th></tr>
+<tr><td><code>claude</code></td><td>启动交互式 REPL</td></tr>
+<tr><td><code>claude "query"</code></td><td>带初始提示启动 REPL</td></tr>
+<tr><td><code>claude -p "query"</code></td><td>打印模式，查询后退出</td></tr>
+<tr><td><code>cat file | claude -p "query"</code></td><td>处理管道内容</td></tr>
+<tr><td><code>claude -c</code></td><td>继续最近一次会话</td></tr>
+<tr><td><code>claude -r "session"</code></td><td>恢复指定会话</td></tr>
+<tr><td><code>claude update</code></td><td>更新到最新版本</td></tr>
+<tr><td><code>claude mcp</code></td><td>配置 MCP servers</td></tr>
+<tr><td><code>claude agents</code></td><td>列出已配置 subagents</td></tr>
+<tr><td><code>claude plugin</code></td><td>管理插件</td></tr>
+</table>
+
+<h2>核心标志</h2>
+<table>
+<tr><th>参数</th><th>说明</th></tr>
+<tr><td><code>-p, --print</code></td><td>打印模式（非交互）</td></tr>
+<tr><td><code>-c, --continue</code></td><td>继续最近会话</td></tr>
+<tr><td><code>-r, --resume</code></td><td>恢复指定会话</td></tr>
+<tr><td><code>-w, --worktree</code></td><td>在隔离 worktree 中启动</td></tr>
+<tr><td><code>--model</code></td><td>设置模型</td></tr>
+<tr><td><code>--effort</code></td><td>设置推理强度</td></tr>
+<tr><td><code>--permission-mode</code></td><td>权限模式</td></tr>
+<tr><td><code>--output-format</code></td><td>输出格式（text/json/stream-json）</td></tr>
+</table>
+
+<h2>打印模式（非交互式）</h2>
+<pre><code># 单次查询
+claude -p "这个函数做什么？"
+
+# 处理文件
+cat error.log | claude -p "解释这个错误"
+
+# JSON 输出
+claude -p --output-format json "列出所有函数"
+
+# 限制预算
+claude -p --max-budget-usd 5.00 "分析架构"
+
+# 管道串联
+claude -p "列出待办事项" | grep "URGENT"</code></pre>
+
+<h2>模型选择</h2>
+<pre><code># 短名称
+claude --model sonnet
+claude --model opus
+claude --model haiku
+
+# opusplan（Opus 规划，Sonnet 执行）
+claude --model opusplan "设计并实现缓存层"
+
+# 带后备模型
+claude -p --model opus --fallback-model sonnet "分析架构"</code></pre>
+
+<h2>工具与权限</h2>
+<pre><code># 限制可用工具
+claude -p --tools "Bash,Edit,Read" "query"
+
+# 允许特定操作无需确认
+claude --allowedTools "Bash(git log:*)" "Read"
+
+# 阻止危险操作
+claude --disallowedTools "Bash(rm -rf:*)"</code></pre>
+
+<h2>系统提示词</h2>
+<pre><code># 替换系统提示词
+claude --system-prompt "你是安全工程师"
+
+# 追加指令
+claude --append-system-prompt "始终使用 TypeScript"
+
+# 从文件加载
+claude -p --system-prompt-file ./prompt.txt "query"</code></pre>
+
+<h2>CI/CD 集成</h2>
+<pre><code># 代码审查
+claude -p --output-format json "review this diff"
+
+# 测试报告
+claude -p "run tests and summarize failures"
+
+# 批处理
+for file in *.md; do
+  claude -p --output-format json "summarize: $(cat $file)" > ${file%.md}.json
+done
+
+# jq 处理
+claude -p --output-format json "find bugs" | jq '.bugs[] | select(.severity=="high")'</code></pre>
+
+<h2>环境变量</h2>
+<table>
+<tr><th>变量</th><th>说明</th></tr>
+<tr><td><code>ANTHROPIC_API_KEY</code></td><td>API key</td></tr>
+<tr><td><code>CLAUDE_MODEL</code></td><td>默认模型</td></tr>
+<tr><td><code>CLAUDE_EFFORT</code></td><td>默认推理强度</td></tr>
+<tr><td><code>CLAUDE_OUTPUT_FORMAT</code></td><td>默认输出格式</td></tr>
+</table>
+</div>
+</article>
+
+<!-- Section 16: 学习路线图 -->
+<article id="s16">
+<div class="section-header"><span class="section-badge purple">Part 4</span><h1>学习路线图</h1><div class="meta">找到你的水平，按自己的节奏学习</div></div>
+<div class="content">
+<h2>自我评估</h2>
+<p>请诚实回答下面的问题：</p>
+<ul>
+<li>☐ 我可以启动 Claude Code 并与它对话</li>
+<li>☐ 我创建或编辑过 CLAUDE.md</li>
+<li>☐ 我至少使用过 3 个内置 slash command</li>
+<li>☐ 我创建过自定义 slash command 或 skill</li>
+<li>☐ 我配置过 MCP server</li>
+<li>☐ 我在 settings.json 中设置过 hooks</li>
+<li>☐ 我创建或使用过自定义 subagents</li>
+<li>☐ 我使用过 print mode 做脚本或 CI/CD</li>
+</ul>
+
+<h2>你的水平</h2>
+<table>
+<tr><th>勾选数</th><th>水平</th><th>建议起点</th><th>时间</th></tr>
+<tr><td>0-2</td><td>Level 1：Beginner</td><td>里程碑 1A</td><td>~3 小时</td></tr>
+<tr><td>3-5</td><td>Level 2：Intermediate</td><td>里程碑 2A</td><td>~5 小时</td></tr>
+<tr><td>6-8</td><td>Level 3：Advanced</td><td>里程碑 3A</td><td>~5 小时</td></tr>
+</table>
+
+<h2>完整学习路径</h2>
+<table>
+<tr><th>步骤</th><th>功能</th><th>复杂度</th><th>时间</th></tr>
+<tr><td>1</td><td>Slash Commands</td><td>⭐</td><td>30 分钟</td></tr>
+<tr><td>2</td><td>Memory</td><td>⭐⭐</td><td>45 分钟</td></tr>
+<tr><td>3</td><td>Checkpoints</td><td>⭐⭐</td><td>45 分钟</td></tr>
+<tr><td>4</td><td>CLI Basics</td><td>⭐⭐</td><td>30 分钟</td></tr>
+<tr><td>5</td><td>Skills</td><td>⭐⭐</td><td>1 小时</td></tr>
+<tr><td>6</td><td>Hooks</td><td>⭐⭐</td><td>1 小时</td></tr>
+<tr><td>7</td><td>MCP</td><td>⭐⭐⭐</td><td>1 小时</td></tr>
+<tr><td>8</td><td>Subagents</td><td>⭐⭐⭐</td><td>1.5 小时</td></tr>
+<tr><td>9</td><td>Advanced Features</td><td>⭐⭐⭐⭐⭐</td><td>2-3 小时</td></tr>
+<tr><td>10</td><td>Plugins</td><td>⭐⭐⭐⭐</td><td>2 小时</td></tr>
+<tr><td>11</td><td>CLI Mastery</td><td>⭐⭐⭐</td><td>1 小时</td></tr>
+</table>
+<p><strong>总学习时间</strong>：约 11-13 小时（或直接跳到你的水平）</p>
+
+<h2>Level 1：Beginner</h2>
+<h3>里程碑 1A：第一个命令与 Memory（1-2 小时）</h3>
+<pre><code># 练习 1：安装 slash command
+mkdir -p .claude/commands
+cp optimize.md .claude/commands/
+
+# 练习 2：创建项目 memory
+cp project-CLAUDE.md ./CLAUDE.md
+
+# 练习 3：试用
+/optimize</code></pre>
+
+<h3>里程碑 1B：安全探索（1 小时）</h3>
+<pre><code># 交互模式 vs 打印模式
+claude "explain this project"
+claude -p "explain this function"
+
+# 管道处理
+cat error.log | claude -p "explain this error"
+
+# Checkpoint 工作流
+# 做实验 → Esc+Esc → 回退</code></pre>
+
+<h2>Level 2：Intermediate</h2>
+<h3>里程碑 2A：自动化（2-3 小时）</h3>
+<pre><code># 安装 skill
+cp -r code-review ~/.claude/skills/
+
+# 设置 hooks
+mkdir -p ~/.claude/hooks
+cp pre-tool-check.sh ~/.claude/hooks/
+chmod +x ~/.claude/hooks/*.sh</code></pre>
+
+<h3>里程碑 2B：集成（2-3 小时）</h3>
+<pre><code># 设置 GitHub MCP
+export GITHUB_TOKEN="your_token"
+claude mcp add github -- npx -y @modelcontextprotocol/server-github
+
+# 安装 subagents
+mkdir -p .claude/agents
+cp code-reviewer.md .claude/agents/</code></pre>
+
+<h2>Level 3：Advanced</h2>
+<h3>里程碑 3A：高级功能</h3>
+<pre><code># Planning mode
+/plan Implement user authentication system
+
+# 权限模式
+claude --permission-mode plan "analyze codebase"
+claude --permission-mode auto "implement feature"
+
+# Extended thinking
+# Option+T (macOS) / Alt+T (Windows)</code></pre>
+
+<h3>里程碑 3B：团队与分发</h3>
+<pre><code># 安装插件
+/plugin install pr-review
+
+# CI/CD 集成
+claude -p --output-format json "run tests"
+
+# 批处理
+for file in *.md; do
+  claude -p "summarize: $(cat $file)" > ${file%.md}.summary
+done</code></pre>
+
+<h2>快速开始路径</h2>
+<h3>只有 15 分钟</h3>
+<ol>
+<li>复制一个 slash command</li>
+<li>在 Claude Code 中试一下 <code>/optimize</code></li>
+</ol>
+
+<h3>有 1 小时</h3>
+<ol>
+<li>Slash commands（15 分钟）</li>
+<li>项目 memory（15 分钟）</li>
+<li>安装一个 skill（15 分钟）</li>
+<li>一起试用（15 分钟）</li>
+</ol>
+
+<h3>有一个周末</h3>
+<ul>
+<li>周六上午：完成 Level 1</li>
+<li>周六下午：完成 Level 2</li>
+<li>周日：完成 Level 3，构建自定义 plugin</li>
+</ul>
+</div>
+</article>
+
+<!-- Section 17: 快速参考卡 -->
+<article id="s17">
+<div class="section-header"><span class="section-badge purple">Part 4</span><h1>快速参考卡</h1><div class="meta">一页纸速查所有核心功能</div></div>
+<div class="content">
+<h2>安装速命令</h2>
+<pre><code># Slash Commands
+cp *.md .claude/commands/
+
+# Memory
+cp project-CLAUDE.md ./CLAUDE.md       # 项目级
+cp personal-CLAUDE.md ~/.claude/CLAUDE.md  # 个人级
+
+# Skills
+cp -r code-review ~/.claude/skills/    # 个人
+cp -r code-review .claude/skills/      # 项目
+
+# Subagents
+cp *.md .claude/agents/
+
+# MCP
+export GITHUB_TOKEN="your_token"
+claude mcp add github -- npx -y @modelcontextprotocol/server-github
+
+# Hooks
+mkdir -p ~/.claude/hooks
+cp *.sh ~/.claude/hooks/
+chmod +x ~/.claude/hooks/*.sh
+
+# Plugins
+/plugin install pr-review</code></pre>
+
+<h2>功能速览表</h2>
+<table>
+<tr><th>功能</th><th>安装路径</th><th>用法</th></tr>
+<tr><td>Slash Commands（55+）</td><td><code>.claude/commands/*.md</code></td><td><code>/command-name</code></td></tr>
+<tr><td>Memory</td><td><code>./CLAUDE.md</code></td><td>自动加载</td></tr>
+<tr><td>Skills</td><td><code>.claude/skills/*/SKILL.md</code></td><td>自动触发</td></tr>
+<tr><td>Subagents</td><td><code>.claude/agents/*.md</code></td><td>自动委派</td></tr>
+<tr><td>MCP</td><td><code>.mcp.json</code></td><td><code>/mcp__server__action</code></td></tr>
+<tr><td>Hooks（25 事件）</td><td><code>~/.claude/hooks/*.sh</code></td><td>事件触发</td></tr>
+<tr><td>Plugins</td><td><code>/plugin install</code></td><td>打包所有能力</td></tr>
+<tr><td>Checkpoints</td><td>内置</td><td><code>Esc+Esc</code> 或 <code>/rewind</code></td></tr>
+<tr><td>Planning Mode</td><td>内置</td><td><code>/plan &lt;task&gt;</code></td></tr>
+<tr><td>Permission Modes</td><td>内置</td><td><code>--permission-mode</code></td></tr>
+</table>
+
+<h2>文件位置参考</h2>
+<pre><code>Your Project/
+├── .claude/
+│   ├── commands/         # Slash commands
+│   ├── agents/           # Subagents
+│   ├── skills/           # 项目 skills
+│   └── settings.json     # 项目设置
+├── .mcp.json             # MCP 配置
+├── CLAUDE.md             # 项目 memory
+└── src/
+    └── api/
+        └── CLAUDE.md     # 目录级 memory
+
+~/.claude/
+├── commands/             # 个人命令
+├── agents/               # 个人 agents
+├── skills/               # 个人 skills
+├── hooks/                # hook 脚本
+├── settings.json         # 用户设置
+└── CLAUDE.md             # 个人 memory</code></pre>
+
+<h2>常见场景速查</h2>
+<table>
+<tr><th>需求</th><th>用什么</th></tr>
+<tr><td>快速快捷操作</td><td>Slash Command</td></tr>
+<tr><td>团队规范</td><td>Memory (CLAUDE.md)</td></tr>
+<tr><td>自动化工作流</td><td>Skill</td></tr>
+<tr><td>专门任务委派</td><td>Subagent</td></tr>
+<tr><td>外部数据访问</td><td>MCP</td></tr>
+<tr><td>事件自动化</td><td>Hook</td></tr>
+<tr><td>完整方案打包</td><td>Plugin</td></tr>
+<tr><td>安全实验</td><td>Checkpoint</td></tr>
+<tr><td>CI/CD 集成</td><td>CLI (claude -p)</td></tr>
+</table>
+
+<h2>CLI 最常用命令</h2>
+<pre><code># 交互式会话
+claude
+
+# 快速提问
+claude -p "explain this repo"
+
+# 继续上次
+claude -c
+
+# JSON 输出
+claude -p --output-format json "list all classes"
+
+# 只读审查
+claude --permission-mode plan -p "review this codebase"
+
+# 高级模型
+claude --model opus -p "analyze architecture"</code></pre>
+
+<h2>快捷键速查</h2>
+<table>
+<tr><th>快捷键</th><th>功能</th></tr>
+<tr><td><code>Enter</code></td><td>发送消息</td></tr>
+<tr><td><code>Shift+Enter</code></td><td>多行输入</td></tr>
+<tr><td><code>Ctrl+C</code></td><td>打断生成</td></tr>
+<tr><td><code>Esc+Esc</code></td><td>打开 Checkpoint 浏览器</td></tr>
+<tr><td><code>Shift+Tab</code></td><td>切换权限模式</td></tr>
+<tr><td><code>Option+T / Alt+T</code></td><td>切换 Extended Thinking</td></tr>
+</table>
+
+<h2>新功能亮点（2026）</h2>
+<table>
+<tr><th>功能</th><th>说明</th><th>用法</th></tr>
+<tr><td>Auto Mode</td><td>后台分类器实现全自治</td><td><code>--enable-auto-mode</code></td></tr>
+<tr><td>Voice Dictation</td><td>语音输入</td><td><code>/voice</code></td></tr>
+<tr><td>Channels</td><td>Discord/Telegram 集成</td><td><code>--channels</code></td></tr>
+<tr><td>Remote Control</td><td>远程控制本地会话</td><td><code>claude --rc</code></td></tr>
+<tr><td>Web Sessions</td><td>浏览器中运行</td><td><code>claude --remote</code></td></tr>
+<tr><td>Desktop App</td><td>原生桌面应用</td><td>独立下载</td></tr>
+<tr><td>Agent Teams</td><td>多 agent 协作</td><td>环境变量启用</td></tr>
+<tr><td>Scheduled Tasks</td><td>定时任务</td><td><code>/loop</code></td></tr>
+</table>
+</div>
+</article>
+
 </main>
 <script>
-function showDay(n) {
+function show(n) {
   document.querySelectorAll('article').forEach(function(a) { a.classList.remove('active'); });
-  var day = document.getElementById('day' + n);
-  if (day) day.classList.add('active');
-  document.querySelectorAll('nav a').forEach(function(a, i) { a.classList.toggle('active', i === n-1); });
+  var s = document.getElementById('s' + n);
+  if (s) s.classList.add('active');
+  document.querySelectorAll('nav a').forEach(function(a, i) { a.classList.toggle('active', i === n); });
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
-showDay(1);
+show(0);
 </script>
 </body>
 </html>
